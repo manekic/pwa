@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Rezultati</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
+  </head>
+  <body>
+    Korisničko ime:
+		<input type="text" id="username" />
+		<br />
+		Lozinka:
+		<input type="password" id="password" />
+		<br />
+		<button type="submit" id="btn_prijava">Prijavi se</button>
+    <script type="text/javascript">
+    var username = null, pass = null;
+    var uspio = false;
+
+      $(document).ready(function(){
+        $("#btn_prijava").on("click", Prijava)
+      });
+      function Prijava(){
+        console.log("U fji prijava");
+        username = $("#username").val();
+        console.log("Korisnicko ime je " + username);
+        pass = $("#password").val();
+        console.log("Lozinka je " + pass);
+
+        //provjera jesu li podaci zaista uneseni
+        if(username !== '' && pass !== '')
+          console.log("Nisu prazni");
+        else console.log("Prazno");
+
+        //ajaxom saljem serveru username i pass da provjeri nalazi li se student u bazi
+        $.ajax({
+          url: "pocetna.php",
+          data:
+          {
+            username: username,
+            pass: pass
+          },
+          dataType: "json",
+          success: function(data) {
+            uspio = true;
+            console.log(data.id);
+            //console.log(data.broj);
+            console.log(data.uspjeh);
+            console.log("Broj " +data.nazivi.length);
+            for(var i = 0; i <data.rez.length; i++) {
+              console.log(data.rez[i].kolegij);
+            }
+
+          },
+          error : function(xhr, status) {
+            if(status !== "null")
+            console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
+          }
+        });
+      }
+    </script>
+  </body>
+
+
+</html>
