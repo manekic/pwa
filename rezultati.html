@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
+    <style media="screen">
+      td, tr {border: 1px solid green;}
+      td { width: 50px; height: 50px; border-collapse: separate; font-size: 30px;}
+    </style>
+  </head>
+  <body>
+    <p id="podaci"></p>
+    <p id="tbl"></p>
+    <script type="text/javascript">
+      console.log("Na stranici rezultati.html");
+      var username = localStorage.getItem("username");
+      var pass = localStorage.getItem("pass");
+      var ime = localStorage.getItem("ime");
+      var prezime = localStorage.getItem("prezime");
+      var id = localStorage.getItem("id");
+      //polje za podatke koji se nalaze u prvom retku tablice sa rezultatima
+      var td_kategorije = ["Kolegij", "1.kolokvij", "2.kolokvij", "Završni ispit", "1.zadaća", "2.zadaća", "3.zadaća", "4.zadaća"];
+      /*console.log(username);
+      console.log(pass);
+      console.log(ime);
+      console.log(prezime)
+      console.log(id);*/
+      $(document).ready(function(){
+        $("#podaci").append("Student: " + ime + " " + prezime);
+      });
+      $.ajax({
+        url: "rezultati.php",
+        data:
+        {
+          username: username,
+          pass: pass,
+          id: id
+        },
+        dataType: "json",
+        success: function(data) {
+          ispisiRezultate(data.rez);
+        },
+        error : function(xhr, status) {
+          if(status !== "null")
+          console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
+        }
+      });
+      //fja za dinamičko stvaranje tablice sa rezultatima
+      function ispisiRezultate(data) {
+        console.log("U fji ispisiRezultate");
+        var tbl = $("<table></table>");
+        //prvi redak tablice
+        var tr = $("<tr></tr>");
+        //potrebno je 8 ćelija sa nazivima elemenata za ocjenjivanje
+        for(var k = 0; k < 8 ; k++) {
+          var td = $("<td><</td>");
+          td.prop("align", "center").css("color", "green").html(td_kategorije[k]);
+          tr.append(td);
+        }
+        tbl.append(tr);
+        //kreiranje jednog retka za svaki kolegij koji je korisnik upisao
+        //kreiranje ćelija u koje se upisuju bodovi iz određenog elementa
+        for(var i = 0; i < data.length; i++) {
+          var td_podrucja = [data[i].ime, data[i].kol1, data[i].kol2, data[i].zavrsni, data[i].dz1, data[i].dz2, data[i].dz3, data[i].dz4];
+          var tr = $("<tr></tr>");
+          for(var j = 0; j < 8; j++) {
+            var td = $("<td></td>");
+            if(td_podrucja[j] === null)
+              td.prop("align", "center").css("color", "green").html("-");
+            else
+              td.prop("align", "center").css("color", "green").html(td_podrucja[j]);
+            tr.append(td);
+          }
+          tbl.append(tr);
+        }
+        $("#tbl").html(tbl);
+        console.log("Nacrtao tablicu, izlazim iz fje.");
+      }
+    </script>
+
+  </body>
+</html>
+
