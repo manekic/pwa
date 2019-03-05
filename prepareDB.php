@@ -98,7 +98,9 @@ try {
                        VALUES (:student_id, :kolegiji_id, :1kolokvij, :2kolokvij, :zavrsni, :1zadaca, :2zadaca, :3zadaca, :4zadaca)' );
 	$st->execute( array( 'student_id' => 1, 'kolegiji_id' => 1, '1kolokvij' => 25, '2kolokvij' => NULL, 'zavrsni' => NULL, '1zadaca' => NULL, '2zadaca' => NULL, '3zadaca' => NULL, '4zadaca' => NULL) );
 	$st->execute( array( 'student_id' => 2, 'kolegiji_id' => 3, '1kolokvij' => 15, '2kolokvij' => 13, 'zavrsni' => NULL, '1zadaca' => NULL, '2zadaca' => NULL, '3zadaca' => NULL, '4zadaca' => NULL) );
+	$st->execute( array( 'student_id' => 1, 'kolegiji_id' => 2, '1kolokvij' => 25, '2kolokvij' => NULL, 'zavrsni' => NULL, '1zadaca' => NULL, '2zadaca' => NULL, '3zadaca' => NULL, '4zadaca' => NULL) );
 }
 catch( PDOException $e ) { exit( "PDO error [rezultati]: " . $e->getMessage() ); }
 echo "Ubacio u tablicu rezultati.<br />";
 ?>
+

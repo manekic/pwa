@@ -6,32 +6,27 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
   </head>
   <body>
-    Korisničko ime:
+    <p id="ime">Korisničko ime:</p>
 		<input type="text" id="username" />
 		<br />
-		Lozinka:
+		<p id="lozinka">Lozinka:</p>
 		<input type="password" id="password" />
 		<br />
-		<button type="submit" id="btn_prijava">Prijavi se</button>
+		<button id="btn_prijava">Prijavi se</button>
     <script type="text/javascript">
     var username = null, pass = null;
     var uspio = false;
 
       $(document).ready(function(){
+        console.log("Na stranici pocetna.html");
         $("#btn_prijava").on("click", Prijava)
       });
       function Prijava(){
         console.log("U fji prijava");
         username = $("#username").val();
-        console.log("Korisnicko ime je " + username);
+        //console.log("Korisnicko ime je " + username);
         pass = $("#password").val();
-        console.log("Lozinka je " + pass);
-
-        //provjera jesu li podaci zaista uneseni
-        if(username !== '' && pass !== '')
-          console.log("Nisu prazni");
-        else console.log("Prazno");
-
+        //console.log("Lozinka je " + pass);
         //ajaxom saljem serveru username i pass da provjeri nalazi li se student u bazi
         $.ajax({
           url: "pocetna.php",
@@ -43,14 +38,15 @@
           dataType: "json",
           success: function(data) {
             uspio = true;
-            console.log(data.id);
-            //console.log(data.broj);
             console.log(data.uspjeh);
-            console.log("Broj " +data.nazivi.length);
-            for(var i = 0; i <data.rez.length; i++) {
-              console.log(data.rez[i].kolegij);
+            for(var i = 0; i < data.nazivi.length; i++) {
+              console.log(data.rez[i].ime);
+              console.log(data.rez[i].kol1);
+              console.log(data.rez[i].kol2);
+              console.log(data.rez[i].zavrsni);
+              console.log(data.rez[i].dz1);
+              console.log(data.rez[i].dz2);
             }
-
           },
           error : function(xhr, status) {
             if(status !== "null")
@@ -63,3 +59,4 @@
 
 
 </html>
+
