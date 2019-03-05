@@ -10,12 +10,22 @@
     </style>
   </head>
   <body>
-    <p id="podaci"></p>
-    <p id="tbl"></p>
+    <button id="btn_rez">Unos rezultata</button>
+    <button id="btn_studenti">Unos novih studenata</button>
     <script type="text/javascript">
       console.log("Na stranici administrator.html");
-
+      $(document).ready(function(){
+        $("#btn_rez").on("click", unosRezultata);
+        $("#btn_studenti").on("click", unosStudenata);
+      });
+      function unosRezultata() {
+        window.location.href = "unosRezultata.html";
+      }
+      function unosStudenata() {
+        window.location.href = "unosStudenata.html";
+      }
     </script>
 
   </body>
 </html>
+

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
+    <style media="screen">
+      td, tr {border: 1px solid green;}
+      td { width: 150px; height: 150px; border-collapse: separate; font-size: 30px;}
+    </style>
+  </head>
+  <body>
+    <p>Ime studenta:</p>
+    <input type="text" id="ime">
+    <p>Prezime studenta:</p>
+    <input type="text" id="prezime">
+    <p>Korisničko ime studenta:</p>
+    <input type="text" id="kime">
+    <p>Lozinka studenta:</p>
+    <input type="text" id="lozinka">
+    <p id="popis"></p>
+    <button type="button" id="btn_spremi">Spremi i unesi još studenata</button>
+    <button type="button" id="btn_gotovo">Spremi i završi sa radom</button>
+    <script type="text/javascript">
+      var ime = null, prezime = null, username = null, pass = null;
+      var br = 0;
+      console.log("Na stranii unosStudenata.html");
+      $.ajax({
+        url: "administrator.php",
+        data:
+        {
+
+        },
+        dataType: "json",
+        success: function(data) {
+          prikaziKolegije(data.rez);
+        },
+        error : function(xhr, status) {
+          if(status !== "null")
+          console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
+        }
+      });
+      function prikaziKolegije(data) {
+        console.log("U fji prikaziKolegije");
+
+        $("#popis").append("Odaberi željene kolegije:").append("<br><br>");
+        for(var i = 0; i < data.length; i++) {
+          var cb = $("<input></input>");
+          cb.prop("type", "checkbox").prop("class", "kolegiji").prop("id", "k" + i).prop("value", data[i].ime);
+          console.log(data[i].ime);
+          $("#popis").append(cb).append(data[i].ime).append("<br>");
+        }
+        br = i;
+        console.log("Nacrtao tablicu, izlazim iz fje.");
+      }
+      $("body").on("click", "#btn_spremi", daljnjiUnos);
+      $("body").on("click", "#btn_gotovo", zadnjiUnos);
+      function daljnjiUnos() {
+        spremiUBazu();
+      }
+      function zadnjiUnos() {
+
+      }
+      function spremiUBazu() {
+        ime = $("#ime").val();
+        prezime = $("#prezime").val();
+        username = $("#username").val();
+        pass = $("#pass").val();
+        var indeksi = [];
+        if(ime !== "" && prezime !== "" && username !== "" && pass !== "") {
+          //provjera koji kolegiji su oznaceni
+          var oznaceni = [];
+          var cb = $(".kolegiji");
+          for(var j = 0; j < cb.length; j++) {
+            if(cb[j].checked) {
+              oznaceni.push(cb[j]);
+            }
+          }
+          for(var j = 0; j < oznaceni.length; j++) {
+            console.log(oznaceni[j].value);
+          }
+          /*$.ajax({
+            url: "administrator.php",
+            data:
+            {
+              ime: ime,
+              prezime : prezime,
+              username: username,
+              pass: pass,
+              kolegiji: oznaceni,
+              duljina: oznaceni.length
+            },
+            dataType: "json",
+            success: function(data) {
+              prikaziKolegije(data.rez);
+            },
+            error : function(xhr, status) {
+              if(status !== "null")
+              console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
+            }
+          });*/
+        }
+
+      }
+    </script>
+
+  </body>
+</html>
+
