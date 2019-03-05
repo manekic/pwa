@@ -4,6 +4,10 @@
     <meta charset="utf-8">
     <title>Rezultati</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
+    <style media="screen">
+      td, tr {border: 1px solid green;}
+      td { width: 50px; height: 50px; border-collapse: separate; font-size: 30px;}
+    </style>
   </head>
   <body>
     <p id="ime">Korisničko ime:</p>
@@ -13,9 +17,11 @@
 		<input type="password" id="password" />
 		<br />
 		<button id="btn_prijava">Prijavi se</button>
+    <p id="tbl"></p>
     <script type="text/javascript">
     var username = null, pass = null;
     var uspio = false;
+    var td_prvi_red = ["Kolegij", "1.kolokvij", "2.kolokvij", "Završni ispit", "1.zadaća", "2.zadaća", "3.zadaća", "4.zadaća"];
 
       $(document).ready(function(){
         console.log("Na stranici pocetna.html");
@@ -39,14 +45,7 @@
           success: function(data) {
             uspio = true;
             console.log(data.uspjeh);
-            for(var i = 0; i < data.nazivi.length; i++) {
-              console.log(data.rez[i].ime);
-              console.log(data.rez[i].kol1);
-              console.log(data.rez[i].kol2);
-              console.log(data.rez[i].zavrsni);
-              console.log(data.rez[i].dz1);
-              console.log(data.rez[i].dz2);
-            }
+            ispisiRezultate(data.rez);
           },
           error : function(xhr, status) {
             if(status !== "null")
@@ -54,6 +53,37 @@
           }
         });
       }
+      function ispisiRezultate(data) {
+        console.log("U fji ispisiRezultate");
+        var tbl = $("<table></table>");
+        var tr = $("<tr></tr>");
+        for(var k = 0; k < 8 ; k++) {
+          var td = $("<td><</td>");
+          td.prop("align", "center").css("color", "green").html(td_prvi_red[k]);
+          tr.append(td);
+        }
+        tbl.append(tr);
+
+        for(var i = 0; i < data.length; i++) {
+          var td_podrucja = [data[i].ime, data[i].kol1, data[i].kol2, data[i].zavrsni, data[i].dz1, data[i].dz2, data[i].dz3, data[i].dz4];
+          var tr = $("<tr></tr>");
+          for(var j = 0; j < 8; j++) {
+            var td = $("<td></td>");
+            td.prop("align", "center").css("color", "green").html(td_podrucja[j]);
+            tr.append(td);
+          }
+          /*console.log(data[i].ime);
+          console.log(data[i].kol1);
+          console.log(data[i].kol2);
+          console.log(data[i].zavrsni);
+          console.log(data[i].dz1);
+          console.log(data[i].dz2);*/
+          tbl.append(tr);
+        }
+        $("#tbl").html(tbl);
+        console.log("Nacrtao tablicu, izlazim iz fje.");
+      }
+
     </script>
   </body>
 
