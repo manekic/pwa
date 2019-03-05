@@ -19,9 +19,10 @@
 		<button id="btn_prijava">Prijavi se</button>
     <p id="tbl"></p>
     <script type="text/javascript">
+    //varijable za spremanje podataka
     var username = null, pass = null;
-    var uspio = false;
-    var td_prvi_red = ["Kolegij", "1.kolokvij", "2.kolokvij", "Završni ispit", "1.zadaća", "2.zadaća", "3.zadaća", "4.zadaća"];
+    //polje za podatke koji se nalaze u prvom retku tablice sa rezultatima
+    var td_kategorije = ["Kolegij", "1.kolokvij", "2.kolokvij", "Završni ispit", "1.zadaća", "2.zadaća", "3.zadaća", "4.zadaća"];
 
       $(document).ready(function(){
         console.log("Na stranici pocetna.html");
@@ -29,11 +30,14 @@
       });
       function Prijava(){
         console.log("U fji prijava");
+        //spremam potrebne podatke koje ću slati ajax upitom
         username = $("#username").val();
         //console.log("Korisnicko ime je " + username);
         pass = $("#password").val();
         //console.log("Lozinka je " + pass);
-        //ajaxom saljem serveru username i pass da provjeri nalazi li se student u bazi
+        //ajax upit kojim provjeravam je li korisnik unesao točne podatke pri registraciji
+        //ako jest, povrati podaci su rezultati ispita tog korisnika
+        //ako nije, poruka o greški - ili je lozinka kriva, ili takvo korisničko ime ne postoji
         $.ajax({
           url: "pocetna.php",
           data:
@@ -43,8 +47,8 @@
           },
           dataType: "json",
           success: function(data) {
-            uspio = true;
-            console.log(data.uspjeh);
+            console.log(data.info);
+            //korisnik se uspješno prijavio pa treba ispisati njegove rezultate
             ispisiRezultate(data.rez);
           },
           error : function(xhr, status) {
@@ -53,23 +57,30 @@
           }
         });
       }
+      //fja za dinamičko stvaranje tablice sa rezultatima
       function ispisiRezultate(data) {
         console.log("U fji ispisiRezultate");
         var tbl = $("<table></table>");
+        //prvi redak tablice
         var tr = $("<tr></tr>");
+        //potrebno je 8 ćelija sa nazivima elemenata za ocjenjivanje
         for(var k = 0; k < 8 ; k++) {
           var td = $("<td><</td>");
-          td.prop("align", "center").css("color", "green").html(td_prvi_red[k]);
+          td.prop("align", "center").css("color", "green").html(td_kategorije[k]);
           tr.append(td);
         }
         tbl.append(tr);
-
+        //kreiranje jednog retka za svaki kolegij koji je korisnik upisao
+        //kreiranje ćelija u koje se upisuju bodovi iz određenog elementa
         for(var i = 0; i < data.length; i++) {
           var td_podrucja = [data[i].ime, data[i].kol1, data[i].kol2, data[i].zavrsni, data[i].dz1, data[i].dz2, data[i].dz3, data[i].dz4];
           var tr = $("<tr></tr>");
           for(var j = 0; j < 8; j++) {
             var td = $("<td></td>");
-            td.prop("align", "center").css("color", "green").html(td_podrucja[j]);
+            if(td_podrucja[j] === null)
+              td.prop("align", "center").css("color", "green").html("-");
+            else
+              td.prop("align", "center").css("color", "green").html(td_podrucja[j]);
             tr.append(td);
           }
           /*console.log(data[i].ime);
@@ -83,7 +94,6 @@
         $("#tbl").html(tbl);
         console.log("Nacrtao tablicu, izlazim iz fje.");
       }
-
     </script>
   </body>
 
