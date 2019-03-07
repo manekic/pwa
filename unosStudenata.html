@@ -15,60 +15,34 @@
     <p>Prezime studenta:</p>
     <input type="text" id="prezime">
     <p>Korisničko ime studenta:</p>
-    <input type="text" id="kime">
+    <input type="text" id="username">
     <p>Lozinka studenta:</p>
     <input type="text" id="lozinka">
-    <p id="popis"></p>
-    <button type="button" id="btn_spremi">Spremi</button>
+    <button type="button" id="btn_spremi_studenta">Spremi studenta</button>
     <script type="text/javascript">
       var ime = null, prezime = null, username = null, pass = null;
       var br = 0;
       var saljem = true;
       var oznaceni = new Array();
-      console.log("Na stranii unosStudenata.html");
-      $.ajax({
-        url: "unosStudenata.php",
-        dataType: "json",
-        success: function(data) {
-          prikaziKolegije(data.rez);
-        },
-        error : function(xhr, status) {
-          if(status !== "null")
-          console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
-        }
-      });
-      function prikaziKolegije(data) {
-        console.log("U fji prikaziKolegije");
-
-        $("#popis").append("Odaberi željene kolegije:").append("<br><br>");
-        for(var i = 0; i < data.length; i++) {
-          var cb = $("<input></input>");
-          cb.prop("type", "checkbox").prop("class", "kolegiji").prop("id", "k" + i).prop("value", data[i].ime);
-          console.log(data[i].ime);
-          $("#popis").append(cb).append(data[i].ime).append("<br>");
-        }
-        br = i;
-        console.log("Nacrtao tablicu, izlazim iz fje.");
-      }
-      $("body").on("click", "#btn_spremi", spremiUBazu);
+      var id_kolegija = null;
+      console.log("Na stranici unosStudenata.html");
+      $("#btn_spremi_studenta").on("click", spremiUBazu);
       function spremiUBazu() {
         ime = $("#ime").val();
         prezime = $("#prezime").val();
         username = $("#username").val();
-        pass = $("#pass").val();
-        var indeksi = [];
-        if(ime !== "" && prezime !== "" && username !== "" && pass !== "") {
-          //provjera koji kolegiji su oznaceni
+        pass = $("#lozinka").val();
+        console.log(ime);
+        console.log(prezime);
+        console.log(username);
 
-          var cb = $(".kolegiji");
-          for(var j = 0; j < cb.length; j++) {
-            if(cb[j].checked)
-              oznaceni.push(cb[j]);
-          }
-          for(var j = 0; j < oznaceni.length; j++) {
-            console.log("ozn "+oznaceni[j].value);
-          }
-          var polje_za_slanje = JSON.stringify(oznaceni);
+        if(ime !== "" && prezime !== "" && username !== "" && pass !== "") {
+          var kliknuto = $(this).prop("id");
+          //console.log("kliknuto "+kliknuto);
+          var duljina_id_kolegija = kliknuto.length-1;
+          //console.log("duljina "+duljina_id_kolegija);
+          id_kolegija = kliknuto.slice(1, duljina_id_kolegija+1);
+          //console.log("id kolegija "+id_kolegija);
           $.ajax({
             url: "unosStudenata.php",
             data:
@@ -76,26 +50,29 @@
               ime: ime,
               prezime : prezime,
               username: username,
-              pass: pass,
-              oznaceni: polje_za_slanje
+              pass: pass
             },
             dataType: "json",
             success: function(data) {
-              console.log(data.us);
+              console.log(data.info);
               //prikaziKolegije(data.rez);
-              for(var i = 0; i <data.predmeti.length; i++)
-                console.log(data.predmeti[i]);
+              window.location.href = "unosKolegija.html";
+              localStorage.setItem("id", data.id);
+              localStorage.setItem("ime", ime);
+              localStorage.setItem("prezime", prezime);
             },
             error : function(xhr, status) {
               if(status !== "null")
               console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
             }
           });
-          window.location.href = "administrator.html";
         }
         else
           alert("Potrebno je unesti tražene podatke!");
-          window.location.href = "administrator.html";
+          $("#ime").val("");
+          $("#prezime").val("");
+          $("#username").val("");
+          $("#lozinka").val("");
       }
     </script>
   </body>

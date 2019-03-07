@@ -31,7 +31,8 @@ function sendErrorAndExit($messageText)
 	sendJSONandExit($message);
 }
 //ako ajaxom šaljemo username && pass
-if(isset($_GET['i']) && isset($_GET['p'])) {
+//isset($_GET['i']) && isset($_GET['p'])
+if(!isset($_GET['bodovi'])) {
   $ime = $_GET['i'];
   $prezime = $_GET['p'];
   $message = [];
@@ -52,6 +53,7 @@ if(isset($_GET['i']) && isset($_GET['p'])) {
   foreach($st->fetchAll() as $row) {
     if($row['ime'] === $ime && $row['prezime'] === $prezime) {
       $id = $row['student_id'];
+      $message['id'] = $id;
       $flag = true;
       break;
     }
@@ -94,6 +96,23 @@ if(isset($_GET['i']) && isset($_GET['p'])) {
   //slanje povratnih podataka
   sendJSONandExit($message);
 }
+else if(isset($_GET['id_kolegija']) && isset($_GET['elt']) && isset($_GET['bodovi']) && isset($_GET['id_studenta'])) {
+  $id_kolegija = $_GET['id_kolegija'];
+  $id_studenta = $_GET['id_studenta'];
+  $elt = $_GET['elt'];
+  $bodovi = $_GET['bodovi'];
+  $message = [];
+  try {
+      $db = DB::getConnection();
+      $st3 = $db->prepare("UPDATE rezultati SET $elt = '$bodovi' WHERE student_id = '$id_studenta' AND kolegij_id = '$id_kolegija'");
+      $st3->execute();
+      $message['info'] = "Ubacio rezultate u bazu!"
+    }
+    catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
+  //slanje povratnih podataka
+  sendJSONandExit($message);
+}
+
 else
   sendErrorAndExit("Nesto nije u redu -> vjerojatno nisi poslao trazenje podatke!");
  ?>
