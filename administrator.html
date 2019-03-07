@@ -2,35 +2,20 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title></title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
-    <style media="screen">
-      td, tr {border: 1px solid green;}
-      td { width: 50px; height: 50px; border-collapse: separate; font-size: 30px;}
-    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	  <link rel="stylesheet" href="view.css">
   </head>
   <body>
-    <button id="btn_rez">Unos rezultata</button><br /><br />
-    <button id="btn_studenti">Unos novih studenata</button><br /><br />
-    <button id="btn_gotovo">Završi sa radom</button>
-    <script type="text/javascript">
-      console.log("Na stranici administrator.html");
-      $(document).ready(function(){
-        $("#btn_rez").on("click", unosRezultata);
-        $("#btn_studenti").on("click", unosStudenata);
-        $("#btn_gotovo").on("click", zavrsiRad);
-      });
-      function unosRezultata() {
-        window.location.href = "unosRezultata.html";
-      }
-      function unosStudenata() {
-        window.location.href = "unosStudenata.html";
-      }
-      function zavrsiRad() {
-        window.location.href = "pocetna.html";
-      }
-    </script>
-
+    <div class="container-fluid">
+      <ul class="nav navbar-nav navbar-left">
+        <li><a href="unosRezultata.html">Unos rezultata</a></li>
+        <li><a href="unosStudenata.html">Unos novih studenata</a></li>
+        <li><a href="pocetna.html">Završi sa radom</a></li>
+			</ul>
+		</div>
   </body>
 </html>
-

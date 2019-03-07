@@ -88,4 +88,3 @@ if(isset($_GET['username']) && isset($_GET['pass'])) {
 else
 sendErrorAndExit("Nesto nije u redu -> vjerojatno nisi poslao trazenje podatke!");
 ?>
-

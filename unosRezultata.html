@@ -2,19 +2,27 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title></title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	  <link rel="stylesheet" href="login.css">
     <style media="screen">
       td, tr {border: 1px solid green;}
       td { width: 50px; height: 50px; border-collapse: separate; font-size: 30px;}
     </style>
   </head>
-  <body>
-    Ime studenta: <input type="text" id="ime_r" />
-    <br />
-    Prezime studenta: <input type="text" id="prezime_r" />
-    <br />
-    <button id="btn_tablica">Dohvati tablicu</button>
+  <body class="text-center">
+    <div class="form-signin">
+      <label for="ime">Ime studenta:</label>
+      <input type="text" id="ime_r" class="form-control" />
+      <br />
+      <label for="prezime" >Prezime studenta:</label>
+      <input type="text" id="prezime_r" class="form-control"/>
+      <br />
+      <button id="btn_tablica" class="btn btn-success">Dohvati tablicu</button>
+    </div>
     <p id="tbl"></p>
     <p id="btn_spremi"></p>
     <script type="text/javascript">
@@ -144,4 +152,3 @@
 
   </body>
 </html>
-

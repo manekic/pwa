@@ -103,4 +103,3 @@ try {
 catch( PDOException $e ) { exit( "PDO error [rezultati]: " . $e->getMessage() ); }
 echo "Ubacio u tablicu rezultati.<br />";
 ?>
-

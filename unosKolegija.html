@@ -2,17 +2,27 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title></title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
-    <style media="screen">
-      td, tr {border: 1px solid green;}
-      td { width: 150px; height: 150px; border-collapse: separate; font-size: 30px;}
-    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	  <link rel="stylesheet" href="view.css">
   </head>
-  <body>
-    <p id="podaci"></p>
-    <p id="popis"></p>
-    <button type="button" id="btn_spremi">Spremi</button>
+  <body class="text-center">
+    <nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid">
+      <ul class="nav navbar-nav navbar-left">
+        <li><h2 id="podaci"></h2></li>
+			</ul>
+		</div>
+	</nav>
+  <div class="container-fluid">
+    <p id="popis"></p> <br />
+    <button type="button" id="btn_spremi" class="btn btn-success">Spremi</button>
+  </div>
+
+
     <script type="text/javascript">
       var id_kolegija = null;
       var id = localStorage.getItem("id");
@@ -35,8 +45,9 @@
       });
       function prikaziKolegije(data) {
         console.log("U fji prikaziKolegije");
-
-        $("#popis").append("Odaberi željene kolegije:").append("<br><br>");
+        var h3 = $("<h2></h2>");
+        h3.html("Odaberite željene kolegije:");
+        $("#popis").append(h3).append("<br>");
         for(var i = 0; i < data.length; i++) {
           var cb = $("<input></input>");
           cb.prop("type", "checkbox").prop("class", "kolegiji").prop("id", "k" + (i+1)).prop("value", data[i].ime);
@@ -79,4 +90,3 @@
     </script>
   </body>
 </html>
-

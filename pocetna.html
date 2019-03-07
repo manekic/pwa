@@ -2,21 +2,28 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Rezultati</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="login.css" rel="stylesheet">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
   </head>
-  <body>
-    <p id="ime">Korisničko ime:</p>
-		<input type="text" id="username" />
-		<br />
-		<p id="lozinka">Lozinka:</p>
-		<input type="password" id="password" />
-		<br />
-		<button id="btn_prijava">Prijavi se</button>
+  <body class="text-center">
+    <div class="form-signin">
+      <h1>Dobrodošli!</h1>
+      <br />
+      <label for="username" id="ime">Korisničko ime:</label>
+      <input type="text" id="username" class="form-control" />
+      <br />
+      <label for="password" id="lozinka">Lozinka:</label>
+      <input type="password" id="password" class="form-control"/>
+      <br />
+      <button id="btn_prijava" class="btn btn-success">Prijavi se</button>
+    </div>
     <script type="text/javascript">
     //varijable za spremanje podataka
     var username = null, pass = null;
-
     $(document).ready(function(){
       console.log("Na stranici pocetna.html");
       $("#btn_prijava").on("click", Prijava);
@@ -71,4 +78,3 @@
     </script>
   </body>
 </html>
-

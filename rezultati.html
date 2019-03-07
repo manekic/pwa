@@ -2,17 +2,26 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title></title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
-    <style media="screen">
-      td, tr {border: 1px solid green;}
-      td { width: 50px; height: 50px; border-collapse: separate; font-size: 30px;}
-    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	  <link rel="stylesheet" href="view.css">
   </head>
   <body>
-    <p id="podaci"></p>
-    <p id="tbl"></p>
-    <button type="button" id="btn_odjava">Odjava</button>
+    <nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid">
+      <ul class="nav navbar-nav navbar-left">
+        <li><h2 id="podaci"></h2></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="pocetna.html"><span class="glyphicon glyphicon-log-out"></span> Odjava</a></li>
+        <li><h2 id="podaci"></h2></li>
+			</ul>
+		</div>
+	</nav>
+      <p id="tbl"></p>
     <script type="text/javascript">
       console.log("Na stranici rezultati.html");
       var username = localStorage.getItem("username");
@@ -60,7 +69,7 @@
         //potrebno je 8 ćelija sa nazivima elemenata za ocjenjivanje
         for(var k = 0; k < 8 ; k++) {
           var td = $("<td><</td>");
-          td.prop("align", "center").css("color", "green").html(td_kategorije[k]);
+          td.prop("align", "center").html(td_kategorije[k]);
           tr.append(td);
         }
         tbl.append(tr);
@@ -72,9 +81,9 @@
           for(var j = 0; j < 8; j++) {
             var td = $("<td></td>");
             if(td_podrucja[j] === null)
-              td.prop("align", "center").css("color", "green").html("-");
+              td.prop("align", "center").html("-");
             else
-              td.prop("align", "center").css("color", "green").html(td_podrucja[j]);
+              td.prop("align", "center").html(td_podrucja[j]);
             tr.append(td);
           }
           tbl.append(tr);
@@ -86,4 +95,3 @@
 
   </body>
 </html>
-

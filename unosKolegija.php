@@ -92,4 +92,3 @@ else if(isset($_GET['id'])) {
 else
   sendErrorAndExit("Nesto nije u redu -> vjerojatno nisi poslao trazene podatke!");
  ?>
-

@@ -2,23 +2,29 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title></title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
-    <style media="screen">
-      td, tr {border: 1px solid green;}
-      td { width: 150px; height: 150px; border-collapse: separate; font-size: 30px;}
-    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	  <link rel="stylesheet" href="login.css">
   </head>
-  <body>
-    <p>Ime studenta:</p>
-    <input type="text" id="ime">
-    <p>Prezime studenta:</p>
-    <input type="text" id="prezime">
-    <p>Korisničko ime studenta:</p>
-    <input type="text" id="username">
-    <p>Lozinka studenta:</p>
-    <input type="text" id="lozinka">
-    <button type="button" id="btn_spremi_studenta">Spremi studenta</button>
+  <body class="text-center">
+    <div class="form-signin">
+      <label for="ime">Ime studenta:</label>
+      <input type="text" id="ime" class="form-control" />
+      <br />
+      <label for="prezime">Prezime studenta:</label>
+      <input type="text" id="prezime" class="form-control" />
+      <br />
+      <label for="username">Korisničko ime studenta:</label>
+      <input type="text" id="username" class="form-control" />
+      <br />
+      <label for="password">Lozinka studenta:</label>
+      <input type="password" id="lozinka" class="form-control"/>
+      <br />
+      <button id="btn_spremi_studenta" class="btn btn-success">Spremi studenta</button>
+    </div>
     <script type="text/javascript">
       var ime = null, prezime = null, username = null, pass = null;
       var br = 0;
@@ -77,4 +83,3 @@
     </script>
   </body>
 </html>
-

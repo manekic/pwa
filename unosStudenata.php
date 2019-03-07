@@ -106,4 +106,3 @@ if(isset($_GET['ime'])) {
 else
   sendErrorAndExit("Nesto nije u redu -> vjerojatno nisi poslao trazene podatke!");
  ?>
-

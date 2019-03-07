@@ -116,4 +116,3 @@ else if(isset($_GET['id_kolegija']) && isset($_GET['elt']) && isset($_GET['bodov
 else
   sendErrorAndExit("Nesto nije u redu -> vjerojatno nisi poslao trazenje podatke!");
  ?>
-
