@@ -12,6 +12,7 @@
   <body>
     <p id="podaci"></p>
     <p id="tbl"></p>
+    <button type="button" id="btn_odjava">Odjava</button>
     <script type="text/javascript">
       console.log("Na stranici rezultati.html");
       var username = localStorage.getItem("username");
@@ -28,6 +29,9 @@
       console.log(id);*/
       $(document).ready(function(){
         $("#podaci").append("Student: " + ime + " " + prezime);
+        $("#btn_odjava").on("click", function(){
+          window.location.href = "pocetna.html";
+        });
       });
       $.ajax({
         url: "rezultati.php",
@@ -49,6 +53,7 @@
       //fja za dinamičko stvaranje tablice sa rezultatima
       function ispisiRezultate(data) {
         console.log("U fji ispisiRezultate");
+        console.log("rez "+data[0].ime);
         var tbl = $("<table></table>");
         //prvi redak tablice
         var tr = $("<tr></tr>");

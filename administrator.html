@@ -10,19 +10,24 @@
     </style>
   </head>
   <body>
-    <button id="btn_rez">Unos rezultata</button>
-    <button id="btn_studenti">Unos novih studenata</button>
+    <button id="btn_rez">Unos rezultata</button><br /><br />
+    <button id="btn_studenti">Unos novih studenata</button><br /><br />
+    <button id="btn_gotovo">Završi sa radom</button>
     <script type="text/javascript">
       console.log("Na stranici administrator.html");
       $(document).ready(function(){
         $("#btn_rez").on("click", unosRezultata);
         $("#btn_studenti").on("click", unosStudenata);
+        $("#btn_gotovo").on("click", zavrsiRad);
       });
       function unosRezultata() {
         window.location.href = "unosRezultata.html";
       }
       function unosStudenata() {
         window.location.href = "unosStudenata.html";
+      }
+      function zavrsiRad() {
+        window.location.href = "pocetna.html";
       }
     </script>
 

@@ -7,6 +7,7 @@ $_GET['pass'] = pass korisnika
 
 OUTPUT: JSON
 {
+  info = varijabla koja kaze je li prijava uspjela
   rez = rezultati ispita dostupni u bazi
 }
 ili
@@ -30,16 +31,40 @@ function sendErrorAndExit($messageText)
 	sendJSONandExit($message);
 }
 //ako ajaxom šaljemo username && pass
-if(isset($_GET['username']) && isset($_GET['pass'])) {
-  $username = $_GET['username'];
-  $pass = $_GET['pass'];
-  $id = $_GET['id'];
+if(isset($_GET['i']) && isset($_GET['p'])) {
+  $ime = $_GET['i'];
+  $prezime = $_GET['p'];
   $message = [];
   $message['rez'] = [];
+  $message['kolegiji'] = [];
   //polje za nazive kolegija
   $kolegiji = array();
   //brojač elemenata prethodnog polja
   $br = 0;
+  $flag = false;
+  //spajanje na bazu, tablica studenti
+  try {
+      $db = DB::getConnection();
+      $st = $db->query('SELECT * FROM studenti');
+    }
+    catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
+  //popunjavanje polja sa nazivima kolegija
+  foreach($st->fetchAll() as $row) {
+    if($row['ime'] === $ime && $row['prezime'] === $prezime) {
+      $id = $row['student_id'];
+      $flag = true;
+      break;
+    }
+  }
+  if($flag) {
+    $message['info'] = "Korisnik je u bazi";
+    $message['potvrda'] = true;
+  }
+
+  else {
+    $message['info'] = "Korisnik nije u bazi";
+    $message['potvrda'] = false;
+  }
   //spajanje na bazu, tablica kolegiji
   try {
       $db = DB::getConnection();
@@ -49,6 +74,7 @@ if(isset($_GET['username']) && isset($_GET['pass'])) {
   //popunjavanje polja sa nazivima kolegija
   foreach($st1->fetchAll() as $row1) {
     $kolegiji[$br++] = $row1['naziv_kolegija'];
+    $message['kolegiji'][] = array('ime' => $row1['naziv_kolegija']);
   }
   //spajanje na bazu, tablica rezultati
   try {

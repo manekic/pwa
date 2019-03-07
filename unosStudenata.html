@@ -19,18 +19,15 @@
     <p>Lozinka studenta:</p>
     <input type="text" id="lozinka">
     <p id="popis"></p>
-    <button type="button" id="btn_spremi">Spremi i unesi još studenata</button>
-    <button type="button" id="btn_gotovo">Spremi i završi sa radom</button>
+    <button type="button" id="btn_spremi">Spremi</button>
     <script type="text/javascript">
       var ime = null, prezime = null, username = null, pass = null;
       var br = 0;
+      var saljem = true;
+      var oznaceni = new Array();
       console.log("Na stranii unosStudenata.html");
       $.ajax({
-        url: "administrator.php",
-        data:
-        {
-
-        },
+        url: "unosStudenata.php",
         dataType: "json",
         success: function(data) {
           prikaziKolegije(data.rez);
@@ -53,14 +50,7 @@
         br = i;
         console.log("Nacrtao tablicu, izlazim iz fje.");
       }
-      $("body").on("click", "#btn_spremi", daljnjiUnos);
-      $("body").on("click", "#btn_gotovo", zadnjiUnos);
-      function daljnjiUnos() {
-        spremiUBazu();
-      }
-      function zadnjiUnos() {
-
-      }
+      $("body").on("click", "#btn_spremi", spremiUBazu);
       function spremiUBazu() {
         ime = $("#ime").val();
         prezime = $("#prezime").val();
@@ -69,41 +59,45 @@
         var indeksi = [];
         if(ime !== "" && prezime !== "" && username !== "" && pass !== "") {
           //provjera koji kolegiji su oznaceni
-          var oznaceni = [];
+
           var cb = $(".kolegiji");
           for(var j = 0; j < cb.length; j++) {
-            if(cb[j].checked) {
+            if(cb[j].checked)
               oznaceni.push(cb[j]);
-            }
           }
           for(var j = 0; j < oznaceni.length; j++) {
-            console.log(oznaceni[j].value);
+            console.log("ozn "+oznaceni[j].value);
           }
-          /*$.ajax({
-            url: "administrator.php",
+          var polje_za_slanje = JSON.stringify(oznaceni);
+          $.ajax({
+            url: "unosStudenata.php",
             data:
             {
               ime: ime,
               prezime : prezime,
               username: username,
               pass: pass,
-              kolegiji: oznaceni,
-              duljina: oznaceni.length
+              oznaceni: polje_za_slanje
             },
             dataType: "json",
             success: function(data) {
-              prikaziKolegije(data.rez);
+              console.log(data.us);
+              //prikaziKolegije(data.rez);
+              for(var i = 0; i <data.predmeti.length; i++)
+                console.log(data.predmeti[i]);
             },
             error : function(xhr, status) {
               if(status !== "null")
               console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
             }
-          });*/
+          });
+          window.location.href = "administrator.html";
         }
-
+        else
+          alert("Potrebno je unesti tražene podatke!");
+          window.location.href = "administrator.html";
       }
     </script>
-
   </body>
 </html>
 
