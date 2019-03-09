@@ -1,8 +1,9 @@
 html,
 body {
   height: 100%;
-  background:
-    url(5.jpg);
+  background-image: url(6.jpg);
+  background-position: center;
+  background-size: cover;
   font-size: 25px;
   color: #5cb85c;
 }
@@ -25,14 +26,14 @@ body {
 .form-signin {
   width: 100%;
   max-width: 330px;
-  padding: 15px;
+  padding: 20px;
   margin: 0 auto;
 }
 .form-signin .form-control {
   position: relative;
   box-sizing: border-box;
   height: auto;
-  padding: 10px;
+  padding: 20px;
   font-size: 16px;
 }
 .form-signin .form-control:focus {

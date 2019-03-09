@@ -6,22 +6,24 @@
     <title></title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="view.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	  <link rel="stylesheet" href="view.css">
   </head>
-  <body>
+  <body  class="text-center">
     <nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
       <ul class="nav navbar-nav navbar-left">
-        <li><h2 id="podaci"></h2></li>
+        <li><h2 id="podaci"><span class="glyphicon glyphicon-education"></span></h2></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="pocetna.html"><span class="glyphicon glyphicon-log-out"></span> Odjava</a></li>
-        <li><h2 id="podaci"></h2></li>
 			</ul>
 		</div>
 	</nav>
+  <div class="table-responsive">
       <p id="tbl"></p>
+  </div>
+
     <script type="text/javascript">
       console.log("Na stranici rezultati.html");
       var username = localStorage.getItem("username");
@@ -30,14 +32,14 @@
       var prezime = localStorage.getItem("prezime");
       var id = localStorage.getItem("id");
       //polje za podatke koji se nalaze u prvom retku tablice sa rezultatima
-      var td_kategorije = ["Kolegij", "1.kolokvij", "2.kolokvij", "Završni ispit", "1.zadaća", "2.zadaća", "3.zadaća", "4.zadaća"];
+      var td_kategorije = ["Kolegij", "1.kolokvij ", "2.kolokvij", "Završni ispit", "1.zadaća", "2.zadaća", "3.zadaća", "4.zadaća"];
       /*console.log(username);
       console.log(pass);
       console.log(ime);
       console.log(prezime)
       console.log(id);*/
       $(document).ready(function(){
-        $("#podaci").append("Student: " + ime + " " + prezime);
+        $("#podaci").append(" " + ime + " " + prezime);
         $("#btn_odjava").on("click", function(){
           window.location.href = "pocetna.html";
         });
@@ -64,11 +66,12 @@
         console.log("U fji ispisiRezultate");
         console.log("rez "+data[0].ime);
         var tbl = $("<table></table>");
+        tbl.prop("class", "table");
         //prvi redak tablice
         var tr = $("<tr></tr>");
         //potrebno je 8 ćelija sa nazivima elemenata za ocjenjivanje
         for(var k = 0; k < 8 ; k++) {
-          var td = $("<td><</td>");
+          var td = $("<td></td>");
           td.prop("align", "center").html(td_kategorije[k]);
           tr.append(td);
         }

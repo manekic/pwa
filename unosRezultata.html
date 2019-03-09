@@ -5,13 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title></title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	  <link rel="stylesheet" href="login.css">
-    <style media="screen">
-      td, tr {border: 1px solid green;}
-      td { width: 50px; height: 50px; border-collapse: separate; font-size: 30px;}
-    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="login.css" rel="stylesheet">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
   </head>
   <body class="text-center">
     <div class="form-signin">
@@ -22,9 +18,8 @@
       <input type="text" id="prezime_r" class="form-control"/>
       <br />
       <button id="btn_tablica" class="btn btn-success">Dohvati tablicu</button>
+      <br />
     </div>
-    <p id="tbl"></p>
-    <p id="btn_spremi"></p>
     <script type="text/javascript">
       var i = null, p = null, id_studenta = null;
       var elt = null, id_kolegija = null, duljina_id_kolegija;
@@ -45,110 +40,10 @@
       function ispisTablice() {
         i = $("#ime_r").val();
         p = $("#prezime_r").val();
-        console.log(i);
-        console.log(p);
-        $("#btn").prop("display", "none");
-        $.ajax({
-          url: "unosRezultata.php",
-          data:
-          {
-            i: i,
-            p: p
-          },
-          dataType: "json",
-          success: function(data) {
-            console.log(data.info);
-            console.log(data.id);
-            id_studenta = data.id;
-            for(var i = 0; i < data.kolegiji.length; i++)
-              popis_kolegija.push(data.kolegiji[i].ime);
-            if(!data.potvrda) {
-              alert("Korisnik ne postoji! Unesi točne podatke.");
-              $("#ime_r").val("");
-              $("#prezime_r").val("");
-            }
-            ispisRezultata(data.rez);
-          },
-          error : function(xhr, status) {
-            if(status !== "null")
-            console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
-          }
-        });
-      }
-      //fja za dinamičko stvaranje tablice sa rezultatima
-      function ispisRezultata(data) {
-        console.log("U fji ispisRezultata");
-        var tbl = $("<table></table>");
-        //prvi redak tablice
-        var tr = $("<tr></tr>");
-        //potrebno je 8 ćelija sa nazivima elemenata za ocjenjivanje
-        for(var k = 0; k < 8 ; k++) {
-          var td = $("<td><</td>");
-          td.prop("align", "center").css("color", "green").html(td_kategorije[k]);
-          tr.append(td);
-        }
-        tbl.append(tr);
-        //kreiranje jednog retka za svaki kolegij koji je korisnik upisao
-        //kreiranje ćelija u koje se upisuju bodovi iz određenog elementa
-        for(var i = 0; i < data.length; i++) {
-          var td_podrucja = [data[i].ime, data[i].kol1, data[i].kol2, data[i].zavrsni, data[i].dz1, data[i].dz2, data[i].dz3, data[i].dz4];
-          var tr = $("<tr></tr>");
-          for(var j = 0; j < 8; j++) {
-            var td = $("<td></td>");
-            if(td_podrucja[j] === null) {
-              var input = $("<input />");
-              for(var k = 0; k < popis_kolegija.length; k++) {
-                if(data[i].ime === popis_kolegija[k]) {
-                  var z = 0;
-                  z = k+1;
-                  input.prop("type", "text").prop("class", "rez").prop("id", "k"+z+"e"+j).prop("align", "center");
-                }
-              }
-              td.append(input);
-            }
-            else
-              td.prop("align", "center").css("color", "green").html(td_podrucja[j]);
-            tr.append(td);
-          }
-          tbl.append(tr);
-        }
-        $("#tbl").html(tbl);
-        var btn = $("<button></button>");
-        btn.prop("class", "spremi").html("Spremi");
-        $("#btn_spremi").append(btn);
-        console.log("Nacrtao tablicu, izlazim iz fje.");
-      }
-      $("body").on("click", "button.spremi", function(){
-        window.location.href = "administrator.html";
-      });
-      $("body").on("change", "input.rez", spremiRezultat);
-      function spremiRezultat() {
-        var id = $(this).prop("id");
-        id_elta = $(this).prop("id")[id.length-1];
-        duljina_id_kolegija = id.length - 3;
-        elt = td_kategorije_db[id_elta];
-        id_kolegija = id.slice(1, duljina_id_kolegija+1);
-        var bodovi = $(this).val();
-        $.ajax({
-          url: "unosRezultata.php",
-          data:
-          {
-            id_studenta: id_studenta,
-            id_kolegija: id_kolegija,
-            elt: elt,
-            bodovi: bodovi
-          },
-          dataType: "json",
-          success: function(data) {
-            console.log(data.info);
-          },
-          error : function(xhr, status) {
-            if(status !== "null")
-            console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
-          }
-        });
-      }
+        window.location.href = "upisRez.html";
+        localStorage.setItem("ime_ur", i);
+        localStorage.setItem("prezime_ur", p);
+}
     </script>
-
   </body>
 </html>
