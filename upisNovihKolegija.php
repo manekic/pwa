@@ -32,14 +32,12 @@ function sendErrorAndExit($messageText)
 }
 //ako ajaxom šaljemo username && pass
 //isset($_GET['i']) && isset($_GET['p'])
-if(!isset($_GET['bodovi'])) {
-  $ime = $_GET['i'];
-  $prezime = $_GET['p'];
+if(!isset($_GET['id_kolegija'])) {
   $message = [];
   $message['rez'] = [];
   $message['kolegiji'] = [];
+  $message['upisani'] = [];
   $id = $_GET['id_studenta'];
-
   //polje za nazive kolegija
   $kolegiji = array();
   //brojač elemenata prethodnog polja
@@ -65,31 +63,46 @@ if(!isset($_GET['bodovi'])) {
   //podatke iz baze zapisujem u povratnu varijablu
   foreach($st2->fetchAll() as $row2) {
     if($row2['student_id'] === $id) {
-      //$message['nazivi'][] = $kolegiji[$row2['kolegij_id']-1];
-      $message['rez'][] = array('ime' => $kolegiji[$row2['kolegij_id']-1], 'kol1' => $row2['1kolokvij'],
-                                'kol2' => $row2['2kolokvij'], 'zavrsni' => $row2['zavrsni'], 'dz1' => $row2['1zadaca'],
-                                'dz2' => $row2['2zadaca'], 'dz3' => $row2['3zadaca'],'dz4' => $row2['4zadaca']);
+      $message['upisani'][] = array('ime' => $kolegiji[$row2['kolegij_id']-1]);
     }
   }
   //slanje povratnih podataka
   sendJSONandExit($message);
 }
-/*else if(isset($_GET['bodovi'])) {
-  $id_kolegija = $_GET['id_kolegija'];
+else if(isset($_GET['id_kolegija'])) {
   $id_studenta = $_GET['id_studenta'];
-  $elt = $_GET['elt'];
-  $bodovi = $_GET['bodovi'];
-  $message = [];
+  $id_kolegija = $_GET['id_kolegija'];
+	$message = [];
+  $flag = false;
   try {
       $db = DB::getConnection();
-      $st3 = $db->prepare("UPDATE rezultati SET $elt = '$bodovi' WHERE student_id = '$id_studenta' AND kolegij_id = '$id_kolegija'");
-      $st3->execute();
-      $message['info'] = "Ubacio rezultate u bazu!"
+      $st1 = $db->query('SELECT student_id, kolegij_id FROM rezultati');
     }
-    catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
-  //slanje povratnih podataka
-  sendJSONandExit($message);
-}*/
+  catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
+  foreach($st1->fetchAll() as $row1) {
+    if($row1['student_id'] === $id_studenta && $row1['kolegij_id'] === $id_kolegija) {
+      $flag = true;
+      try {
+          $db = DB::getConnection();
+          $st2 = $db->prepare( "DELETE FROM rezultati WHERE student_id = '$id_studenta' AND kolegij_id = '$id_kolegija'" );
+          $st2->execute();
+          $message['info'] ="obrisao";
+      }
+      catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
+      }
+    }
+    if($flag === false) {
+      try {
+          $db = DB::getConnection();
+          $st3 = $db->prepare( 'INSERT INTO rezultati(student_id, kolegij_id)
+                                VALUES (:student_id, :kolegij_id)' );
+          $st3->execute( array('student_id' => $id_studenta, 'kolegij_id' => $id_kolegija) );
+          $message['info'] ="ubacio";
+        }
+        catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
+    }
+    sendJSONandExit($message);
+}
 
 else
   sendErrorAndExit("Nesto nije u redu -> vjerojatno nisi poslao trazenje podatke!");

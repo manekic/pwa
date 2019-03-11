@@ -10,24 +10,147 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </head>
   <body  class="text-center">
-  <div class="table-responsive">
-      <p id="tbl"></p>
+  <nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <ul class="nav navbar-nav navbar-left">
+      <li><h2 id="podaci"><span class="glyphicon glyphicon-education"></span></h2></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="administrator.html"><span class="glyphicon glyphicon-floppy-saved"></span> Spremi</a></li>
+    </ul>
   </div>
-
+</nav>
+  <div  class="container-fluid">
+    <p id="popis"></p>
+  </div>
     <script type="text/javascript">
       console.log("Na stranici brisanje rez.html");
-      var i = null, p = null, id_studenta = null;
-      $(document).ready(function(){
-        $("#btn_tablica").on("click", ispisTablice);
-      });
-      function ispisTablice() {
-        i = $("#ime_br").val();
-        p = $("#prezime_br").val();
-        window.location.href = "brisanjeRez.html";
-        localStorage.setItem("ime_br", i);
-        localStorage.setItem("prezime_br", p);
-}
+      var i = localStorage.getItem("ime_br");
+      var p = localStorage.getItem("prezime_br");
+      var id_studenta = localStorage.getItem("id_br");
+      $("#podaci").append(" " + i + " "+ p);
+      var popisUpisanihKolegija = [];
+      var popisSvihKolegija = [];
+      var id_kolegija = null;
+      var flag = false;
+      var saljem = true;
+      $(document).ready(dohvacanjeKolegija());
+      function dohvacanjeKolegija() {
+        $.ajax({
+          url: "brisanjeRez.php",
+          data:
+          {
+            id_studenta: id_studenta
+          },
+          dataType: "json",
+          success: function(data) {
+            console.log(data.info);
+            console.log(data.id);
+            //id_studenta = data.id;
+            popisSvihKolegija = [];
+            popisUpisanihKolegija = [];
+            for(var i = 0; i < data.kolegiji.length; i++)
+              popisSvihKolegija.push(data.kolegiji[i].ime);
 
+            for(var i = 0; i < data.upisani.length; i++)
+              popisUpisanihKolegija.push(data.upisani[i].ime);
+
+            for(var i = 0; i < popisUpisanihKolegija.length; i++)
+              console.log("upisani " + popisUpisanihKolegija[i]);
+              for(var i = 0; i < popisSvihKolegija.length; i++)
+                console.log("svi " + popisSvihKolegija[i]);
+            ispisKolegija();
+          },
+          error : function(xhr, status) {
+            if(status !== "null")
+            console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
+          }
+        });
+      }
+      function ispisKolegija() {
+        console.log("U fji brisanje kolegija");
+        $("#popis").html("");
+        var h4 = $("<p></p>");
+        if(popisUpisanihKolegija.length === 0)
+          $("#popis").append("Nema upisanih kolegija.");
+        else {
+          h4.html("Popis upisanih kolegija:");
+          $("#popis").append(h4);
+          var ul = $("<ul></ul>");
+
+          for(var i = 0; i < popisUpisanihKolegija.length; i++) {
+            var li = $("<li></li>");
+            li.prop("class", "upisani_kolegiji").prop("list-style-type", "none");
+            li.html(popisUpisanihKolegija[i]);
+            ul.append(li);
+          }
+          $("#popis").append(ul).append("<br />").append("Obriši kolegij: ");
+          var input = $("<input></input>");
+          input.prop("type", "text").prop("id", "imeZaBrisanje");
+          $("#popis").append(input).append(" ");
+          var btn = $("<button></button>");
+          btn.prop("class", "btn btn-success").prop("id", "btnBrisanje").html(" Obriši");
+          $("#popis").append(btn);
+        }
+        console.log("Nacrtao tablicu, izlazim iz fje.");
+      }
+      $("body").on("click", "#btnBrisanje", function(){
+        console.log("btn brisanje");
+        var input = $("#imeZaBrisanje").val();
+        console.log("input je  "+ input);
+        flag = false;
+        if(input !== "") {
+          for(var i = 0; i < popisUpisanihKolegija.length; i++) {
+            console.log("trim "+popisUpisanihKolegija[i].trim());
+            if(popisUpisanihKolegija[i].trim() === input.trim()) {
+              console.log("Unesao dozvoljenu vrijednost.");
+              for(var j = 0; j < popisSvihKolegija.length; j++) {
+                if(popisSvihKolegija[j] === input) {
+                  id_kolegija = j+1;
+                  flag = true;
+                  break;
+                }
+              }
+            }
+          }
+          var r = confirm("Jeste li sigurni da želite obrisati kolegij " + input + "?");
+        }
+        else
+          alert("Nisu uneseni potrebni podaci!");
+        if(r) {
+          if(flag) {
+            console.log("brisem");
+            $("#imeZaBrisanje").val("");
+            obrisiRedakTablice();
+          }
+          else
+            alert("Nije unesen valjan podatak.");
+            $("#imeZaBrisanje").val("");
+        }
+        else {
+          $("#imeZaBrisanje").val("");
+        }
+      });
+      function obrisiRedakTablice() {
+        console.log("u brisanje retka");
+          $.ajax({
+            url: "brisanjeRez.php",
+            data:
+            {
+              id_studenta: id_studenta,
+              id_kolegija: id_kolegija
+            },
+            dataType: "json",
+            success: function(data) {
+              console.log(data.info);
+              dohvacanjeKolegija();
+            },
+            error : function(xhr, status) {
+              if(status !== "null")
+              console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
+            }
+          });
+      }
     </script>
 
   </body>

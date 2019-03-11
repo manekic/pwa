@@ -24,9 +24,8 @@
       <p id="tbl"></p>
   </div>
     <script type="text/javascript">
-      var id_studenta = null;
-      var elt = null, id_kolegija = null, duljina_id_kolegija;
-      var popis_kolegija = [];
+      var elt = null, id_kolegija = null, duljina_id_kolegija, id_studenta;
+      var popisKolegija = [];
       console.log("Na stranici unesiRezultate.html");
       //polje za podatke koji se nalaze u prvom retku tablice sa rezultatima
       var td_kategorije = ["Kolegij", " 1.kolokvij ", "2.kolokvij", "Završni ispit", "1.zadaća", "2.zadaća", "3.zadaća", "4.zadaća"];
@@ -35,26 +34,19 @@
       $(document).ready(function(){
         var i = localStorage.getItem("ime_ur");
         var p = localStorage.getItem("prezime_ur");
+        id_studenta = localStorage.getItem("id_ur");
         $("#podaci").append(" " + i + " " + p);
         $.ajax({
           url: "unosRezultata.php",
           data:
           {
-            i: i,
-            p: p
+            id_studenta: id_studenta
           },
           dataType: "json",
           success: function(data) {
             console.log(data.info);
-            console.log(data.id);
-            id_studenta = data.id;
             for(var i = 0; i < data.kolegiji.length; i++)
-              popis_kolegija.push(data.kolegiji[i].ime);
-            if(!data.potvrda) {
-              alert("Korisnik ne postoji! Unesi točne podatke.");
-              $("#ime_r").val("");
-              $("#prezime_r").val("");
-            }
+              popisKolegija.push(data.kolegiji[i].ime);
             ispisRezultata(data.rez);
           },
           error : function(xhr, status) {
@@ -86,8 +78,8 @@
             if(td_podrucja[j] === null) {
               //td.prop("align", "center").html("-");
               var input = $("<input />");
-              for(var k = 0; k < popis_kolegija.length; k++) {
-                if(data[i].ime === popis_kolegija[k]) {
+              for(var k = 0; k < popisKolegija.length; k++) {
+                if(data[i].ime === popisKolegija[k]) {
                   var z = 0;
                   z = k+1;
                   input.prop("type", "text").prop("size", "3").prop("class", "rez").prop("id", "k"+z+"e"+j).prop("align", "center");
@@ -120,7 +112,7 @@
         var bodovi = $(this).val();
         console.log("bodovi su " + bodovi);
         $.ajax({
-          url: "upisRez.php",
+          url: "unosRezultata.php",
           data:
           {
             id_studenta: id_studenta,

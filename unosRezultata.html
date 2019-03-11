@@ -33,17 +33,41 @@
       console.log(ime);
       console.log(prezime)
       console.log(id);*/
-
       $(document).ready(function(){
         $("#btn_tablica").on("click", ispisTablice);
       });
       function ispisTablice() {
         i = $("#ime_r").val();
         p = $("#prezime_r").val();
-        window.location.href = "upisRez.html";
-        localStorage.setItem("ime_ur", i);
-        localStorage.setItem("prezime_ur", p);
-}
+        $.ajax({
+          url: "unosRezultataLogin.php",
+          data:
+          {
+            i: i,
+            p: p
+          },
+          dataType: "json",
+          success: function(data) {
+            //ukoliko je prijava korisnika bila uspješna te se ne radi o administratoru, treba ispisati njegove rezultate
+            if(data.potvrda) {
+              console.log(data.info);
+              window.location.href = "upisRez.html";
+              localStorage.setItem("ime_ur", i);
+              localStorage.setItem("prezime_ur", p);
+              localStorage.setItem("id_ur", data.id);
+            }
+            else {
+              alert(data.info);
+              $("#ime_r").val("");
+              $("#prezime_r").val("");
+            }
+          },
+          error : function(xhr, status) {
+            if(status !== "null")
+            console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
+          }
+        });
+      }
     </script>
   </body>
 </html>

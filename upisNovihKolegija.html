@@ -24,37 +24,69 @@
       <p id="popis"></p>
     </div>
     <script type="text/javascript">
-      var id_kolegija = null;
-      var id = localStorage.getItem("id_us");
-      var ime = localStorage.getItem("ime_us");
-      var prezime = localStorage.getItem("prezime_us");
+      console.log("Na stranici upis novih kolegija.html");
+      var popisSvihKolegija = [];
+      var popisUpisanihKolegija = [];
+      var id_studenta = null, id_kolegija = null;
+      var flag = false;
       $(document).ready(function(){
-        $("#podaci").append(" " + ime + " " + prezime);
-        console.log("Na stranici unosKolegija.html");
+        id_studenta = localStorage.getItem("id_unk");
+        var i = localStorage.getItem("ime_unk");
+        var p = localStorage.getItem("prezime_unk");
+        $("#podaci").append(" " + i + " "+ p);
+        dohvacanjeSvihKolegija();
+      });
+      function dohvacanjeSvihKolegija() {
         $.ajax({
-          url: "unosKolegija.php",
+          url: "upisNovihKolegija.php",
+          data:
+          {
+            id_studenta: id_studenta
+          },
           dataType: "json",
           success: function(data) {
-            prikaziKolegije(data.rez);
+            console.log(data.info);
+            popisSvihKolegija = [];
+            popisUpisanihKolegija = [];
+            for(var i = 0; i < data.kolegiji.length; i++)
+              popisSvihKolegija.push(data.kolegiji[i].ime);
+            for(var i = 0; i < data.upisani.length; i++)
+              popisUpisanihKolegija.push(data.upisani[i].ime);
+            for(var i = 0; i < popisUpisanihKolegija.length; i++)
+              console.log("upisani " + popisUpisanihKolegija[i]);
+            for(var i = 0; i < popisSvihKolegija.length; i++)
+              console.log("svi " + popisSvihKolegija[i]);
+            ispisSvihKolegija();
           },
           error : function(xhr, status) {
             if(status !== "null")
             console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
           }
         });
-      });
-      function prikaziKolegije(data) {
-        console.log("U fji prikaziKolegije");
+      }
+      function ispisSvihKolegija() {
         var h4 = $("<p></p>");
         h4.html("Odaberite željene kolegije:");
         $("#popis").append(h4);
-        for(var i = 0; i < data.length; i++) {
-          var cb = $("<input></input>");
-          cb.prop("type", "checkbox").prop("class", "kolegiji").prop("id", "k" + (i+1)).prop("value", data[i].ime);
-          console.log(data[i].ime);
-          $("#popis").append(cb).append(data[i].ime).append("<br>");
+        /*for(var i = 0; i < popisSvihKolegija.length; i++) {
+          for(var j = 0; j < popisUpisanihKolegija.length; j++) {
+            if(popisSvihKolegija[i] !== popisUpisanihKolegija[j]) {
+              var cb = $("<input></input>");
+              cb.prop("type", "checkbox").prop("class", "kolegiji").prop("id", "k" + (i+1)).prop("value", popisSvihKolegija[i]);
+              $("#popis").append(cb).append(popisSvihKolegija[i]).append("<br>");
+            }
+          }
+        }*/
+        for(var i = 0; i < popisSvihKolegija.length; i++) {
+          for(var j = 0; j < popisUpisanihKolegija.length; j++) {
+            var cb = $("<input></input>");
+            cb.prop("type", "checkbox").prop("class", "kolegiji").prop("id", "k" + (i+1)).prop("value", popisSvihKolegija[i]);
+            if(popisSvihKolegija[i] === popisUpisanihKolegija[j]) {
+              cb.prop("checked", "checked").prop("disabled", "disabled");
+            }
+            $("#popis").append(cb).append(popisSvihKolegija[i]).append("<br>");
+          }
         }
-        br = i;
         console.log("Nacrtao tablicu, izlazim iz fje.");
       }
       $("body").on("change", "input.kolegiji", spremiUBazu);
@@ -67,10 +99,10 @@
           id_kolegija = kliknuto.slice(1, duljina_id_kolegija+1);
           //console.log("id kolegija "+id_kolegija);
           $.ajax({
-            url: "unosKolegija.php",
+            url: "upisNovihKolegija.php",
             data:
             {
-              id: id,
+              id_studenta: id_studenta,
               id_kolegija: id_kolegija
             },
             dataType: "json",
@@ -84,9 +116,7 @@
           });
           //window.location.href = "administrator.html";
         }
-    /*$("#btn_spremi").on("click", function(){
-      window.location.href = "administrator.html";
-    });*/
     </script>
+
   </body>
 </html>

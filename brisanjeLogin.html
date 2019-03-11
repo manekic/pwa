@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="login.css" rel="stylesheet">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+  </head>
+  <body  class="text-center">
+  <div class="form-signin">
+    <label for="ime">Ime studenta:</label>
+    <input type="text" id="ime_br" class="form-control" />
+    <br />
+    <label for="prezime" >Prezime studenta:</label>
+    <input type="text" id="prezime_br" class="form-control"/>
+    <br />
+    <button id="btn_pronadi" class="btn btn-success">Pronađi</button>
+    <br />
+  </div>
+  <script type="text/javascript">
+      console.log("Na stranici brisanje login.html");
+      var i = null, p = null, id_studenta = null;
+      $(document).ready(function(){
+        $("#btn_pronadi").on("click", pronadiStudenta);
+      });
+      function pronadiStudenta() {
+        i = $("#ime_br").val();
+        p = $("#prezime_br").val();
+        console.log("i " +i);
+        $.ajax({
+          url: "brisanjeLogin.php",
+          data:
+          {
+            i: i,
+            p: p
+          },
+          dataType: "json",
+          success: function(data) {
+            //ukoliko je prijava korisnika bila uspješna te se ne radi o administratoru, treba ispisati njegove rezultate
+            if(data.potvrda) {
+              console.log(data.info);
+              window.location.href = "brisanjeRez.html";
+              localStorage.setItem("ime_br", i);
+              localStorage.setItem("prezime_br", p);
+              localStorage.setItem("id_br", data.id);
+            }
+            else {
+              alert(data.info);
+              $("#ime_br").val("");
+              $("#prezime_br").val("");
+            }
+          },
+          error : function(xhr, status) {
+            if(status !== "null")
+            console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
+          }
+        });
+}
+
+    </script>
+
+  </body>
+</html>
