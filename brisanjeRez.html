@@ -77,7 +77,7 @@
           h4.html("Popis upisanih kolegija:");
           $("#popis").append(h4);
           var ul = $("<ul></ul>");
-
+          ul.prop("class", "nav");
           for(var i = 0; i < popisUpisanihKolegija.length; i++) {
             var li = $("<li></li>");
             li.prop("class", "upisani_kolegiji").prop("list-style-type", "none");

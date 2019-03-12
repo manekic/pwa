@@ -54,7 +54,10 @@
         },
         dataType: "json",
         success: function(data) {
-          ispisiRezultate(data.rez);
+          if(data.rez.length !== 0)
+            ispisiRezultate(data.rez);
+          else
+            $("#tbl").append("Niste upisali niti jedan kolegij!");
         },
         error : function(xhr, status) {
           if(status !== "null")
@@ -69,8 +72,42 @@
         tbl.prop("class", "table");
         //prvi redak tablice
         var tr = $("<tr></tr>");
+        for(var i = 0; i < data.length; i++) {
+          var td_podrucja = [data[i].ime, data[i].kol1, data[i].kol2, data[i].zavrsni, data[i].dz1, data[i].dz2, data[i].dz3, data[i].dz4];
+          //var tr = $("<tr></tr>");
+          if(i === 0) {
+            var td = $("<td></td>");
+            td.prop("align", "center").html(td_kategorije[0]);
+            var td1 = $("<td></td>");
+            td1.prop("align", "center").html(td_podrucja[0]);
+            tr.append(td);
+            tr.append(td1);
+          }
+          else {
+            var td = $("<td></td>");
+            td.prop("align", "center").html(td_podrucja[0]);
+            tr.append(td);
+          }
+        tbl.append(tr);
+        }
+        for(var j = 0; j < 7; j++) {
+          var tr = $("<tr></tr>");
+          var td = $("<td></td>");
+          td.prop("align", "center").html(td_kategorije[j+1]);
+          tr.append(td);
+          for(var i = 0; i < data.length; i++) {
+            var td_podrucja = [data[i].ime, data[i].kol1, data[i].kol2, data[i].zavrsni, data[i].dz1, data[i].dz2, data[i].dz3, data[i].dz4];
+            var td = $("<td></td>");
+            if(td_podrucja[j+1] === null)
+              td.prop("align", "center").html("-");
+            else
+              td.prop("align", "center").html(td_podrucja[j+1]);
+            tr.append(td);
+          }
+          tbl.append(tr);
+        }
         //potrebno je 8 ćelija sa nazivima elemenata za ocjenjivanje
-        for(var k = 0; k < 8 ; k++) {
+        /*for(var k = 0; k < 8 ; k++) {
           var td = $("<td></td>");
           td.prop("align", "center").html(td_kategorije[k]);
           tr.append(td);
@@ -90,7 +127,7 @@
             tr.append(td);
           }
           tbl.append(tr);
-        }
+        }*/
         $("#tbl").html(tbl);
         console.log("Nacrtao tablicu, izlazim iz fje.");
       }

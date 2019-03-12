@@ -77,12 +77,28 @@
             }
           }
         }*/
-        for(var i = 0; i < popisSvihKolegija.length; i++) {
-          for(var j = 0; j < popisUpisanihKolegija.length; j++) {
+        for(var i = 0; i < popisUpisanihKolegija.length; i++)
+          console.log("upisani " + popisUpisanihKolegija[i]);
+        if(popisUpisanihKolegija.length === 0) {
+          for(var i = 0; i < popisSvihKolegija.length; i++) {
+            var cb = $("<input></input>");
+            cb.prop("type", "checkbox").prop("class", "kolegiji").prop("id", "k" + (i+1)).prop("value",popisSvihKolegija[i]);
+            console.log(popisSvihKolegija[i]);
+            $("#popis").append(cb).append(popisSvihKolegija[i]).append("<br>");
+          }
+        }
+        else if(popisUpisanihKolegija.length === popisSvihKolegija.length) {
+          $("#popis").append("Upisani su svi raspoloživi kolegiji.").append("<br>");
+        }
+        else {
+          for(var i = 0; i < popisSvihKolegija.length; i++) {
             var cb = $("<input></input>");
             cb.prop("type", "checkbox").prop("class", "kolegiji").prop("id", "k" + (i+1)).prop("value", popisSvihKolegija[i]);
-            if(popisSvihKolegija[i] === popisUpisanihKolegija[j]) {
-              cb.prop("checked", "checked").prop("disabled", "disabled");
+            for(var j = 0; j < popisUpisanihKolegija.length; j++) {
+              if(popisSvihKolegija[i] === popisUpisanihKolegija[j]) {
+                cb.prop("checked", "checked").prop("disabled", "disabled").prop("text-decoration", "line-through");
+                break;
+              }
             }
             $("#popis").append(cb).append(popisSvihKolegija[i]).append("<br>");
           }
