@@ -1,11 +1,11 @@
 html,
 body {
   height: 100%;
-  background-image: url(6.jpg);
+  background-image: url(1.jpg);
   background-position: center;
   background-size: cover;
   font-size: 25px;
-  color: #5cb85c;
+  color: #ea5e0e;
 }
 body {
   display: -ms-flexbox;
@@ -26,7 +26,7 @@ table tr td{
   width: auto;
   text-align: center;
   table-layout: auto;
-  color: #5cb85c;
+  color: #ea5e0e;
 }
 td {
   max-width: 100%;
@@ -41,9 +41,10 @@ td {
   z-index:1;
   opacity: 0.8;
 }
+
 a {
-  color: #5cb85c;
+  color: #ea5e0e;
 }
 span {
-  color: #5cb85c;
+  color: #ea5e0e;
 }
