@@ -48,17 +48,17 @@ if(isset($_GET['i']) && isset($_GET['p'])) {
   //spajanje na bazu, tablica studenti
   try {
       $db = DB::getConnection();
-      $st = $db->query('SELECT * FROM studenti');
+      $st = $db->prepare('SELECT student_id FROM studenti WHERE ime=:ime AND prezime=:prezime');
+      $st->execute(array('ime' => $ime, 'prezime' => $prezime));
     }
     catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
-  foreach($st->fetchAll() as $row) {
-    if($row['ime'] === $ime && $row['prezime'] === $prezime) {
-      $id = $row['student_id'];
-      $message['id'] = $id;
+
+    while($row = $st->fetch()) {
+      $id_studenta = $row['student_id'];
+      $message['id'] = $id_studenta;
       $flag = true;
       break;
     }
-  }
   if($flag) {
     $message['info'] = "Korisnik je u bazi";
     $message['potvrda'] = true;

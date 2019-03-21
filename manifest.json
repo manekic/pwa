@@ -1,0 +1,19 @@
+{
+  "short_name": "Rezultati ispita",
+  "name": "Praćenje rezultata na ispitima",
+  "start_url": "/~maja/novo/index.html",
+  "gcm_sender_id": "56350896431",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "app-icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "app-icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

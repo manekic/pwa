@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="view.css">
+    <link rel="manifest" href="manifest.json">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </head>
   <body  class="text-center">
@@ -25,12 +26,14 @@
     </div>
     <script type="text/javascript">
       var id_kolegija = null;
+      //dohvaćanje podataka o korisniku
       var id = localStorage.getItem("id_us");
       var ime = localStorage.getItem("ime_us");
       var prezime = localStorage.getItem("prezime_us");
       $(document).ready(function(){
         $("#podaci").append(" " + ime + " " + prezime);
         console.log("Na stranici unosKolegija.html");
+        //dohvaćanje svih kolegija
         $.ajax({
           url: "unosKolegija.php",
           dataType: "json",
@@ -43,6 +46,8 @@
           }
         });
       });
+      //prikaz svih kolegija
+      //svaki kolegij je jedan checkbox
       function prikaziKolegije(data) {
         console.log("U fji prikaziKolegije");
         var h4 = $("<p></p>");
@@ -57,6 +62,8 @@
         br = i;
         console.log("Nacrtao tablicu, izlazim iz fje.");
       }
+      //klikom na checkbox (radnja: označi) kolegij se sprema u bazu
+      //klikom na checkbox (radnja: odznači) kolegij se briše iz baze
       $("body").on("change", "input.kolegiji", spremiUBazu);
       //$("#btn_spremi").on("click", spremiUBazu);
       function spremiUBazu() {
@@ -82,11 +89,7 @@
               console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
             }
           });
-          //window.location.href = "administrator.html";
         }
-    /*$("#btn_spremi").on("click", function(){
-      window.location.href = "administrator.html";
-    });*/
     </script>
   </body>
 </html>

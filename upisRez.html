@@ -8,6 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	  <link rel="stylesheet" href="view.css">
+    <link rel="manifest" href="manifest.json">
   </head>
   <body class="text-center">
     <nav class="navbar navbar-default navbar-fixed-top">
@@ -32,10 +33,12 @@
       var td_kategorije_db = ["Kolegij", "1kolokvij", "2kolokvij", "zavrsni", "1zadaca", "2zadaca", "3zadaca", "4zadaca"];
       console.log("na upisrez");
       $(document).ready(function(){
+        //dohvaćanje podataka o korisniku
         var i = localStorage.getItem("ime_ur");
         var p = localStorage.getItem("prezime_ur");
         id_studenta = localStorage.getItem("id_ur");
         $("#podaci").append(" " + i + " " + p);
+        //dohvaćanje kolegija koje je upisao te odg.rezultata
         $.ajax({
           url: "unosRezultata.php",
           data:
@@ -75,8 +78,8 @@
           var tr = $("<tr></tr>");
           for(var j = 0; j < 8; j++) {
             var td = $("<td></td>");
+            //ako rezultat iz određenog podtučja ne postoji -> stavi input na to mjesto (za upis rezultata)
             if(td_podrucja[j] === null) {
-              //td.prop("align", "center").html("-");
               var input = $("<input />");
               for(var k = 0; k < popisKolegija.length; k++) {
                 if(data[i].ime === popisKolegija[k]) {
@@ -85,7 +88,6 @@
                   input.prop("type", "text").prop("size", "3").prop("class", "rez").prop("id", "k"+z+"e"+j).prop("align", "center");
                 }
               }
-              //td.append(td);
               td.append(input);
             }
             else
@@ -97,6 +99,7 @@
         $("#tbl").html(tbl).append("<br />");
         console.log("Nacrtao tablicu, izlazim iz fje.");
       }
+      //reakcija na pritisak entera nakon unosa rezultata
       $("body").on("change", "input.rez", spremiRezultat);
       function spremiRezultat() {
         var id = $(this).prop("id");
@@ -111,6 +114,7 @@
         console.log("id kol je " + id_kolegija);
         var bodovi = $(this).val();
         console.log("bodovi su " + bodovi);
+        //slanje svih potrebnih podataka kako bi se novi rezultat spremio u bazu
         $.ajax({
           url: "unosRezultata.php",
           data:

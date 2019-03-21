@@ -31,6 +31,36 @@ function sendErrorAndExit($messageText)
 	sendJSONandExit($message);
 }
 //ajaxom šaljemo upit i želimo dobiti nazive kolegija kao povratne informacije
+if(isset($_GET['ime'])) {
+  $ime = $_GET['ime'];
+  $prezime = $_GET['prezime'];
+  $username = $_GET['username'];
+  $pass = $_GET['pass'];
+	$message = [];
+  //spajanje na bazu, tablica studenti
+  try {
+      $db = DB::getConnection();
+      $st = $db->prepare('SELECT student_id FROM studenti');
+      $st->execute();
+    }
+    catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
+  //dohvaćanje svih podataka korisnika koji se prijavio
+  //ako proslijeđeni username ne postoji u bazi -> krivo korisničko ime!
+  while($row = $st->fetch()) {
+    $id = $row['student_id'];
+  }
+  //zadnji id + 1 je id novog studenta
+  $id = $id + 1;
+  $message['id'] = $id;
+  try {
+      $db = DB::getConnection();
+      $st1 = $db->prepare( 'INSERT INTO studenti(student_id, ime, prezime, username, password)
+                            VALUES (:student_id, :ime, :prezime, :username, :password)' );
+      $st1->execute( array('student_id' => $id, 'ime' => $ime, 'prezime' => $prezime, 'username' => $username, 'password' => $pass ) );
+      $message['info'] ="ubacio";
+    }
+    catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
+    sendJSONandExit($message);
 /*if(!isset($_GET['ime'])) {
   //inicijaliziram varijablu koju saljem
 	$message = [];
@@ -52,36 +82,6 @@ function sendErrorAndExit($messageText)
   //slanje povratnih podataka
   sendJSONandExit($message);
 }*/
-if(isset($_GET['ime'])) {
-  $ime = $_GET['ime'];
-  $prezime = $_GET['prezime'];
-  $username = $_GET['username'];
-  $pass = $_GET['pass'];
-	$message = [];
-  //spajanje na bazu, tablica studenti
-  try {
-      $db = DB::getConnection();
-      $st = $db->prepare('SELECT student_id FROM studenti');
-      $st->execute();
-    }
-    catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
-  //dohvaćanje svih podataka korisnika koji se prijavio
-  //ako proslijeđeni username ne postoji u bazi -> krivo korisničko ime!
-  while($row = $st->fetch()) {
-    $id = $row['student_id'];
-  }
-  $id = $id + 1;
-  $message['id'] = $id;
-  try {
-      $db = DB::getConnection();
-      $st1 = $db->prepare( 'INSERT INTO studenti(student_id, ime, prezime, username, password)
-                            VALUES (:student_id, :ime, :prezime, :username, :password)' );
-      $st1->execute( array('student_id' => $id, 'ime' => $ime, 'prezime' => $prezime, 'username' => $username, 'password' => $pass ) );
-      $message['info'] ="ubacio";
-    }
-    catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
-    sendJSONandExit($message);
-
 }
 
 /*else if(isset($_GET['ime'])) {

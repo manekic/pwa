@@ -5,7 +5,7 @@ body {
   background-position: center;
   background-size: cover;
   font-size: 25px;
-  color: #ea5e0e;
+  color: #5cb85c;
 }
 body {
   display: -ms-flexbox;
@@ -26,7 +26,7 @@ table tr td{
   width: auto;
   text-align: center;
   table-layout: auto;
-  color: #ea5e0e;
+  color: #5cb85c;
 }
 td {
   max-width: 100%;
@@ -43,8 +43,8 @@ td {
 }
 
 a {
-  color: #ea5e0e;
+  color: #5cb85c;
 }
 span {
-  color: #ea5e0e;
+  color: #5cb85c;
 }

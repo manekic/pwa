@@ -30,9 +30,7 @@ function sendErrorAndExit($messageText)
 	sendJSONandExit($message);
 }
 //ako ajaxom šaljemo username && pass
-if(isset($_GET['username']) && isset($_GET['pass'])) {
-  $username = $_GET['username'];
-  $pass = $_GET['pass'];
+if(isset($_GET['id'])) {
   $id = $_GET['id'];
   $message = [];
   $message['rez'] = [];
@@ -43,27 +41,26 @@ if(isset($_GET['username']) && isset($_GET['pass'])) {
   //spajanje na bazu, tablica kolegiji
   try {
       $db = DB::getConnection();
-      $st1 = $db->query('SELECT naziv_kolegija FROM kolegiji');
+      $st = $db->prepare('SELECT naziv_kolegija FROM kolegiji');
+      $st->execute();
     }
     catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
   //popunjavanje polja sa nazivima kolegija
-  foreach($st1->fetchAll() as $row1) {
-    $kolegiji[$br++] = $row1['naziv_kolegija'];
+  while($row = $st->fetch()) {
+    $kolegiji[$br++] = $row['naziv_kolegija'];
   }
   //spajanje na bazu, tablica rezultati
   try {
       $db = DB::getConnection();
-      $st2 = $db->query('SELECT * FROM rezultati');
+      $st1 = $db->prepare('SELECT * FROM rezultati WHERE student_id=:student_id');
+      $st1->execute(array('student_id' => $id));
     }
     catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
   //podatke iz baze zapisujem u povratnu varijablu
-  foreach($st2->fetchAll() as $row2) {
-    if($row2['student_id'] === $id) {
-      //$message['nazivi'][] = $kolegiji[$row2['kolegij_id']-1];
-      $message['rez'][] = array('ime' => $kolegiji[$row2['kolegij_id']-1], 'kol1' => $row2['1kolokvij'],
-                                'kol2' => $row2['2kolokvij'], 'zavrsni' => $row2['zavrsni'], 'dz1' => $row2['1zadaca'],
-                                'dz2' => $row2['2zadaca'], 'dz3' => $row2['3zadaca'],'dz4' => $row2['4zadaca']);
-    }
+  while($row1 = $st1->fetch()) {
+    $message['rez'][] = array('ime' => $kolegiji[$row1['kolegij_id']-1], 'kol1' => $row1['1kolokvij'],
+                              'kol2' => $row1['2kolokvij'], 'zavrsni' => $row1['zavrsni'], 'dz1' => $row1['1zadaca'],
+                              'dz2' => $row1['2zadaca'], 'dz3' => $row1['3zadaca'],'dz4' => $row1['4zadaca']);
   }
   //slanje povratnih podataka
   sendJSONandExit($message);

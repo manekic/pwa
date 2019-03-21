@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Rezultati</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="login.css" rel="stylesheet">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+  </head>
+  <body class="text-center">
+
+    <script type="text/javascript" scr="app.js"></script>
+    <script type="text/javascript">
+    var db;
+    //stvaranje baze
+    var request = window.indexedDB.open("Studenti", 1);
+    request.onerror = function(event) {
+      console.log("DB Error " + event.target.error);
+    };
+    request.onsuccess = function(event) {
+      db = event.target.result;
+      console.log("DB: " + db);
+      console.log("Object store names: " + db.objectStoreNames);
+    };
+    //stvaranje tablica u bazi
+    request.onupgradeneeded = function(event) {
+      var db = event.target.result;
+      var objStore = db.createObjectStore("studenti", { keyPath: "id_studenta" });
+      objStore.createIndex("id_studenta", "id_studenta", {unique: true});
+      var objStore1 = db.createObjectStore("rezultati", { keyPath: "id"});
+      objStore1.createIndex("id_studenta", "id_studenta", {unique: false});
+      objStore1.createIndex("kolegij", "kolegij", {unique: false});
+      var objStore2 = db.createObjectStore("kolegiji", { keyPath: "id_kolegija" });
+      objStore2.createIndex("id_kolegija", "id_kolegija", {unique: true});
+      var objStore3 = db.createObjectStore("noviRezultati", { keyPath: "id" });
+      objStore3.createIndex("idx_status", "status", { unique: false });
+    };
+    //popunjavanje tablice sa imenima kolegija
+    request.onsuccess = function(event) {
+      var db = event.target.result;
+      var podaci = [
+        {id_kolegija: 1, naziv: "Matematicka analiza 1"}, {id_kolegija: 2, naziv: "Matematicka analiza 2"},
+        {id_kolegija: 3, naziv: "Linearna algebra 1"}, {id_kolegija: 4, naziv: "Linearna algebra 2"}
+      ];
+      var transakcija = db.transaction(["kolegiji"], "readwrite");
+      transakcija.onerror = function(event) {
+        console.log("Error: " + event.target.error);
+      };
+      var transakcija1 = db.transaction(["studenti"], "readwrite");
+      transakcija1.onerror = function(event) {
+        console.log("Error: " + event.target.error);
+      };
+      var kolegijiStore = transakcija.objectStore("kolegiji");
+      studentiStore = transakcija1.objectStore("studenti");
+      for(var i = 0; i < podaci.length; i++) {
+        kolegijiStore.add(podaci[i]);
+      }
+    };
+    </script>
+  </body>
+</html>

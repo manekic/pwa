@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="view.css">
+    <link rel="manifest" href="manifest.json">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </head>
   <body  class="text-center">
@@ -25,9 +26,11 @@
   </div>
     <script type="text/javascript">
       console.log("Na stranici brisanje rez.html");
+      //dohvaćanje podataka o korisniku
       var i = localStorage.getItem("ime_br");
       var p = localStorage.getItem("prezime_br");
       var id_studenta = localStorage.getItem("id_br");
+      //upis podataka na navbar
       $("#podaci").append(" " + i + " "+ p);
       var popisUpisanihKolegija = [];
       var popisSvihKolegija = [];
@@ -35,6 +38,7 @@
       var flag = false;
       var saljem = true;
       $(document).ready(dohvacanjeKolegija());
+      //dohvaćanje kolegija koje je student upisao
       function dohvacanjeKolegija() {
         $.ajax({
           url: "brisanjeRez.php",
@@ -46,7 +50,6 @@
           success: function(data) {
             console.log(data.info);
             console.log(data.id);
-            //id_studenta = data.id;
             popisSvihKolegija = [];
             popisUpisanihKolegija = [];
             for(var i = 0; i < data.kolegiji.length; i++)
@@ -68,7 +71,6 @@
         });
       }
       function ispisKolegija() {
-        console.log("U fji brisanje kolegija");
         $("#popis").html("");
         var h4 = $("<p></p>");
         if(popisUpisanihKolegija.length === 0)
@@ -94,11 +96,13 @@
         }
         console.log("Nacrtao tablicu, izlazim iz fje.");
       }
+      //reakcija na dinamički stvoren btn za brisanje kolegija iz baze
       $("body").on("click", "#btnBrisanje", function(){
         console.log("btn brisanje");
         var input = $("#imeZaBrisanje").val();
         console.log("input je  "+ input);
         flag = false;
+        //ako je zaista uneseno ime kolegija
         if(input !== "") {
           for(var i = 0; i < popisUpisanihKolegija.length; i++) {
             console.log("trim "+popisUpisanihKolegija[i].trim());
@@ -113,26 +117,34 @@
               }
             }
           }
+          //prikaz upozorenja i dohvaćanje korisnikovog odgovora
           var r = confirm("Jeste li sigurni da želite obrisati kolegij " + input + "?");
         }
+        //nije upisano ime kolegija
         else
           alert("Nisu uneseni potrebni podaci!");
+        //potvrdili smo brisanje kolegija
         if(r) {
+          //ako je unesen kolegij koji se nalazi u bazi (kojega zaista možemo obrisati)
           if(flag) {
             console.log("brisem");
             $("#imeZaBrisanje").val("");
+            //brisanje odgovarajućeg retka u tablici rezultati
             obrisiRedakTablice();
           }
+          //uneseni kolegij ne nalazi se u bazi
           else
             alert("Nije unesen valjan podatak.");
             $("#imeZaBrisanje").val("");
         }
+        //odbili smo brisanje kolegija -> "čišćenje" input-a
         else {
           $("#imeZaBrisanje").val("");
         }
       });
       function obrisiRedakTablice() {
         console.log("u brisanje retka");
+        //ajax upit kojim šaljemo potrebne podatke za obrisati željeni redak
           $.ajax({
             url: "brisanjeRez.php",
             data:

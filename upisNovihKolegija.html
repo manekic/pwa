@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="view.css">
+    <link rel="manifest" href="manifest.json">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </head>
   <body  class="text-center">
@@ -30,6 +31,7 @@
       var id_studenta = null, id_kolegija = null;
       var flag = false;
       $(document).ready(function(){
+        //dohvaćanje podataka o korisniku
         id_studenta = localStorage.getItem("id_unk");
         var i = localStorage.getItem("ime_unk");
         var p = localStorage.getItem("prezime_unk");
@@ -37,6 +39,7 @@
         dohvacanjeSvihKolegija();
       });
       function dohvacanjeSvihKolegija() {
+        //ajax upit za dohvaćanje popisa svih kolegija i kolegija koje je upisao korisnik
         $.ajax({
           url: "upisNovihKolegija.php",
           data:
@@ -64,19 +67,12 @@
           }
         });
       }
+      //prikaz popisa svih kolegija
+      //svaki kolegij je jedan checkbox, a oni upisani su disabled
       function ispisSvihKolegija() {
         var h4 = $("<p></p>");
         h4.html("Odaberite željene kolegije:");
         $("#popis").append(h4);
-        /*for(var i = 0; i < popisSvihKolegija.length; i++) {
-          for(var j = 0; j < popisUpisanihKolegija.length; j++) {
-            if(popisSvihKolegija[i] !== popisUpisanihKolegija[j]) {
-              var cb = $("<input></input>");
-              cb.prop("type", "checkbox").prop("class", "kolegiji").prop("id", "k" + (i+1)).prop("value", popisSvihKolegija[i]);
-              $("#popis").append(cb).append(popisSvihKolegija[i]).append("<br>");
-            }
-          }
-        }*/
         for(var i = 0; i < popisUpisanihKolegija.length; i++)
           console.log("upisani " + popisUpisanihKolegija[i]);
         if(popisUpisanihKolegija.length === 0) {
@@ -105,6 +101,8 @@
         }
         console.log("Nacrtao tablicu, izlazim iz fje.");
       }
+      //klikom na checkbox, kolegij se automatski sprema u bazu ako se već ne nalazi u bazi (na prvi klik, tj na označi)
+      //ako se kolegij već nalazi u bazi (kliknuto je drugi put, tj odznači), kolegij se briše iz baze
       $("body").on("change", "input.kolegiji", spremiUBazu);
       //$("#btn_spremi").on("click", spremiUBazu);
       function spremiUBazu() {

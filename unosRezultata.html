@@ -7,67 +7,136 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <link href="login.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
   </head>
   <body class="text-center">
-    <div class="form-signin">
+    <div class="form-login">
       <label for="ime">Ime studenta:</label>
       <input type="text" id="ime_r" class="form-control" />
       <br />
       <label for="prezime" >Prezime studenta:</label>
       <input type="text" id="prezime_r" class="form-control"/>
       <br />
-      <button id="btn_tablica" class="btn btn-success">Dohvati tablicu</button>
+      <label for="klegij" >Naziv kolegija:</label>
+      <input type="text" id="kolegij_r" class="form-control"/>
+      <br />
+      <p id="tbl"></p>
+      <p id="brBodova"></p>
+      <button id="btn_rez" class="btn btn-success">Upiši rezultat</button>
       <br />
     </div>
+    <script type="text/javascript" scr="app.js"></script>
+    <script type="text/javascript" scr="indexedDB.js"></script>
+
     <script type="text/javascript">
-      var i = null, p = null, id_studenta = null;
-      var elt = null, id_kolegija = null, duljina_id_kolegija;
-      var popis_kolegija = [];
+
+      var i = null, p = null, k = null, bodovi = null;
+      var elt = null;
       console.log("Na stranici unesiRezultate.html");
       //polje za podatke koji se nalaze u prvom retku tablice sa rezultatima
-      var td_kategorije = ["Kolegij", "1.kolokvij", "2.kolokvij", "Završni ispit", "1.zadaća", "2.zadaća", "3.zadaća", "4.zadaća"];
-      var td_kategorije_db = ["Kolegij", "1kolokvij", "2kolokvij", "zavrsni", "1zadaca", "2zadaca", "3zadaca", "4zadaca"];
-      /*console.log(username);
-      console.log(pass);
-      console.log(ime);
-      console.log(prezime)
-      console.log(id);*/
+      var td_kategorije = [" 1.kolokvij", " 2.kolokvij", " Završni ispit", " 1.zadaća", " 2.zadaća", " 3.zadaća", " 4.zadaća"];
+      var td_kategorije_db = ["1kolokvij", "2kolokvij", "zavrsni", "1zadaca", "2zadaca", "3zadaca", "4zadaca"];
       $(document).ready(function(){
-        $("#btn_tablica").on("click", ispisTablice);
+        /*Notification.requestPermission().then(function(result) {
+          if(result === "granted") {
+            new Notification("Cao");
+          }
+        });*/
+        for(var k = 0; k < 7; k++) {
+          var input = $("<input></input>");
+          input.prop("type", "radio").prop("value",td_kategorije[k]).prop("name", "podrucje");
+          $("#tbl").append(input).append(td_kategorije[k]).append("<br>");
+        }
       });
-      function ispisTablice() {
+
+      $("body").on("click", "input[name='podrucje']:radio", function() {
+        console.log("change "+$(this).val());
+        var tmp = $(this).val();
+        for(var i = 0; i < 7; i++) {
+          if(tmp === td_kategorije[i]) {
+            elt = td_kategorije_db[i];
+            break
+          }
+        }
+        $("#bodovi").remove();
+        var input = $("<input />");
+        input.prop("type", "text").prop("size", "2").prop("id", "bodovi").prop("text-align", "center");
+        $("#brBodova").append(input);
+      });
+
+      $("#btn_rez").on("click", function() {
+        console.log("klik na upisi");
         i = $("#ime_r").val();
         p = $("#prezime_r").val();
+        k = $("#kolegij_r").val();
+        bodovi = $("#bodovi").val();
+        console.log(i+" "+p+" "+k+" "+bodovi+" "+elt);
+        if(i === "" || p === "" || k === "" || bodovi === "") {
+          alert("Nisu uneseni potrebni podaci!");
+          $("#ime_r").val("");
+          $("#prezime_r").val("");
+          $("#kolegij_r").val("");
+          $("#brBodova").val("");
+          $("input[name='podrucje']").attr("checked", false);
+          $("#bodovi").remove();
+        }
+        else {
+          rezultatiZaSlanje(i, p, k, elt, bodovi);
+        }
+      });
+
+      var rezultatiZaSlanje = function(i, p, k, elt, bodovi) {
+        var data = {
+          id: bodovi,
+          i: i,
+          p: p,
+          k: k,
+          elt: elt,
+          bodovi: bodovi
+        };
+        var request = window.indexedDB.open("Studenti", 1);
+        request.onsuccess = function(event) {
+          var db = event.target.result;
+          var objectStore = db.transaction(["noviRezultati"], "readwrite").objectStore("noviRezultati");
+          //dohvaćam sve objekte sa ključem === id
+          //var request = objectStore.get(id);
+          objectStore.add(data)
+        };
+        /*if ("serviceWorker" in navigator && "SyncManager" in window) {
+          console.log("ola");
+          navigator.serviceWorker.ready.then(function(registration) {
+            console.log("ola2");
+            registration.sync.register("sync-reservations");
+        });
+      }*/
+      //else {
         $.ajax({
           url: "unosRezultataLogin.php",
           data:
           {
+            id: bodovi,
             i: i,
-            p: p
+            p: p,
+            k: k,
+            elt: elt,
+            bodovi: bodovi
           },
           dataType: "json",
           success: function(data) {
-            //ukoliko je prijava korisnika bila uspješna te se ne radi o administratoru, treba ispisati njegove rezultate
-            if(data.potvrda) {
-              console.log(data.info);
-              window.location.href = "upisRez.html";
-              localStorage.setItem("ime_ur", i);
-              localStorage.setItem("prezime_ur", p);
-              localStorage.setItem("id_ur", data.id);
-            }
-            else {
-              alert(data.info);
-              $("#ime_r").val("");
-              $("#prezime_r").val("");
-            }
+            console.log(data.potvrda);
+            console.log(data.nesto);
+            console.log(data.id_k);
+            console.log(data.id);
           },
           error : function(xhr, status) {
             if(status !== "null")
             console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
           }
         });
-      }
+    //  }
+    };
+
     </script>
   </body>
 </html>

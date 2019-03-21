@@ -41,11 +41,12 @@ if(!isset($_GET['id'])) {
   //spajanje na bazu, tablica kolegiji
   try {
       $db = DB::getConnection();
-      $st = $db->query('SELECT naziv_kolegija FROM kolegiji');
+      $st = $db->prepare('SELECT * FROM kolegiji');
+      $st->execute();
     }
     catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
   //popunjavanje polja sa nazivima kolegija
-  foreach($st->fetchAll() as $row) {
+  while($row = $st->fetch()) {
     $message['rez'][] = array('ime' => $row['naziv_kolegija']);
   }
   //slanje povratnih podataka
@@ -59,21 +60,20 @@ else if(isset($_GET['id'])) {
   $flag = false;
   try {
       $db = DB::getConnection();
-      $st1 = $db->query('SELECT student_id, kolegij_id FROM rezultati');
+      $st1 = $db->prepare('SELECT * FROM rezultati WHERE student_id=:student_id AND kolegij_id=:kolegij_id');
+      $st1->execute(array('student_id' => $id, 'kolegij_id' => $id_kolegija));
     }
   catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
-  foreach($st1->fetchAll() as $row1) {
-    if($row1['student_id'] === $id && $row1['kolegij_id'] === $id_kolegija) {
-      $flag = true;
-      try {
-          $db = DB::getConnection();
-          $st2 = $db->prepare( "DELETE FROM rezultati WHERE student_id = '$id' AND kolegij_id = '$id_kolegija'" );
-          $st2->execute();
-          $message['info'] ="obrisao";
-      }
-      catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
-      }
+  while($row1 = $st1->fetch()) {
+    $flag = true;
+    try {
+        $db = DB::getConnection();
+        $st2 = $db->prepare("DELETE FROM rezultati WHERE student_id = '$id' AND kolegij_id = '$id_kolegija'");
+        $st2->execute();
+        $message['info'] ="obrisao";
     }
+    catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
+  }
     if($flag === false) {
       try {
           $db = DB::getConnection();
@@ -85,10 +85,7 @@ else if(isset($_GET['id'])) {
         catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
     }
     sendJSONandExit($message);
-
 }
-
-
 else
   sendErrorAndExit("Nesto nije u redu -> vjerojatno nisi poslao trazene podatke!");
  ?>

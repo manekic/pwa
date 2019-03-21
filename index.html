@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Rezultati</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="login.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+  </head>
+  <body class="text-center">
+    <div class="form-signin" id="div">
+    </div>
+    <script type="text/javascript" scr="app.js"></script>
+    <script type="text/javascript" scr="index.js"></script>
+    <script type="text/javascript">
+    //varijable za spremanje podataka
+    var username = null, pass = null;
+    $(document).ready(function(){
+      console.log("Na stranici pocetna.html");
+      //ako u localStorage nema podataka (ako je korisnik odlogiran), prikaži formu za login
+      if(localStorage.getItem("id_prijave") === null) {
+          localStorage.clear();
+          console.log("null");
+          var lab = $("<label></label>");
+          var h = $("<h1></h1>");
+          h.html("Dobrodošli")
+          lab.append(h);
+          $("#div").append(h).append("<br />");
+          var lab = $("<label></label>");
+          lab.prop("id", "ime");
+          $("#div").append("Korisničko ime: ").append(lab).append("<br />");
+          var input = $("<input/>");
+          input.prop("type", "text").prop("id", "username").prop("class", "form-control");
+          $("#div").append(input).append("<br />");
+          var lab = $("<label></label>");
+          lab.prop("id", "lozinka");
+          $("#div").append("Lozinka: ").append(lab).append("<br />");
+          var input = $("<input/>");
+          input.prop("type", "password").prop("id", "password").prop("class", "form-control");
+          $("#div").append(input).append("<br />");
+          var btn = $("<button></button>");
+          btn.prop("id", "btn_prijava").prop("class", "btn btn-success").html("Prijavi se");
+          $("#div").append(btn).append("<br />");
+      }
+      //ako je korisnik ostao ulogiran, automatski ga prebaci na rezultati.html
+      else if(localStorage.getItem("id_prijave") !== null) {
+          console.log("nije null");
+          console.log("id "+localStorage.getItem("id_prijave"));
+          //ako je admin ulogiran
+          if(localStorage.getItem("id_prijave") === "0") {
+            console.log("nula");
+            window.location.href = "administrator.html";
+          }
+          else
+            window.location.href = "rezultati.html";
+      }
+    });
+    //ako smo ponudili formu za login, reakcija na #btn_prijava klik
+    $("body").on("click","button#btn_prijava", Prijava);
+    function Prijava(){
+      console.log("U fji prijava");
+      //spremam potrebne podatke koje ću slati ajax upitom
+      username = $("#username").val();
+      //console.log("Korisnicko ime je " + username);
+      pass = $("#password").val();
+      //ajax upit kojim provjeravam je li korisnik unesao točne podatke pri registraciji
+      //ako jest, povrati podaci su rezultati ispita tog korisnika
+      //ako nije, poruka o greški - ili je lozinka kriva, ili takvo korisničko ime ne postoji
+      $.ajax({
+        url: "index.php",
+        data:
+        {
+          username: username,
+          pass: pass
+        },
+        dataType: "json",
+        success: function(data) {
+          console.log(data.info);
+          console.log("Greška je: " +data.greska);
+          console.log("Administrator: " +data.admin);
+          //ukoliko je prijava korisnika bila uspješna te se ne radi o administratoru, treba ispisati njegove rezultate
+          if(!data.admin && data.greska === 0) {
+            window.location.href = "rezultati.html";
+            localStorage.setItem("username", username);
+            localStorage.setItem("pass", pass);
+            localStorage.setItem("ime", data.ime_studenta);
+            localStorage.setItem("prezime", data.prezime_studenta);
+            localStorage.setItem("id_prijave", data.id);
+          }
+          //ukoliko je prijava administatora bila uspješna, treba ispisati forme za unos studenata
+          else if(data.admin && data.greska === 0)
+            window.location.href = "administrator.html";
+          //ukoliko je došlo do neke greške, ispiši podatke o njoj
+          else {
+            alert(data.info);
+            $("#username").val("");
+            $("#password").val("");
+          }
+        },
+        error : function(xhr, status) {
+          if(status !== "null")
+          console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
+        }
+      });
+    }
+    </script>
+  </body>
+</html>
