@@ -30,10 +30,25 @@ function sendErrorAndExit($messageText)
 	$message['error'] = $messageText;
 	sendJSONandExit($message);
 }
-//ako ajaxom šaljemo username && pass
-//isset($_GET['i']) && isset($_GET['p'])
-//
-if(!isset($_GET['id_kolegija'])) {
+if(!isset($_GET['id_studenta']) && !isset($_GET['id_kolegija'])) {
+  $message = [];
+  $message['studenti'] = [];
+  //spajanje na bazu, tablica studenti
+  try {
+      $db = DB::getConnection();
+      $st = $db->prepare('SELECT * FROM studenti');
+      $st->execute();
+    }
+    catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
+  //popunjavanje polja sa nazivima kolegija
+  while($row = $st->fetch()) {
+    if($row['username'] != "admin")
+      $message['studenti'][] = array('ime' => $row['ime'], 'prezime' => $row['prezime'], 'id' => $row['student_id']);
+  }
+  //slanje povratnih podataka
+  sendJSONandExit($message);
+}
+else if(!isset($_GET['id_kolegija']) && isset($_GET['id_studenta'])) {
   $id = $_GET['id_studenta'];
   $message = [];
   $message['rez'] = [];
@@ -93,7 +108,6 @@ else if(isset($_GET['id_kolegija']) && isset($_GET['id_studenta'])) {
   //slanje povratnih podataka
   sendJSONandExit($message);
 }
-
 else
   sendErrorAndExit("Nesto nije u redu -> vjerojatno nisi poslao trazenje podatke!");
  ?>

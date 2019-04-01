@@ -17,7 +17,7 @@
       <li><h2 id="podaci"><span class="glyphicon glyphicon-education"></span></h2></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-      <li><a href="administrator.html"><span class="glyphicon glyphicon-floppy-saved"></span> Spremi</a></li>
+      <li><a href="administrator.html"><span class="glyphicon glyphicon-chevron-left"></span> Kraj</a></li>
     </ul>
   </div>
 </nav>
@@ -26,12 +26,12 @@
   </div>
     <script type="text/javascript">
       console.log("Na stranici brisanje rez.html");
+      var id_studenta = null;
       //dohvaćanje podataka o korisniku
-      var i = localStorage.getItem("ime_br");
-      var p = localStorage.getItem("prezime_br");
-      var id_studenta = localStorage.getItem("id_br");
+      var student = localStorage.getItem("ime_studenta_br");
+      id_studenta = localStorage.getItem("id_br");
       //upis podataka na navbar
-      $("#podaci").append(" " + i + " "+ p);
+      $("#podaci").append(" Administrator - "+student);
       var popisUpisanihKolegija = [];
       var popisSvihKolegija = [];
       var id_kolegija = null;

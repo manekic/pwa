@@ -1,4 +1,3 @@
-importScripts("indexedDB.js");
 var CACHE_NAME = "gih-cache";
 var CACHED_URLS = [
   "index.html",
@@ -18,9 +17,7 @@ var CACHED_URLS = [
   "unosStudenata.html",
   "upisKolegijaLogin.html",
   "upisNovihKolegija.html",
-  "upisRez.html",
-  "pocetna.html",
-  "indexedDB.js"
+  "upisRez.html"
 ];
 
 self.addEventListener("install", function(event) {
@@ -67,18 +64,6 @@ self.addEventListener("fetch", function (event) {
           return networkResponse;
         }).catch(function() {
           return caches.match(event.request);
-        });
-      })
-    );
-  } else if (requestURL.pathname === "/~maja/novo/pocetna.html") {
-    event.respondWith(
-      caches.open(CACHE_NAME).then(function(cache) {
-        return cache.match("pocetna.html").then(function(cachedResponse) {
-          var fetchPromise = fetch("pocetna.html").then(function(networkResponse) {
-            cache.put("pocetna.html", networkResponse.clone());
-            return networkResponse;
-          });
-          return cachedResponse || fetchPromise;
         });
       })
     );

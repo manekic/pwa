@@ -10,59 +10,41 @@
     <link rel="manifest" href="manifest.json">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
   </head>
-  <body  class="text-center">
-  <div class="form-signin">
-    <label for="ime">Ime studenta:</label>
-    <input type="text" id="ime_br" class="form-control" />
-    <br />
-    <label for="prezime" >Prezime studenta:</label>
-    <input type="text" id="prezime_br" class="form-control"/>
-    <br />
-    <button id="btn_pronadi" class="btn btn-success">Pronađi</button>
-    <br />
-  </div>
+  <body>
+  <div id="popis"> </div>
   <script type="text/javascript">
       console.log("Na stranici brisanje login.html");
       var i = null, p = null, id_studenta = null;
       $(document).ready(function(){
-        $("#btn_pronadi").on("click", pronadiStudenta);
-      });
-      function pronadiStudenta() {
-        //dohvaćanje podataka o studentu
-        i = $("#ime_br").val();
-        p = $("#prezime_br").val();
-        //ajax upit za provjeru nalazi li se korisnik u bazi
         $.ajax({
-          url: "brisanjeLogin.php",
-          data:
-          {
-            i: i,
-            p: p
-          },
+          url: "brisanjeRez.php",
           dataType: "json",
           success: function(data) {
-            //ukoliko se korisnik nalazi u bazi, spremi njegove podatke za kasnije korištenje
-            if(data.potvrda) {
-              console.log(data.info);
-              window.location.href = "brisanjeRez.html";
-              localStorage.setItem("ime_br", i);
-              localStorage.setItem("prezime_br", p);
-              localStorage.setItem("id_br", data.id);
+            console.log(data.info);
+            for(var i = 0; i < data.studenti.length; i++) {
+              var input = $("<input></input>");
+              input.prop("type", "radio").prop("value", data.studenti[i].ime+" "+data.studenti[i].prezime).prop("name", "studenti").prop("id",data.studenti[i].id);
+              $("#popis").append(input).append(" "+data.studenti[i].ime+" "+data.studenti[i].prezime).append("<br>");
             }
-            //korisnik se ne nazali u bazi, obriši sadržaj input-a i prikaži odg.poruku
-            else {
-              alert(data.info);
-              $("#ime_br").val("");
-              $("#prezime_br").val("");
-            }
+            var btn = $("<button></button>");
+            btn.prop("id", "klik").prop("class", "btn btn-success").html("Odabir kolegija");
+            $("#popis").append("<br>").append(btn);
           },
           error : function(xhr, status) {
             if(status !== "null")
             console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
           }
         });
-}
-
+      });
+      $("body").on("click", "input[name='studenti']:radio", function() {
+        console.log("change "+$(this).val());
+        console.log("change id "+$(this).prop("id"));
+        localStorage.setItem("ime_studenta_br", $(this).val());
+        localStorage.setItem("id_br", $(this).prop("id"));
+      });
+      $("body").on("click", "button#klik", function() {
+        window.location.href = "brisanjeRez.html";
+      });
     </script>
 
   </body>

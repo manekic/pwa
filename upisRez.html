@@ -17,7 +17,7 @@
         <li><h2 id="podaci"><span class="glyphicon glyphicon-education"></span></h2></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="administrator.html"><span class="glyphicon glyphicon-floppy-saved"></span> Spremi</a></li>
+        <li><a href="administrator.html"><span class="glyphicon glyphicon-chevron-left"></span> Kraj</a></li>
       </ul>
     </div>
   </nav>
@@ -25,108 +25,135 @@
       <p id="tbl"></p>
   </div>
     <script type="text/javascript">
-      var elt = null, id_kolegija = null, duljina_id_kolegija, id_studenta;
-      var popisKolegija = [];
+      var elt = null, id_studenta = null, duljina_id_kolegija;
+      var id_kolegija_Rez = null, naziv_kolegija_Rez = null;
       console.log("Na stranici unesiRezultate.html");
       //polje za podatke koji se nalaze u prvom retku tablice sa rezultatima
-      var td_kategorije = ["Kolegij", " 1.kolokvij ", "2.kolokvij", "Završni ispit", "1.zadaća", "2.zadaća", "3.zadaća", "4.zadaća"];
+      var td_kategorije = ["Student", " 1.kolokvij ", "2.kolokvij", "Završni ispit", "1.zadaća", "2.zadaća", "3.zadaća", "4.zadaća"];
       var td_kategorije_db = ["Kolegij", "1kolokvij", "2kolokvij", "zavrsni", "1zadaca", "2zadaca", "3zadaca", "4zadaca"];
       console.log("na upisrez");
+      //dohvaćanje podataka o korisniku
+      id_kolegija_Rez = localStorage.getItem("id_kolegija_Rez");
+      naziv_kolegija_Rez = localStorage.getItem("naziv_kolegija_Rez");
+      console.log("id kolegija "+id_kolegija_Rez);
       $(document).ready(function(){
-        //dohvaćanje podataka o korisniku
-        var i = localStorage.getItem("ime_ur");
-        var p = localStorage.getItem("prezime_ur");
-        id_studenta = localStorage.getItem("id_ur");
-        $("#podaci").append(" " + i + " " + p);
-        //dohvaćanje kolegija koje je upisao te odg.rezultata
-        $.ajax({
-          url: "unosRezultata.php",
-          data:
-          {
-            id_studenta: id_studenta
-          },
-          dataType: "json",
-          success: function(data) {
-            console.log(data.info);
-            for(var i = 0; i < data.kolegiji.length; i++)
-              popisKolegija.push(data.kolegiji[i].ime);
-            ispisRezultata(data.rez);
-          },
-          error : function(xhr, status) {
-            if(status !== "null")
-            console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
-          }
-        });
-      });
-      //fja za dinamičko stvaranje tablice sa rezultatima
-      function ispisRezultata(data) {
-        console.log("U fji ispisRezultata");
-        var tbl = $("<table></table>");
-        //prvi redak tablice
-        var tr = $("<tr></tr>");
-        //potrebno je 8 ćelija sa nazivima elemenata za ocjenjivanje
-        for(var k = 0; k < 8 ; k++) {
-          var td = $("<td><</td>");
-          td.prop("align", "center").html(td_kategorije[k]);
-          tr.append(td);
-        }
-        tbl.append(tr);
-        //kreiranje jednog retka za svaki kolegij koji je korisnik upisao
-        //kreiranje ćelija u koje se upisuju bodovi iz određenog elementa
-        for(var i = 0; i < data.length; i++) {
-          var td_podrucja = [data[i].ime, data[i].kol1, data[i].kol2, data[i].zavrsni, data[i].dz1, data[i].dz2, data[i].dz3, data[i].dz4];
-          var tr = $("<tr></tr>");
-          for(var j = 0; j < 8; j++) {
-            var td = $("<td></td>");
-            //ako rezultat iz određenog podtučja ne postoji -> stavi input na to mjesto (za upis rezultata)
-            if(td_podrucja[j] === null) {
-              var input = $("<input />");
-              for(var k = 0; k < popisKolegija.length; k++) {
-                if(data[i].ime === popisKolegija[k]) {
-                  var z = 0;
-                  z = k+1;
-                  input.prop("type", "text").prop("size", "3").prop("class", "rez").prop("id", "k"+z+"e"+j).prop("align", "center");
-                }
-              }
-              td.append(input);
+        $("#podaci").append(" Administrator - "+ naziv_kolegija_Rez);
+        if(navigator.onLine) {
+          console.log("Online sam!");
+          //dohvaćanje studenata koji su upisali traženi kolegij
+          $.ajax({
+            url: "unosRez.php",
+            data:
+            {
+              id_kolegija_Rez: id_kolegija_Rez
+            },
+            dataType: "json",
+            success: function(data) {
+              console.log(data.info);
+              var request = window.indexedDB.open("Studenti", 1);
+              request.onsuccess = function(event) {
+                var db = event.target.result;
+                var objectStore = db.transaction(["bodovi"], "readwrite").objectStore("bodovi");
+                objectStore.clear();
+                for(var i = 0; i < data.studenti.length; i++) {
+                  objectStore.add({id_studenta: data.studenti[i].id, naziv_kolegija: naziv_kolegija_Rez, id_kolegija: id_kolegija_Rez, ime: data.studenti[i].ime, prezime: data.studenti[i].prezime, kol1: data.rez[i].kol1, kol2: data.rez[i].kol2,
+                         zavrsni: data.rez[i].zavrsni, dz1: data.rez[i].dz1, dz2: data.rez[i].dz2, dz3: data.rez[i].dz3, dz4: data.rez[i].dz4});
+               }
+             };
+              tablica();
+            },
+            error : function(xhr, status) {
+              if(status !== "null")
+              console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
             }
-            else
-              td.prop("align", "center").html(td_podrucja[j]);
+          });
+        }
+        else {
+          console.log("Offline sam!");
+          tablica();
+        }
+      });
+      function tablica() {
+        //ispis podataka iz indexedDB
+        var imaRez = false;
+        var request = window.indexedDB.open("Studenti", 1);
+        request.onsuccess = function(event) {
+          var db = event.target.result;
+          var objectStore = db.transaction("bodovi", "readonly").objectStore("bodovi");
+          var index = objectStore.index("id_kolegija");
+          var count = index.count();
+          var cursor = index.openCursor(id_kolegija_Rez);
+          var tbl = $("<table></table>");
+          tbl.prop("id", "tblRez");
+          var tr = $("<tr></tr>");
+          //potrebno je 8 ćelija sa nazivima elemenata za ocjenjivanje
+          for(var k = 0; k < 8 ; k++) {
+            var td = $("<td></td>");
+            td.prop("align", "center").html(td_kategorije[k]);
             tr.append(td);
           }
           tbl.append(tr);
-        }
-        $("#tbl").html(tbl).append("<br />");
-        console.log("Nacrtao tablicu, izlazim iz fje.");
+          cursor.onsuccess = function(event) {
+            var cursor = event.target.result;
+            if (cursor) {
+              imaRez = true;
+              var td_podrucja = [cursor.value.id_studenta, cursor.value.kol1, cursor.value.kol2, cursor.value.zavrsni, cursor.value.dz1, cursor.value.dz2, cursor.value.dz3, cursor.value.dz4];
+              var tr = $("<tr></tr>");
+              var td = $("<td></td>");
+              td.prop("align", "center").html(cursor.value.ime+" "+cursor.value.prezime);
+              tr.append(td);
+              console.log("id "+cursor.value.id_studenta);
+              for(var j = 0; j < 8; j++) {
+                var td = $("<td></td>");
+                if(td_podrucja[j+1] === null) {
+                  var input = $("<input />");
+                  input.prop("type", "text").prop("size", "2").prop("id", "s"+(td_podrucja[0])+"e"+(j+1)).prop("text-align", "center").prop("class", "rez");
+                  td.append(input);
+                }
+                else
+                  td.prop("align", "center").html(td_podrucja[j+1]);
+                tr.append(td);
+              }
+              tbl.append(tr);
+              cursor.continue();
+            }
+            else {
+              console.log("Gotovo");
+            }
+            if(!imaRez)
+              $("#tbl").html("Kolegij nije upisao niti jedan student!");
+            else
+              $("#tbl").append(tbl);
+          };
+        };
       }
-      //reakcija na pritisak entera nakon unosa rezultata
       $("body").on("change", "input.rez", spremiRezultat);
       function spremiRezultat() {
         var id = $(this).prop("id");
         console.log("id je " +id);
         id_elta = $(this).prop("id")[id.length-1];
         console.log("id elta je " + id_elta);
-        duljina_id_kolegija = id.length - 3;
-        console.log("duljina id kolegija je " + duljina_id_kolegija);
-        elt = td_kategorije_db[id_elta];
-        console.log("elt je " + elt);
-        id_kolegija = id.slice(1, duljina_id_kolegija+1);
-        console.log("id kol je " + id_kolegija);
         var bodovi = $(this).val();
         console.log("bodovi su " + bodovi);
-        //slanje svih potrebnih podataka kako bi se novi rezultat spremio u bazu
+        elt = td_kategorije_db[id_elta];
+        console.log("elt je " + elt);
+        var duljina_id_kolegija = id.length - 3;
+        console.log("duljina id studenta je " + duljina_id_kolegija);
+        id_studenta = id.slice(1, duljina_id_kolegija+1);
+        console.log("id studenta je " + id_studenta);
         $.ajax({
-          url: "unosRezultata.php",
+          url: "unosRez.php",
           data:
           {
             id_studenta: id_studenta,
-            id_kolegija: id_kolegija,
+            id_kolegija_Rez: id_kolegija_Rez,
             elt: elt,
             bodovi: bodovi
           },
           dataType: "json",
           success: function(data) {
             console.log(data.info);
+            window.location.reload();
           },
           error : function(xhr, status) {
             if(status !== "null")

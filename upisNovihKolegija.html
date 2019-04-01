@@ -33,9 +33,8 @@
       $(document).ready(function(){
         //dohvaćanje podataka o korisniku
         id_studenta = localStorage.getItem("id_unk");
-        var i = localStorage.getItem("ime_unk");
-        var p = localStorage.getItem("prezime_unk");
-        $("#podaci").append(" " + i + " "+ p);
+        var student = localStorage.getItem("ime_studenta_unk");
+        $("#podaci").append(" " + student);
         dohvacanjeSvihKolegija();
       });
       function dohvacanjeSvihKolegija() {
@@ -80,7 +79,7 @@
             var cb = $("<input></input>");
             cb.prop("type", "checkbox").prop("class", "kolegiji").prop("id", "k" + (i+1)).prop("value",popisSvihKolegija[i]);
             console.log(popisSvihKolegija[i]);
-            $("#popis").append(cb).append(popisSvihKolegija[i]).append("<br>");
+            $("#popis").append(cb).append(" "+popisSvihKolegija[i]).append("<br>");
           }
         }
         else if(popisUpisanihKolegija.length === popisSvihKolegija.length) {

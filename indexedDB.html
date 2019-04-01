@@ -36,6 +36,8 @@
       objStore2.createIndex("id_kolegija", "id_kolegija", {unique: true});
       var objStore3 = db.createObjectStore("noviRezultati", { keyPath: "id" });
       objStore3.createIndex("idx_status", "status", { unique: false });
+      var objStore4 = db.createObjectStore("bodovi", { keyPath: "id_studenta" });
+      objStore4.createIndex("id_kolegija", "id_kolegija", {unique: false});
     };
     //popunjavanje tablice sa imenima kolegija
     request.onsuccess = function(event) {

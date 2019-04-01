@@ -10,27 +10,11 @@
     <link rel="manifest" href="manifest.json">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
   </head>
-  <body class="text-center">
-    <div class="form-login">
-      <label for="ime">Ime studenta:</label>
-      <input type="text" id="ime_r" class="form-control" />
-      <br />
-      <label for="prezime" >Prezime studenta:</label>
-      <input type="text" id="prezime_r" class="form-control"/>
-      <br />
-      <label for="klegij" >Naziv kolegija:</label>
-      <input type="text" id="kolegij_r" class="form-control"/>
-      <br />
-      <p id="tbl"></p>
-      <p id="brBodova"></p>
-      <button id="btn_rez" class="btn btn-success">Upiši rezultat</button>
-      <br />
-    </div>
+  <body>
+    <div id="popis"> </div>
     <script type="text/javascript" scr="app.js"></script>
     <script type="text/javascript" scr="indexedDB.js"></script>
-
     <script type="text/javascript">
-
       var i = null, p = null, k = null, bodovi = null;
       var elt = null;
       console.log("Na stranici unesiRezultate.html");
@@ -43,100 +27,44 @@
             new Notification("Cao");
           }
         });*/
-        for(var k = 0; k < 7; k++) {
-          var input = $("<input></input>");
-          input.prop("type", "radio").prop("value",td_kategorije[k]).prop("name", "podrucje");
-          $("#tbl").append(input).append(td_kategorije[k]).append("<br>");
-        }
-      });
-
-      $("body").on("click", "input[name='podrucje']:radio", function() {
-        console.log("change "+$(this).val());
-        var tmp = $(this).val();
-        for(var i = 0; i < 7; i++) {
-          if(tmp === td_kategorije[i]) {
-            elt = td_kategorije_db[i];
-            break
-          }
-        }
-        $("#bodovi").remove();
-        var input = $("<input />");
-        input.prop("type", "text").prop("size", "2").prop("id", "bodovi").prop("text-align", "center");
-        $("#brBodova").append(input);
-      });
-
-      $("#btn_rez").on("click", function() {
-        console.log("klik na upisi");
-        i = $("#ime_r").val();
-        p = $("#prezime_r").val();
-        k = $("#kolegij_r").val();
-        bodovi = $("#bodovi").val();
-        console.log(i+" "+p+" "+k+" "+bodovi+" "+elt);
-        if(i === "" || p === "" || k === "" || bodovi === "") {
-          alert("Nisu uneseni potrebni podaci!");
-          $("#ime_r").val("");
-          $("#prezime_r").val("");
-          $("#kolegij_r").val("");
-          $("#brBodova").val("");
-          $("input[name='podrucje']").attr("checked", false);
-          $("#bodovi").remove();
+        if(navigator.onLine) {
+          console.log("Online sam!");
+          //ispis kolegija
+          var request = window.indexedDB.open("Studenti", 1);
+          request.onsuccess = function(event) {
+            var db = event.target.result;
+            var objectStore = db.transaction("kolegiji", "readonly").objectStore("kolegiji");
+            objectStore.openCursor().onsuccess = function(event) {
+              var cursor = event.target.result;
+              if(cursor) {
+                var input = $("<input></input>");
+                input.prop("type", "radio").prop("value",cursor.value.naziv).prop("name", "kolegiji").prop("id",cursor.value.id_kolegija);
+                $("#popis").append(input).append(" "+cursor.value.naziv).append("<br>");
+                cursor.continue();
+              }
+              else {
+                console.log("Prošao kroz cijelu tablicu!");
+                var btn = $("<button></button>");
+                btn.prop("id", "klik").prop("class", "btn btn-success").html("Dohvati studente");
+                $("#popis").append("<br>").append(btn);
+              }
+            };
+          };
         }
         else {
-          rezultatiZaSlanje(i, p, k, elt, bodovi);
+          console.log("Offline sam!");
+          window.location.href = "upisRez.html"
         }
       });
-
-      var rezultatiZaSlanje = function(i, p, k, elt, bodovi) {
-        var data = {
-          id: bodovi,
-          i: i,
-          p: p,
-          k: k,
-          elt: elt,
-          bodovi: bodovi
-        };
-        var request = window.indexedDB.open("Studenti", 1);
-        request.onsuccess = function(event) {
-          var db = event.target.result;
-          var objectStore = db.transaction(["noviRezultati"], "readwrite").objectStore("noviRezultati");
-          //dohvaćam sve objekte sa ključem === id
-          //var request = objectStore.get(id);
-          objectStore.add(data)
-        };
-        /*if ("serviceWorker" in navigator && "SyncManager" in window) {
-          console.log("ola");
-          navigator.serviceWorker.ready.then(function(registration) {
-            console.log("ola2");
-            registration.sync.register("sync-reservations");
-        });
-      }*/
-      //else {
-        $.ajax({
-          url: "unosRezultataLogin.php",
-          data:
-          {
-            id: bodovi,
-            i: i,
-            p: p,
-            k: k,
-            elt: elt,
-            bodovi: bodovi
-          },
-          dataType: "json",
-          success: function(data) {
-            console.log(data.potvrda);
-            console.log(data.nesto);
-            console.log(data.id_k);
-            console.log(data.id);
-          },
-          error : function(xhr, status) {
-            if(status !== "null")
-            console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
-          }
-        });
-    //  }
-    };
-
+      $("body").on("click", "input[name='kolegiji']:radio", function() {
+        console.log("change "+$(this).val());
+        console.log("change id "+$(this).prop("id"));
+        localStorage.setItem("naziv_kolegija_Rez", $(this).val());
+        localStorage.setItem("id_kolegija_Rez", $(this).prop("id"));
+      });
+      $("body").on("click", "button#klik", function() {
+        window.location.href = "upisRez.html";
+      });
     </script>
   </body>
 </html>
