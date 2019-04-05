@@ -37,9 +37,9 @@
       naziv_kolegija_Rez = localStorage.getItem("naziv_kolegija_Rez");
       console.log("id kolegija "+id_kolegija_Rez);
       $(document).ready(function(){
-        $("#podaci").append(" Administrator - "+ naziv_kolegija_Rez);
         if(navigator.onLine) {
           console.log("Online sam!");
+          $("#podaci").append(" Administrator (online) - "+ naziv_kolegija_Rez);
           //dohvaćanje studenata koji su upisali traženi kolegij
           $.ajax({
             url: "unosRez.php",
@@ -74,6 +74,7 @@
         }
       });
       function tablica() {
+        var flag = false;
         //ispis podataka iz indexedDB
         var imaRez = false;
         var request = window.indexedDB.open("Studenti", 1);
@@ -97,6 +98,11 @@
             var cursor = event.target.result;
             if (cursor) {
               imaRez = true;
+              if(!flag && !navigator.onLine) {
+                $("#podaci").append(" Administrator (offline) - "+ cursor.value.naziv_kolegija).css("color", "red");
+                $("span").css("color", "red");
+                flag = true;
+              }
               var td_podrucja = [cursor.value.id_studenta, cursor.value.kol1, cursor.value.kol2, cursor.value.zavrsni, cursor.value.dz1, cursor.value.dz2, cursor.value.dz3, cursor.value.dz4];
               var tr = $("<tr></tr>");
               var td = $("<td></td>");

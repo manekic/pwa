@@ -14,7 +14,7 @@
     <nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
       <ul class="nav navbar-nav navbar-left">
-        <li><h2><span class="glyphicon glyphicon-education"> Administrator</span></h2></li>
+        <li><h2 id="admin"><span class="glyphicon glyphicon-education"> Administrator</span></h2></li>
 			</ul>
       <ul class="nav navbar-nav navbar-right">
         <li><span class="glyphicon glyphicon-log-out"></span><br /><button type="button" id="odjava" class="btn btn-success"> Odjava</button></li>
@@ -38,6 +38,16 @@
         window.location.href = "index.html";
         localStorage.clear();
       });
+      if(navigator.onLine) {
+        console.log("online");
+        $("#admin").append(" (online)").css("color", "#5cb85c");
+      }
+      else {
+        console.log("offline");
+        $("#admin").append(" (offline)").css("color", "red");
+        $("span").css("color", "red");
+        $("h2").css("color", "red");
+      }
     });
 
   </script>

@@ -41,6 +41,7 @@
         $("#podaci").append(" " + ime + " " + prezime);
         if(navigator.onLine) {
           console.log("online sam");
+          $("#podaci").append(" (online)").css("color", "#5cb85c");
           $.ajax({
             url: "rezultati.php",
             data:
@@ -123,6 +124,9 @@
         }
         else {
           console.log("offline sam");
+          $("#podaci").append(" (offline)").css("color", "red");
+          $("span").css("color", "red");
+          $("h2").css("color", "red");
           ispisiRezultateOffline();
         }
         //otvaranje indexedDB i spremanje podataka o korisniku (kako bismo omogućili prikaz rezultata i kada je korisnik offline)
