@@ -33,7 +33,9 @@
       var oznaceni = new Array();
       var id_kolegija = null;
       console.log("Na stranici unosStudenata.html");
-      $("#btn_spremi_studenta").on("click", spremiUBazu);
+      $(document).ready(function() {
+        $("#btn_spremi_studenta").on("click", spremiUBazu);
+      });
       function spremiUBazu() {
         ime = $("#ime").val();
         prezime = $("#prezime").val();

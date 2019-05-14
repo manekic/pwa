@@ -16,25 +16,31 @@
       console.log("Na stranici brisanje login.html");
       var i = null, p = null, id_studenta = null;
       $(document).ready(function(){
-        $.ajax({
-          url: "brisanjeRez.php",
-          dataType: "json",
-          success: function(data) {
-            console.log(data.info);
-            for(var i = 0; i < data.studenti.length; i++) {
-              var input = $("<input></input>");
-              input.prop("type", "radio").prop("value", data.studenti[i].ime+" "+data.studenti[i].prezime).prop("name", "studenti").prop("id",data.studenti[i].id);
-              $("#popis").append(input).append(" "+data.studenti[i].ime+" "+data.studenti[i].prezime).append("<br>");
+        if(navigator.onLine) {
+          console.log("online");
+          $.ajax({
+            url: "brisanjeRez.php",
+            dataType: "json",
+            success: function(data) {
+              for(var i = 0; i < data.studenti.length; i++) {
+                var input = $("<input></input>");
+                input.prop("type", "radio").prop("value", data.studenti[i].ime+" "+data.studenti[i].prezime).prop("name", "studenti").prop("id",data.studenti[i].id);
+                $("#popis").append(input).append(" "+data.studenti[i].ime+" "+data.studenti[i].prezime).append("<br>");
+              }
+              var btn = $("<button></button>");
+              btn.prop("id", "klik").prop("class", "btn btn-success").html("Odabir kolegija");
+              $("#popis").append("<br>").append(btn);
+            },
+            error : function(xhr, status) {
+              if(status !== "null")
+              console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
             }
-            var btn = $("<button></button>");
-            btn.prop("id", "klik").prop("class", "btn btn-success").html("Odabir kolegija");
-            $("#popis").append("<br>").append(btn);
-          },
-          error : function(xhr, status) {
-            if(status !== "null")
-            console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
-          }
-        });
+          });
+        }
+        else {
+          console.log("offline");
+          $("#popis").append("Morate imati pristup internetu da biste mogli brisati kolegije studentima!")
+        }
       });
       $("body").on("click", "input[name='studenti']:radio", function() {
         console.log("change "+$(this).val());

@@ -1,4 +1,4 @@
-var CACHE_NAME = "gih-cache";
+var CACHE_NAME = "PWA-cache";
 var CACHED_URLS = [
   "index.html",
   "login.css",
@@ -197,44 +197,30 @@ self.addEventListener("activate", function(event) {
   );
 });
 
-self.addEventListener("sync", function(event) {
-  console.log("Background syncing..."+event);
-  if (event.tag === "sync-reservations") {
-    console.log("Syncing new results");
-    event.waitUntil(
-      readAllData('sync-post')
-      .then(function(data) {
-        for (var dt of data) {
-            fetch('/~maja/novo/upisNovihKolegija.php', { // fetching for sending saved data to firebase database
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-              },
-              body: JSON.stringify({
-                id: dt.id,
-                title: dt.title,
-                content: dt.content
-              })
-            })
-              .then(function(res) {
-                console.log('Sent data', res);
-                if (res.ok) {
-                    res.json()
-                        .then(function (resData) {
-                            deleteItemFromData('sync-posts', resData .id); // function for deleting saved post data from indexedDB as we donot need after realtime post is saved when online.
-                        });
-                }
-              })
-              .catch(function(err) {
-                console.log('Error while sending data', err);
-              });
-          }
-        })
-    );
-  }
-});
-
 self.addEventListener("push", function() {
   self.registration.showNotification("push message received");
+});
+self.addEventListener('push', function (event) {
+    if (!(self.Notification && self.Notification.permission === 'granted')) {
+        return;
+    }
+
+    const sendNotification = body => {
+        // you could refresh a notification badge here with postMessage API
+        const title = "Web Push example";
+
+        return self.registration.showNotification(title, {
+            body,
+        });
+    };
+
+    if (event.data) {
+        const message = event.data.text();
+        event.waitUntil(sendNotification(message));
+    }
+});
+
+
+self.addEventListener('sync', function(event) {
+  self.registration.showNotification("Sync event fired!");
 });

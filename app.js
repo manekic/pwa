@@ -8,10 +8,14 @@ if ("serviceWorker" in navigator) {
   serviceWorkerRegistration.pushManager
   .subscribe({
     userVisibleOnly: true,
-    applicationServerKey: window.vapidPublicKey
+    applicationServerKey: urlBase64ToUint8Array("BMBlr6YznhYMX3NgcWIDRxZXs0sh7tCv7_YCsWcww0ZCv9WGg-tRCXfMEHTiBPCksSqeve1twlbmVAZFv7GSuj0");
   });
 });
 
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.addEventListener("message", function (event) {
+      console.log("message event");
+    });
 
 }
   if (!("Notification" in window)) {
@@ -31,4 +35,17 @@ if ("serviceWorker" in navigator) {
         console.log("Permission to receive notifications has been granted");
       }
     });
+  }
+
+  function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
   }

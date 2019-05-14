@@ -1,19 +1,8 @@
 <?php
 require_once 'db.class.php';
-/*
-INPUT:
-$_GET['username'] = username korisnika
-$_GET['pass'] = pass korisnika
-
-OUTPUT: JSON
-{
-  rez = rezultati ispita dostupni u bazi
-}
-ili
-{
-  error = poruka o greški.
-}
-*/
+require __DIR__ . '/vendor/autoload.php';
+use Minishlink\WebPush\WebPush;
+use Minishlink\WebPush\Subscription;
 
 function sendJSONandExit($message)
 {
@@ -61,6 +50,48 @@ if(isset($_GET['id'])) {
     $message['rez'][] = array('ime' => $kolegiji[$row1['kolegij_id']-1], 'kol1' => $row1['1kolokvij'],
                               'kol2' => $row1['2kolokvij'], 'zavrsni' => $row1['zavrsni'], 'dz1' => $row1['1zadaca'],
                               'dz2' => $row1['2zadaca'], 'dz3' => $row1['3zadaca'],'dz4' => $row1['4zadaca']);
+  }
+  //slanje povratnih podataka
+  sendJSONandExit($message);
+}
+else if(!isset($_GET['id'])){
+  $message = [];
+  $subscription = json_decode(file_get_contents('php://input'), true);
+
+  if (!isset($subscription['endpoint'])) {
+      echo 'Error: not a subscription';
+      return;
+  }
+
+  $method = $_SERVER['REQUEST_METHOD'];
+
+  switch ($method) {
+      case 'POST':
+        echo 'Endpoint je ' . $subscription['endpoint'] . "\n";
+        echo 'publicKey je ' . $subscription['publicKey'] . "\n";
+        echo 'Auth je ' . $subscription['authToken'] . "\n";
+        $endpoint = $subscription['endpoint'];
+        $token = $subscription['authToken'];
+        $key = $subscription['publicKey'];
+        try {
+            $db = DB::getConnection();
+            $st1 = $db->prepare("INSERT INTO subscriptions(endpoint, p256dh, auth)
+                                  VALUES ('$endpoint', '$key', '$token')");
+            $st1->execute();
+             echo "ubacio";
+          }
+          catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
+          // create a new subscription entry in your database (endpoint is unique)
+          break;
+      case 'PUT':
+          // update the key and token of subscription corresponding to the endpoint
+          break;
+      case 'DELETE':
+          // delete the subscription corresponding to the endpoint
+          break;
+      default:
+          echo "Error: method not handled";
+          return;
   }
   //slanje povratnih podataka
   sendJSONandExit($message);

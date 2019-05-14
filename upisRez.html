@@ -25,6 +25,15 @@
       <p id="tbl"></p>
   </div>
     <script type="text/javascript">
+    navigator.serviceWorker.register('sw.js').then(function(reg) {
+      return reg.sync.getTags();
+    }).then(function(tags) {
+      if (tags.includes('syncTest')) log("There's already a background sync pending");
+    }).catch(function(err) {
+      log('It broke (probably sync not supported or flag not enabled)');
+      log(err.message);
+    });
+
       var elt = null, id_studenta = null, duljina_id_kolegija;
       var id_kolegija_Rez = null, naziv_kolegija_Rez = null;
       console.log("Na stranici unesiRezultate.html");
@@ -38,6 +47,7 @@
       console.log("id kolegija "+id_kolegija_Rez);
       $(document).ready(function(){
         if(navigator.onLine) {
+          posaljiPor();
           console.log("Online sam!");
           $("#podaci").append(" Administrator (online) - "+ naziv_kolegija_Rez);
           //dohvaćanje studenata koji su upisali traženi kolegij
@@ -147,7 +157,9 @@
         console.log("duljina id studenta je " + duljina_id_kolegija);
         id_studenta = id.slice(1, duljina_id_kolegija+1);
         console.log("id studenta je " + id_studenta);
-        $.ajax({
+        posaljiPor(id_studenta, id_kolegija_Rez, elt, bodovi);
+        console.log("ola la");
+        /*$.ajax({
           url: "unosRez.php",
           data:
           {
@@ -160,12 +172,50 @@
           success: function(data) {
             console.log(data.info);
             window.location.reload();
+            posaljiPor();
           },
           error : function(xhr, status) {
             if(status !== "null")
             console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
           }
-        });
+        });*/
+      }
+      function posaljiPor(id_studenta, id_kolegija_Rez, elt, bodovi) {
+        console.log("u posalji por");
+        navigator.serviceWorker.ready
+        .then(serviceWorkerRegistration => serviceWorkerRegistration.pushManager.getSubscription())
+        .then(subscription => {
+          if (!subscription) {
+            alert('Please enable push notifications');
+            return;
+          }
+
+          const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0];
+          const jsonSubscription = subscription.toJSON();
+          console.log("sub"+" "+JSON.stringify(jsonSubscription) + " " + contentEncoding);
+          fetch('poruka.php', {
+            method: 'POST',
+            body: JSON.stringify(Object.assign(jsonSubscription, { contentEncoding })),
+          });
+        })
+        /*new Promise(function(resolve, reject) {
+          Notification.requestPermission(function(result) {
+            if (result !== 'granted') return reject(Error("Denied notification permission"));
+            resolve();
+          })
+        }).then(function() {
+          return navigator.serviceWorker.ready;
+        }).then(function(reg) {
+          return reg.sync.register('syncTest');
+        }).then(function() {
+          console.log('Sync registered');
+        }).then(function() {
+          console.log("back");
+        }).catch(function(err) {
+          log('It broke');
+          log(err.message);
+        });*/
+
       }
     </script>
 

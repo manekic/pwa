@@ -22,17 +22,18 @@
 		</div>
 	</nav>
     <div class="container-fluid">
-      <ul class="nav">
-        <li><a href="unosRezultata.html">Unos rezultata</a></li>
-        <li><a href="brisanjeLogin.html">Brisanje starih rezultata</a></li>
-        <li><a href="unosStudenata.html">Unos novih studenata</a></li>
-        <li><a href="upisKolegijaLogin.html">Upis novih kolegija</a></li>
+      <ul class="nav" id="nav">
+
 			</ul>
 		</div>
   </body>
   <script type="text/javascript">
     console.log("Na stranici administrator.html");
     localStorage.setItem("id_prijave", 0);
+    /*<li><a href="unosRezultata.html">Unos rezultata</a></li>
+    <li><a href="brisanjeLogin.html">Brisanje starih rezultata</a></li>
+    <li><a href="unosStudenata.html">Unos novih studenata</a></li>
+    <li><a href="upisKolegijaLogin.html">Upis novih kolegija</a></li>*/
     $(document).ready(function() {
       $("#odjava").on("click", function() {
         window.location.href = "index.html";
@@ -41,14 +42,77 @@
       if(navigator.onLine) {
         console.log("online");
         $("#admin").append(" (online)").css("color", "#5cb85c");
+        notifikacijeOnline();
+        l = $("<li></li>");
+        a = $("<a></a>");
+        a.prop("href", "unosRezultata.html").html("Unos rezultata");
+        l.append(a);
+        $("#nav").append(l);
+        l = $("<li></li>");
+        a = $("<a></a>");
+        a.prop("href", "brisanjeLogin.html").html("Brisanje starih rezultata");
+        l.append(a);
+        $("#nav").append(l);
+        l = $("<li></li>");
+        a = $("<a></a>");
+        a.prop("href", "unosStudenata.html").html("Unos novih studenta");
+        l.append(a);
+        $("#nav").append(l);
+        l = $("<li></li>");
+        a = $("<a></a>");
+        a.prop("href", "upisKolegijaLogin.html").html("Upis novih kolegija");
+        l.append(a);
+        $("#nav").append(l);
       }
       else {
         console.log("offline");
         $("#admin").append(" (offline)").css("color", "red");
         $("span").css("color", "red");
         $("h2").css("color", "red");
+        notifikacijeOffline();
+        l = $("<li></li>");
+        a = $("<a></a>");
+        a.prop("href", "unosRezultata.html").html("Unos rezultata");
+        l.append(a);
+        $("#nav").append(l);
       }
     });
+    function notifikacijeOnline() {
+      //obavijest o otvaranju aplikacije
+      console.log("notifikacije");
+      if("Notification" in window && "serviceWorker" in navigator) {
+        Notification.requestPermission().then(function(premission) {
+          if(premission === "granted") {
+            console.log("granted");
+            navigator.serviceWorker.ready.then(function(registration) {
+              registration.showNotification("Prijava u aplikaciju", {
+                body: "Administratore, upravo ste se prijavili u aplikaciju za praćenje rezultata na ispitima.",
+                icon: "4.jpg",
+                tag: "admin-login"
+              });
+            });
+          }
+        });
+      }
+    }
+    function notifikacijeOffline() {
+      //obavijest o otvaranju aplikacije
+      console.log("notifikacije");
+      if("Notification" in window && "serviceWorker" in navigator) {
+        Notification.requestPermission().then(function(premission) {
+          if(premission === "granted") {
+            console.log("granted");
+            navigator.serviceWorker.ready.then(function(registration) {
+              registration.showNotification("Prijava u aplikaciju", {
+                body: "Administratore, upravo ste se prijavili u aplikaciju za praćenje rezultata na ispitima. Nemate pristup internetu te stoga možete samo unositi nove rezultate studentima iz kolegija " + localStorage.getItem("naziv_kolegija_Rez")+".",
+                icon: "4.jpg",
+                tag: "admin-login"
+              });
+            });
+          }
+        });
+      }
+    }
 
   </script>
 </html>

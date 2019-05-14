@@ -70,6 +70,18 @@ try {
 catch( PDOException $e ) { exit( "PDO error [create rezultati]: " . $e->getMessage() ); }
 echo "Napravio tablicu rezultati.<br />";
 
+try {
+	$st = $db->prepare(
+		'CREATE TABLE IF NOT EXISTS subscriptions (' .
+		'id INT NOT NULL,' .
+		'endpoint varchar(50) NOT NULL,' .
+		'p256dh varchar(50) NOT NULL,' .
+		'auth varchar(50) NOT NULL)'
+	);
+	$st->execute();
+}
+catch( PDOException $e ) { exit( "PDO error [create rezultati]: " . $e->getMessage() ); }
+echo "Napravio tablicu subscriptions.<br />";
 // Ubaci neke korisnike unutra
 try {
 	$st = $db->prepare( 'INSERT INTO studenti(username, password, ime, prezime) VALUES (:username, :password, :ime, :prezime)' );
