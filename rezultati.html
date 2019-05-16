@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title></title>
+    <script type="text/javascript" src="app.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="view.css">
@@ -14,7 +15,7 @@
     <nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
       <ul class="nav navbar-nav navbar-left">
-        <li><h2 id="podaci"><span class="glyphicon glyphicon-education"></span></h2></li>
+        <li><h2 id="ime_studenta"><span class="glyphicon glyphicon-education"></span> <span id="ime_studenta_online_status"></span></h2></li>
 			</ul>
       <ul class="nav navbar-nav navbar-right">
         <li><span class="glyphicon glyphicon-log-out"></span><br /><button type="button" id="odjava" class="btn btn-success"> Odjava</button></li>
@@ -24,7 +25,6 @@
   <div class="table-responsive">
       <p id="tbl"></p>
   </div>
-  <script type="text/javascript" scr="app.js"></script>
     <script type="text/javascript">
       console.log("Na stranici rezultati.html");
       //dohvacanje potrebnih podataka iz localStorage
@@ -39,12 +39,25 @@
       //polje za podatke koji se nalaze u prvom retku tablice sa rezultatima
       var td_kategorije = ["Kolegij", "1.kolokvij ", "2.kolokvij", "Završni ispit", "1.zadaća", "2.zadaća", "3.zadaća", "4.zadaća"];
       $(document).ready(function(){
-        $("#podaci").append(" " + ime + " " + prezime);
+        $("#ime_studenta").append(" " + ime + " " + prezime);
+        $(window).on("online", function() {
+          $("#ime_studenta_online_status").html("(online)").css("color", "#5cb85c");
+          $("span").css("color", "#5cb85c");
+          $("h2").css("color", "#5cb85c");
+          console.log("online event triggered: navigator.onLine=" + navigator.onLine);
+        });
+
+        $(window).on("offline", function() {
+          $("#ime_studenta_online_status").html("(offline)").css("color", "red");
+          $("span").css("color", "red");
+          $("h2").css("color", "red");
+          console.log("offline event triggered: navigator.onLine=" + navigator.onLine);
+        });
         if(navigator.onLine) {
           console.log("online sam");
-          notifikacijeOnline();
           push_subscribe();
-          $("#podaci").append(" (online)").css("color", "#5cb85c");
+          notifikacijeOnline();
+          $("#ime_studenta_online_status").append("(online)").css("color", "#5cb85c");
           $.ajax({
             url: "rezultati.php",
             data:
@@ -53,6 +66,7 @@
             },
             dataType: "json",
             success: function(data) {
+
               //online smo -> tablica se crta sa podacima iz ajax poziva
               if(data.rez.length !== 0) {
                 //dok smo u online modu, podatke dobivene ajax upitom spremamo u indexedDB kako bismo ih mogli dohvatiti i u offline modu
@@ -128,7 +142,7 @@
         else {
           notifikacijeOffline();
           console.log("offline sam");
-          $("#podaci").append(" (offline)").css("color", "red");
+          $("#ime_studenta_online_status").append("(offline)").css("color", "red");
           $("span").css("color", "red");
           $("h2").css("color", "red");
           ispisiRezultateOffline();
@@ -176,7 +190,7 @@
           .then(serviceWorkerRegistration =>
             serviceWorkerRegistration.pushManager.subscribe({
               userVisibleOnly: true,
-              applicationServerKey: urlBase64ToUint8Array("BLSWJLWJM_MK-VdIJ4f2LcTLs9PPHnvehQu-iQ9nKGgh04RRV2LMbCsCiO28F4yJb4CSKqB2YMwhFUlWDDaWT14"),
+              applicationServerKey: urlBase64ToUint8Array("BMBlr6YznhYMX3NgcWIDRxZXs0sh7tCv7_YCsWcww0ZCv9WGg-tRCXfMEHTiBPCksSqeve1twlbmVAZFv7GSuj0"),
             })
           )
           .then(subscription => {

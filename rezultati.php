@@ -3,6 +3,7 @@ require_once 'db.class.php';
 require __DIR__ . '/vendor/autoload.php';
 use Minishlink\WebPush\WebPush;
 use Minishlink\WebPush\Subscription;
+session_start();
 
 function sendJSONandExit($message)
 {
@@ -27,6 +28,7 @@ if(isset($_GET['id'])) {
   $kolegiji = array();
   //brojač elemenata prethodnog polja
   $br = 0;
+  $_SESSION['id_stud'] = $id;
   //spajanje na bazu, tablica kolegiji
   try {
       $db = DB::getConnection();
@@ -57,7 +59,6 @@ if(isset($_GET['id'])) {
 else if(!isset($_GET['id'])){
   $message = [];
   $subscription = json_decode(file_get_contents('php://input'), true);
-
   if (!isset($subscription['endpoint'])) {
       echo 'Error: not a subscription';
       return;
@@ -73,11 +74,12 @@ else if(!isset($_GET['id'])){
         $endpoint = $subscription['endpoint'];
         $token = $subscription['authToken'];
         $key = $subscription['publicKey'];
+        $id = $_SESSION['id_stud'];
         try {
             $db = DB::getConnection();
-            $st1 = $db->prepare("INSERT INTO subscriptions(endpoint, p256dh, auth)
-                                  VALUES ('$endpoint', '$key', '$token')");
-            $st1->execute();
+            $st2 = $db->prepare("INSERT INTO pretplate(id_studenta, endpoint, p256dh, auth)
+                                  VALUES ('$id','$endpoint', '$key', '$token')");
+            $st2->execute();
              echo "ubacio";
           }
           catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }

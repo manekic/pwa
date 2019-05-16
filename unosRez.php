@@ -1,5 +1,12 @@
 <?php
 require_once 'db.class.php';
+require __DIR__ . '/vendor/autoload.php';
+use Minishlink\WebPush\WebPush;
+use Minishlink\WebPush\Subscription;
+session_start();
+/*if(!isset( $_SESSION["user_id"]))
+  error( "Nije se ulogirao!" );*/
+
 /*
 INPUT:
 $_GET['username'] = username korisnika
@@ -73,18 +80,42 @@ else if(isset($_GET['id_kolegija_Rez']) && isset($_GET['id_studenta']) && isset(
   $elt = $_GET['elt'];
   $id_kolegija = $_GET['id_kolegija_Rez'];
   $id_studenta = $_GET['id_studenta'];
+  $_SESSION['id_studenta'] = $id_studenta;
   $message = [];
-  //spajanje na bazu, tablica rezultati
+  //spajanje na bazu kolegiji da saznamo ime kolegija
   try {
       $db = DB::getConnection();
-      $st3 = $db->prepare("UPDATE rezultati SET $elt = '$bodovi' WHERE student_id = '$id_studenta' AND kolegij_id = '$id_kolegija'");
-      $st3->execute();
-      $message['info'] = "Ubacio rezultate u bazu!";
+      $st3 = $db->prepare('SELECT * FROM kolegiji WHERE kolegij_id=:kolegij_id');
+      $st3->execute(array('kolegij_id' => $id_kolegija));
+    }
+    catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
+  //popunjavanje polja sa id-evima studenata
+  while($row3 = $st3->fetch()) {
+    $_SESSION['ime_kolegija'] = $row3['naziv_kolegija'];
+  }
+  //spajanje na bazu kolegiji da saznamo ime studenta
+  try {
+      $db = DB::getConnection();
+      $st4 = $db->prepare('SELECT ime FROM studenti WHERE student_id=:student_id');
+      $st4->execute(array('student_id' => $id_studenta));
+    }
+    catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
+  //popunjavanje polja sa id-evima studenata
+  while($row4 = $st4->fetch()) {
+    $_SESSION['ime_studenta'] = $row4['ime'];
+  }
+  //spajanje na bazu, tablica rezultati
+  try {
+      /*$db = DB::getConnection();
+      $st5 = $db->prepare("UPDATE rezultati SET $elt = '$bodovi' WHERE student_id = '$id_studenta' AND kolegij_id = '$id_kolegija'");
+      $st5->execute();
+      $message['info'] = "Ubacio rezultate u bazu!";*/
+      //poruka.php
     }
     catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
     //slanje povratnih podataka
     sendJSONandExit($message);
 }
 else
-  sendErrorAndExit("Nesto nije u redu -> vjerojatno nisi poslao trazenje podatke!");
+  sendErrorAndExit("Nesto nije u redu -> vjerojatno nisi poslao trazene podatke!");
  ?>

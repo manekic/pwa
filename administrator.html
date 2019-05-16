@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title></title>
+    <script type="text/javascript" src="app.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -14,16 +15,15 @@
     <nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
       <ul class="nav navbar-nav navbar-left">
-        <li><h2 id="admin"><span class="glyphicon glyphicon-education"> Administrator</span></h2></li>
+        <li><h2 id="admin"><span class="glyphicon glyphicon-education"> Administrator</span> <span id="admin_online_status"></span></h2></li>
 			</ul>
       <ul class="nav navbar-nav navbar-right">
         <li><span class="glyphicon glyphicon-log-out"></span><br /><button type="button" id="odjava" class="btn btn-success"> Odjava</button></li>
 			</ul>
 		</div>
 	</nav>
-    <div class="container-fluid">
+    <div class="container-fluid" id="div">
       <ul class="nav" id="nav">
-
 			</ul>
 		</div>
   </body>
@@ -40,43 +40,66 @@
         localStorage.clear();
       });
       if(navigator.onLine) {
+        $("#admin_online_status").html("(online)").css("color", "#5cb85c");
         console.log("online");
-        $("#admin").append(" (online)").css("color", "#5cb85c");
-        notifikacijeOnline();
-        l = $("<li></li>");
-        a = $("<a></a>");
-        a.prop("href", "unosRezultata.html").html("Unos rezultata");
-        l.append(a);
-        $("#nav").append(l);
-        l = $("<li></li>");
-        a = $("<a></a>");
-        a.prop("href", "brisanjeLogin.html").html("Brisanje starih rezultata");
-        l.append(a);
-        $("#nav").append(l);
-        l = $("<li></li>");
-        a = $("<a></a>");
-        a.prop("href", "unosStudenata.html").html("Unos novih studenta");
-        l.append(a);
-        $("#nav").append(l);
-        l = $("<li></li>");
-        a = $("<a></a>");
-        a.prop("href", "upisKolegijaLogin.html").html("Upis novih kolegija");
-        l.append(a);
-        $("#nav").append(l);
+        //notifikacijeOnline();
+        onlineOpcije();
       }
       else {
         console.log("offline");
-        $("#admin").append(" (offline)").css("color", "red");
+        $("#admin_online_status").html("(offline)").css("color", "red");
         $("span").css("color", "red");
         $("h2").css("color", "red");
-        notifikacijeOffline();
-        l = $("<li></li>");
-        a = $("<a></a>");
-        a.prop("href", "unosRezultata.html").html("Unos rezultata");
-        l.append(a);
-        $("#nav").append(l);
+        //notifikacijeOffline();
+        offlineOpcije();
       }
+
+      $(window).on("online", function() {
+        $("#admin_online_status").html("(online)").css("color", "#5cb85c");
+        $("span").css("color", "#5cb85c");
+        $("h2").css("color", "#5cb85c");
+        console.log("online event triggered: navigator.onLine=" + navigator.onLine);
+        onlineOpcije();
+      });
+
+      $(window).on("offline", function() {
+        $("#admin_online_status").html("(offline)").css("color", "red");
+        $("span").css("color", "red");
+        $("h2").css("color", "red");
+        console.log("offline event triggered: navigator.onLine=" + navigator.onLine);
+      });
     });
+
+    function onlineOpcije() {
+      l = $("<li></li>");
+      a = $("<a></a>");
+      a.prop("href", "unosRezultata.html").html("Unos rezultata");
+      l.append(a);
+      $("#nav").append(l);
+      l = $("<li></li>");
+      a = $("<a></a>");
+      a.prop("href", "brisanjeLogin.html").html("Brisanje starih rezultata");
+      l.append(a);
+      $("#nav").append(l);
+      l = $("<li></li>");
+      a = $("<a></a>");
+      a.prop("href", "unosStudenata.html").html("Unos novih studenta");
+      l.append(a);
+      $("#nav").append(l);
+      l = $("<li></li>");
+      a = $("<a></a>");
+      a.prop("href", "upisKolegijaLogin.html").html("Upis novih kolegija");
+      l.append(a);
+      $("#nav").append(l);
+    }
+
+    function offlineOpcije() {
+      l = $("<li></li>");
+      a = $("<a></a>");
+      a.prop("href", "unosRezultata.html").html("Unos rezultata");
+      l.append(a);
+      $("#nav").append(l);
+    }
     function notifikacijeOnline() {
       //obavijest o otvaranju aplikacije
       console.log("notifikacije");
@@ -95,6 +118,7 @@
         });
       }
     }
+
     function notifikacijeOffline() {
       //obavijest o otvaranju aplikacije
       console.log("notifikacije");
@@ -113,6 +137,5 @@
         });
       }
     }
-
   </script>
 </html>

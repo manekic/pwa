@@ -72,16 +72,16 @@ echo "Napravio tablicu rezultati.<br />";
 
 try {
 	$st = $db->prepare(
-		'CREATE TABLE IF NOT EXISTS subscriptions (' .
-		'id INT NOT NULL,' .
-		'endpoint varchar(50) NOT NULL,' .
-		'p256dh varchar(50) NOT NULL,' .
-		'auth varchar(50) NOT NULL)'
+		'CREATE TABLE IF NOT EXISTS pretplate (' .
+		'id_studenta INT NOT NULL,' .
+		'endpoint varchar(300) NOT NULL,' .
+		'p256dh varchar(100) NOT NULL,' .
+		'auth varchar(100) NOT NULL)'
 	);
 	$st->execute();
 }
-catch( PDOException $e ) { exit( "PDO error [create rezultati]: " . $e->getMessage() ); }
-echo "Napravio tablicu subscriptions.<br />";
+catch( PDOException $e ) { exit( "PDO error [create pretplate]: " . $e->getMessage() ); }
+echo "Napravio tablicu pretplate.<br />";
 // Ubaci neke korisnike unutra
 try {
 	$st = $db->prepare( 'INSERT INTO studenti(username, password, ime, prezime) VALUES (:username, :password, :ime, :prezime)' );

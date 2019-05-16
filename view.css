@@ -27,6 +27,7 @@ table tr td{
   text-align: center;
   table-layout: auto;
   color: #5cb85c;
+  overflow-y: auto;
 }
 td {
   max-width: 100%;

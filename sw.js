@@ -21,6 +21,7 @@ var CACHED_URLS = [
 ];
 
 self.addEventListener("install", function(event) {
+  console.log( 'sw.install' );
   event.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
       return cache.addAll(CACHED_URLS);
@@ -32,7 +33,8 @@ self.addEventListener("fetch", function (event) {
   var requestURL = new URL(event.request.url);
   //console.log("url " + requestURL.pathname);
   // Handle requests for index.html
-  if (requestURL.pathname === "index.html" || requestURL.pathname === "/~maja/novo/") {
+  if (requestURL.pathname === "/~maja/pwa/index.html" ) {
+    console.log("/~maja/pwa/index.html");
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("index.html").then(function(cachedResponse) {
@@ -44,7 +46,22 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/novo/administrator.html") {
+  } else if (requestURL.pathname === "/~maja/pwa/app.js") {
+    console.log("/~maja/pwa/app.js");
+    event.respondWith(
+      caches.open(CACHE_NAME).then(function(cache) {
+        return cache.match("app.js").then(function(cachedResponse) {
+          var fetchPromise = fetch("app.js").then(function(networkResponse) {
+            cache.put("app.js", networkResponse.clone());
+            return networkResponse;
+          });
+          return cachedResponse || fetchPromise;
+        });
+      })
+    );
+  }
+  else if (requestURL.pathname === "/~maja/pwa/administrator.html") {
+    console.log("/~maja/pwa/administrator.html");
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("administrator.html").then(function(cachedResponse) {
@@ -56,7 +73,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/novo/rezultati.html") {
+  } else if (requestURL.pathname === "/~maja/pwa/rezultati.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return fetch(event.request).then(function(networkResponse) {
@@ -67,7 +84,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/novo/unosRezultata.html") {
+  } else if (requestURL.pathname === "/~maja/pwa/unosRezultata.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("unosRezultata.html").then(function(cachedResponse) {
@@ -79,7 +96,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/novo/unosStudenata.html") {
+  } else if (requestURL.pathname === "/~maja/pwa/unosStudenata.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("unosStudenata.html").then(function(cachedResponse) {
@@ -91,7 +108,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/novo/brisanjeLogin.html") {
+  } else if (requestURL.pathname === "/~maja/pwa/brisanjeLogin.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("brisanjeLogin.html").then(function(cachedResponse) {
@@ -103,7 +120,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/novo/brisanjeRez.html") {
+  } else if (requestURL.pathname === "/~maja/pwa/brisanjeRez.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("brisanjeRez.html").then(function(cachedResponse) {
@@ -115,7 +132,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/novo/unosKolegija.html") {
+  } else if (requestURL.pathname === "/~maja/pwa/unosKolegija.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("unosKolegija.html").then(function(cachedResponse) {
@@ -127,7 +144,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/novo/upisRez.html") {
+  } else if (requestURL.pathname === "/~maja/pwa/upisRez.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("upisRez.html").then(function(cachedResponse) {
@@ -139,7 +156,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/novo/upisKolegijaLogin.html") {
+  } else if (requestURL.pathname === "/~maja/pwa/upisKolegijaLogin.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("upisKolegijaLogin.html").then(function(cachedResponse) {
@@ -151,7 +168,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/novo/upisNovihKolegija.html") {
+  } else if (requestURL.pathname === "/~maja/pwa/upisNovihKolegija.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("upisNovihKolegija.html").then(function(cachedResponse) {
@@ -188,7 +205,7 @@ self.addEventListener("activate", function(event) {
     caches.keys().then(function(cacheNames) {
       return Promise.all(
         cacheNames.map(function(cacheName) {
-          if(CACHE_NAME !== cacheName && cacheName.startsWith("gih-cache")) {
+          if(CACHE_NAME !== cacheName && cacheName.startsWith("PWA-cache")) {
             return caches.delete(cacheName);
           }
         })
@@ -197,9 +214,9 @@ self.addEventListener("activate", function(event) {
   );
 });
 
-self.addEventListener("push", function() {
+/*self.addEventListener("push", function() {
   self.registration.showNotification("push message received");
-});
+});*/
 self.addEventListener('push', function (event) {
     if (!(self.Notification && self.Notification.permission === 'granted')) {
         return;
@@ -207,7 +224,7 @@ self.addEventListener('push', function (event) {
 
     const sendNotification = body => {
         // you could refresh a notification badge here with postMessage API
-        const title = "Web Push example";
+        const title = "Poruka nakon unosa rezultata";
 
         return self.registration.showNotification(title, {
             body,

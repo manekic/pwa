@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title></title>
+    <script type="text/javascript" src="app.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -47,7 +48,6 @@
       console.log("id kolegija "+id_kolegija_Rez);
       $(document).ready(function(){
         if(navigator.onLine) {
-          posaljiPor();
           console.log("Online sam!");
           $("#podaci").append(" Administrator (online) - "+ naziv_kolegija_Rez);
           //dohvaćanje studenata koji su upisali traženi kolegij
@@ -157,9 +157,9 @@
         console.log("duljina id studenta je " + duljina_id_kolegija);
         id_studenta = id.slice(1, duljina_id_kolegija+1);
         console.log("id studenta je " + id_studenta);
-        posaljiPor(id_studenta, id_kolegija_Rez, elt, bodovi);
         console.log("ola la");
-        /*$.ajax({
+
+        $.ajax({
           url: "unosRez.php",
           data:
           {
@@ -172,32 +172,29 @@
           success: function(data) {
             console.log(data.info);
             window.location.reload();
-            posaljiPor();
+            navigator.serviceWorker.ready
+            .then(serviceWorkerRegistration => serviceWorkerRegistration.pushManager.getSubscription())
+            .then(subscription => {
+              if (!subscription) {
+                alert('Please enable push notifications');
+                return;
+              }
+
+              const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0];
+              const jsonSubscription = subscription.toJSON();
+              console.log("sub"+" "+JSON.stringify(jsonSubscription) + " " + contentEncoding);
+              fetch('poruka.php', {
+                method: 'POST',
+                body: JSON.stringify(Object.assign(jsonSubscription, { contentEncoding })),
+              });
+            })
           },
           error : function(xhr, status) {
             if(status !== "null")
             console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
           }
-        });*/
+        });
       }
-      function posaljiPor(id_studenta, id_kolegija_Rez, elt, bodovi) {
-        console.log("u posalji por");
-        navigator.serviceWorker.ready
-        .then(serviceWorkerRegistration => serviceWorkerRegistration.pushManager.getSubscription())
-        .then(subscription => {
-          if (!subscription) {
-            alert('Please enable push notifications');
-            return;
-          }
-
-          const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0];
-          const jsonSubscription = subscription.toJSON();
-          console.log("sub"+" "+JSON.stringify(jsonSubscription) + " " + contentEncoding);
-          fetch('poruka.php', {
-            method: 'POST',
-            body: JSON.stringify(Object.assign(jsonSubscription, { contentEncoding })),
-          });
-        })
         /*new Promise(function(resolve, reject) {
           Notification.requestPermission(function(result) {
             if (result !== 'granted') return reject(Error("Denied notification permission"));
@@ -215,8 +212,6 @@
           log('It broke');
           log(err.message);
         });*/
-
-      }
     </script>
 
   </body>
