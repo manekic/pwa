@@ -214,9 +214,6 @@ self.addEventListener("activate", function(event) {
   );
 });
 
-/*self.addEventListener("push", function() {
-  self.registration.showNotification("push message received");
-});*/
 self.addEventListener('push', function (event) {
     if (!(self.Notification && self.Notification.permission === 'granted')) {
         return;
@@ -237,7 +234,57 @@ self.addEventListener('push', function (event) {
     }
 });
 
+self.addEventListener('sync', function(sync_event) {
+  console.log("back-sync");
+  var request = indexedDB.open("Studenti", 1);
+  request.onsuccess = function(event) {
+    var db = event.target.result;
+    var objectStore = db.transaction("novi_rezultati", "readonly").objectStore("novi_rezultati");
+    var cursor = objectStore.openCursor();
+    cursor.onsuccess = function(event) {
+      var cursor = event.target.result;
+      if (!cursor) { return; }
+      var id_studenta = cursor.value.id_studenta;
+      var id_kolegija = cursor.value.id_kolegija;
+      var bodovi = cursor.value.bodovi;
+      var elt = cursor.value.elt;
+      $.ajax({
+        url: "unosRez.php",
+        data:
+        {
+          id_studenta: id_studenta,
+          id_kolegija_Rez: id_kolegija,
+          elt: elt,
+          bodovi: bodovi
+        },
+        dataType: "json",
+        success: function(data) {
+          console.log(data.info);
+          window.location.reload();
+          navigator.serviceWorker.ready
+          .then(serviceWorkerRegistration => serviceWorkerRegistration.pushManager.getSubscription())
+          .then(subscription => {
+            if (!subscription) {
+              alert('Please enable push notifications');
+              return;
+            }
 
-self.addEventListener('sync', function(event) {
-  self.registration.showNotification("Sync event fired!");
+            const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0];
+            const jsonSubscription = subscription.toJSON();
+            console.log("sub"+" "+JSON.stringify(jsonSubscription) + " " + contentEncoding);
+            fetch('poruka.php', {
+              method: 'POST',
+              body: JSON.stringify(Object.assign(jsonSubscription, { contentEncoding })),
+            });
+          })
+        },
+        error : function(xhr, status) {
+          if(status !== "null")
+          console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
+        }
+      });
+      cursor.delete();
+      cursor.continue();
+    };
+  };
 });

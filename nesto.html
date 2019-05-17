@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title></title>
+    <script type="text/javascript" src="app.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	  <link rel="stylesheet" href="view.css">
+    <link rel="manifest" href="manifest.json">
+  </head>
+  <body class="text-center">
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+      <ul class="nav navbar-nav navbar-left">
+        <li><h2 id="podaci"><span class="glyphicon glyphicon-education"></span></h2></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="administrator.html"><span class="glyphicon glyphicon-chevron-left"></span> Kraj</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="table-responsive">
+      <p id="tbl"></p>
+  </div>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        console.log("na nesto.html");
+        var request = window.indexedDB.open("Studenti", 1);
+        request.onsuccess = function(event) {
+          var db = event.target.result;
+          var objectStore = db.transaction("novi_rezultati", "readonly").objectStore("novi_rezultati");
+          var cursor = objectStore.openCursor();
+          cursor.onsuccess = function(event) {
+            var cursor = event.target.result;
+            if (!cursor) { return; }
+            var id_studenta = cursor.value.id_studenta;
+            var id_kolegija = cursor.value.id_kolegija;
+            var bodovi = cursor.value.bodovi;
+            var elt = cursor.value.elt;
+            $.ajax({
+              url: "unosRez.php",
+              data:
+              {
+                id_studenta: id_studenta,
+                id_kolegija_Rez: id_kolegija,
+                elt: elt,
+                bodovi: bodovi
+              },
+              dataType: "json",
+              success: function(data) {
+                console.log(data.info);
+                window.location.reload();
+                navigator.serviceWorker.ready
+                .then(serviceWorkerRegistration => serviceWorkerRegistration.pushManager.getSubscription())
+                .then(subscription => {
+                  if (!subscription) {
+                    alert('Please enable push notifications');
+                    return;
+                  }
+
+                  const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0];
+                  const jsonSubscription = subscription.toJSON();
+                  console.log("sub"+" "+JSON.stringify(jsonSubscription) + " " + contentEncoding);
+                  fetch('poruka.php', {
+                    method: 'POST',
+                    body: JSON.stringify(Object.assign(jsonSubscription, { contentEncoding })),
+                  });
+                })
+              },
+              error : function(xhr, status) {
+                if(status !== "null")
+                console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
+              }
+            });
+            cursor.delete();
+            cursor.continue();
+          };
+        };
+      });
+    </script>
+
+  </body>
+</html>

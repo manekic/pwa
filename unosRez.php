@@ -116,6 +116,9 @@ else if(isset($_GET['id_kolegija_Rez']) && isset($_GET['id_studenta']) && isset(
     //slanje povratnih podataka
     sendJSONandExit($message);
 }
-else
+else {
+  echo "ovdje sam sada";
   sendErrorAndExit("Nesto nije u redu -> vjerojatno nisi poslao trazene podatke!");
+}
+
  ?>

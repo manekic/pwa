@@ -118,7 +118,7 @@
               var td = $("<td></td>");
               td.prop("align", "center").html(cursor.value.ime+" "+cursor.value.prezime);
               tr.append(td);
-              console.log("id "+cursor.value.id_studenta);
+              console.log("id studenta"+cursor.value.id_studenta);
               for(var j = 0; j < 8; j++) {
                 var td = $("<td></td>");
                 if(td_podrucja[j+1] === null) {
@@ -157,61 +157,33 @@
         console.log("duljina id studenta je " + duljina_id_kolegija);
         id_studenta = id.slice(1, duljina_id_kolegija+1);
         console.log("id studenta je " + id_studenta);
+        console.log("id kolegija "+id_kolegija_Rez);
+        console.log("naziv kolegija "+naziv_kolegija_Rez);
         console.log("ola la");
-
-        $.ajax({
-          url: "unosRez.php",
-          data:
-          {
-            id_studenta: id_studenta,
-            id_kolegija_Rez: id_kolegija_Rez,
-            elt: elt,
-            bodovi: bodovi
-          },
-          dataType: "json",
-          success: function(data) {
-            console.log(data.info);
-            window.location.reload();
-            navigator.serviceWorker.ready
-            .then(serviceWorkerRegistration => serviceWorkerRegistration.pushManager.getSubscription())
-            .then(subscription => {
-              if (!subscription) {
-                alert('Please enable push notifications');
-                return;
-              }
-
-              const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0];
-              const jsonSubscription = subscription.toJSON();
-              console.log("sub"+" "+JSON.stringify(jsonSubscription) + " " + contentEncoding);
-              fetch('poruka.php', {
-                method: 'POST',
-                body: JSON.stringify(Object.assign(jsonSubscription, { contentEncoding })),
-              });
-            })
-          },
-          error : function(xhr, status) {
-            if(status !== "null")
-            console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
-          }
-        });
-      }
-        /*new Promise(function(resolve, reject) {
-          Notification.requestPermission(function(result) {
-            if (result !== 'granted') return reject(Error("Denied notification permission"));
-            resolve();
-          })
-        }).then(function() {
-          return navigator.serviceWorker.ready;
-        }).then(function(reg) {
-          return reg.sync.register('syncTest');
-        }).then(function() {
-          console.log('Sync registered');
-        }).then(function() {
-          console.log("back");
-        }).catch(function(err) {
-          log('It broke');
-          log(err.message);
-        });*/
+        var request = window.indexedDB.open("Studenti", 1);
+        request.onsuccess = function(event) {
+          var db = event.target.result;
+          var objectStore = db.transaction(["novi_rezultati"], "readwrite").objectStore("novi_rezultati");
+          objectStore.add({id_studenta: id_studenta, naziv_kolegija: naziv_kolegija_Rez, id_kolegija: id_kolegija_Rez, elt: elt, bodovi: bodovi});
+         }
+         new Promise(function(resolve, reject) {
+           Notification.requestPermission(function(result) {
+             if (result !== 'granted') return reject(Error("Denied notification permission"));
+             resolve();
+           })
+         }).then(function() {
+           return navigator.serviceWorker.ready;
+         }).then(function(reg) {
+           return reg.sync.register('syncTest');
+         }).then(function() {
+           console.log('Sync registered');
+         }).then(function() {
+           console.log("back");
+         }).catch(function(err) {
+           log('It broke');
+           log(err.message);
+         });
+       }
     </script>
 
   </body>

@@ -27,15 +27,12 @@
     //stvaranje tablica u bazi
     request.onupgradeneeded = function(event) {
       var db = event.target.result;
-      var objStore = db.createObjectStore("studenti", { keyPath: "id_studenta" });
-      objStore.createIndex("id_studenta", "id_studenta", {unique: true});
       var objStore1 = db.createObjectStore("rezultati", { keyPath: "id"});
       objStore1.createIndex("id_studenta", "id_studenta", {unique: false});
-      objStore1.createIndex("kolegij", "kolegij", {unique: false});
       var objStore2 = db.createObjectStore("kolegiji", { keyPath: "id_kolegija" });
       objStore2.createIndex("id_kolegija", "id_kolegija", {unique: true});
-      var objStore3 = db.createObjectStore("noviRezultati", { keyPath: "id" });
-      objStore3.createIndex("idx_status", "status", { unique: false });
+      var objStore3 = db.createObjectStore("novi_rezultati", { autoIncrement: true });
+      objStore3.createIndex("id_studenta", "id_studenta", { unique: false });
       var objStore4 = db.createObjectStore("bodovi", { keyPath: "id_studenta" });
       objStore4.createIndex("id_kolegija", "id_kolegija", {unique: false});
     };
@@ -50,12 +47,7 @@
       transakcija.onerror = function(event) {
         console.log("Error: " + event.target.error);
       };
-      var transakcija1 = db.transaction(["studenti"], "readwrite");
-      transakcija1.onerror = function(event) {
-        console.log("Error: " + event.target.error);
-      };
       var kolegijiStore = transakcija.objectStore("kolegiji");
-      studentiStore = transakcija1.objectStore("studenti");
       for(var i = 0; i < podaci.length; i++) {
         kolegijiStore.add(podaci[i]);
       }
