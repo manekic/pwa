@@ -15,7 +15,7 @@
     <nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
       <ul class="nav navbar-nav navbar-left">
-        <li><h2 id="admin"><span class="glyphicon glyphicon-education"> Administrator</span> <span id="admin_online_status"></span></h2></li>
+        <li><h2><span class="glyphicon glyphicon-education"> </span> <span id="admin_online_status"></span></h2></li>
 			</ul>
       <ul class="nav navbar-nav navbar-right">
         <li><span class="glyphicon glyphicon-log-out"></span><br /><button type="button" id="odjava" class="btn btn-success"> Odjava</button></li>
@@ -40,14 +40,14 @@
         localStorage.clear();
       });
       if(navigator.onLine) {
-        $("#admin_online_status").html("(online)").css("color", "#5cb85c");
+        $("#admin_online_status").html("Administrator (online)").css("color", "#5cb85c");
         console.log("online");
         //notifikacijeOnline();
         onlineOpcije();
       }
       else {
         console.log("offline");
-        $("#admin_online_status").html("(offline)").css("color", "red");
+        $("#admin_online_status").html("Administrator (offline)").css("color", "red");
         $("span").css("color", "red");
         $("h2").css("color", "red");
         //notifikacijeOffline();
@@ -55,18 +55,19 @@
       }
 
       $(window).on("online", function() {
-        $("#admin_online_status").html("(online)").css("color", "#5cb85c");
+        $("#admin_online_status").html("Administrator (online)").css("color", "#5cb85c");
         $("span").css("color", "#5cb85c");
         $("h2").css("color", "#5cb85c");
         console.log("online event triggered: navigator.onLine=" + navigator.onLine);
-        onlineOpcije();
+        window.location.reload();
       });
 
       $(window).on("offline", function() {
-        $("#admin_online_status").html("(offline)").css("color", "red");
+        $("#admin_online_status").html("Administrator (offline)").css("color", "red");
         $("span").css("color", "red");
         $("h2").css("color", "red");
         console.log("offline event triggered: navigator.onLine=" + navigator.onLine);
+        window.location.reload();
       });
     });
 

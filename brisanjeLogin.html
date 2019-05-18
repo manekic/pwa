@@ -4,9 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title></title>
+    <script type="text/javascript" src="app.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <link href="login.css" rel="stylesheet">
+    <link href="view.css" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
   </head>
@@ -16,6 +17,8 @@
       console.log("Na stranici brisanje login.html");
       var i = null, p = null, id_studenta = null;
       $(document).ready(function(){
+        localStorage.removeItem("ime_studenta_br");
+        localStorage.removeItem("id_br");
         if(navigator.onLine) {
           console.log("online");
           $.ajax({
@@ -39,8 +42,20 @@
         }
         else {
           console.log("offline");
-          $("#popis").append("Morate imati pristup internetu da biste mogli brisati kolegije studentima!")
+          $("#popis").append("Morate imati pristup internetu da biste mogli brisati kolegije studentima. Pokušajte kasnije!");
+          var link = $("<a></a>");
+          link.prop("href", "administrator.html").html("Povratak");
+          $("#popis").append("<br />").append(link);
         }
+
+        $(window).on("online", function() {
+          window.location.reload();
+          //onlineOpcije();
+        });
+
+        $(window).on("offline", function() {
+          window.location.reload();
+        });
       });
       $("body").on("click", "input[name='studenti']:radio", function() {
         console.log("change "+$(this).val());
@@ -49,7 +64,9 @@
         localStorage.setItem("id_br", $(this).prop("id"));
       });
       $("body").on("click", "button#klik", function() {
-        window.location.href = "brisanjeRez.html";
+        var odabir = localStorage.getItem("ime_studenta_br");
+        if(odabir === null) alert("Odaberite ime studenta!");
+        else window.location.href = "brisanjeRez.html";
       });
     </script>
 

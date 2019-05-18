@@ -1,18 +1,9 @@
 if ("serviceWorker" in navigator) {
-  console.log( 'app.js' );
-
   navigator.serviceWorker.register("sw.js").then(function(registration) {
     console.log("Service Worker registered with scope:", registration.scope);
   }).catch(function(err) {
     console.log("Service Worker registration failed:", err);
   });
-  /*navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
-  serviceWorkerRegistration.pushManager
-  .subscribe({
-    userVisibleOnly: true,
-    applicationServerKey: urlBase64ToUint8Array("BMBlr6YznhYMX3NgcWIDRxZXs0sh7tCv7_YCsWcww0ZCv9WGg-tRCXfMEHTiBPCksSqeve1twlbmVAZFv7GSuj0")
-  });
-});*/
 }
 
 if ("serviceWorker" in navigator) {

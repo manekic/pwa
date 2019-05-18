@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title></title>
+    <script type="text/javascript" src="app.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="view.css">
@@ -14,7 +15,7 @@
     <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
       <ul class="nav navbar-nav navbar-left">
-        <li><h2 id="podaci"><span class="glyphicon glyphicon-education"></span></h2></li>
+        <li><h2><span class="glyphicon glyphicon-education"> </span> <span id="admin_online_status"></span></h2></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="administrator.html"><span class="glyphicon glyphicon-floppy-saved"></span> Spremi</a></li>
@@ -34,8 +35,29 @@
         //dohvaćanje podataka o korisniku
         id_studenta = localStorage.getItem("id_unk");
         var student = localStorage.getItem("ime_studenta_unk");
-        $("#podaci").append(" " + student);
-        dohvacanjeSvihKolegija();
+        if(navigator.onLine) {
+          $("#admin_online_status").html("Administrator (online) - " + student).css("color", "#5cb85c");
+          dohvacanjeSvihKolegija();
+        }
+        else {
+          $("#admin_online_status").html("Administrator (offline) - " + student).css("color", "red");
+          $("#popis").append("Nemate internetske veze. Pokušajte kasnije!");
+          var link = $("<a></a>");
+          link.prop("href", "administrator.html");
+          $("#popis").append("<br />").append(link);
+        }
+
+        $(window).on("offline", function() {
+          $("#admin_online_status").html(" Administrator (offline) - "+student).css("color", "red");
+          $("span").css("color", "red");
+          $("h2").css("color", "red");
+          console.log("offline event triggered: navigator.onLine=" + navigator.onLine);
+          $("#popis").empty();
+          $("#popis").append("Nema interneta");
+          var link = $("<a></a>");
+          link.prop("href", "administrator.html").html("Povratak");
+          $("#popis").append("<br />").append(link);
+        });
       });
       function dohvacanjeSvihKolegija() {
         //ajax upit za dohvaćanje popisa svih kolegija i kolegija koje je upisao korisnik

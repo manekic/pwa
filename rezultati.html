@@ -34,8 +34,8 @@
       var prezime = localStorage.getItem("prezime");
       var id = localStorage.getItem("id_prijave");
       var objectStore = null;
-      var bodovi = [];
-      var elts = 0;
+      var kolegiji = [], k1 = [], k2 = [], zavrsni = [], dz1 = [], dz2 = [], dz3 = [], dz4 = [];
+      var br = 0;
       //polje za podatke koji se nalaze u prvom retku tablice sa rezultatima
       var td_kategorije = ["Kolegij", "1.kolokvij ", "2.kolokvij", "Završni ispit", "1.zadaća", "2.zadaća", "3.zadaća", "4.zadaća"];
       $(document).ready(function(){
@@ -77,61 +77,15 @@
                   var index = objectStore.index("id_studenta");
                   var count = index.count();
                   count.onsuccess = function() {
-                    //console.log("count "+count.result);
                     br = count.result;
                     for(var i = 0; i <data.rez.length; i++) {
-                      //console.log("id "+id);
                       objectStore.put({id: (id+i), id_studenta: id, kolegij: data.rez[i].ime, kol1: data.rez[i].kol1, kol2: data.rez[i].kol2,
                              zavrsni: data.rez[i].zavrsni, dz1: data.rez[i].dz1, dz2: data.rez[i].dz2, dz3: data.rez[i].dz3, dz4: data.rez[i].dz4});
-                      //console.log("Ubacio rez");
                     }
                   }
                 };
-                //crtanje tablice sa podacima dobivenima iz ajax poziva
-                var tbl = $("<table></table>");
-                tbl.prop("class", "table");
-                //prvi redak tablice
-                var tr = $("<tr></tr>");
-                for(var i = 0; i < data.rez.length; i++) {
-                  var td_podrucja = [data.rez[i].ime, data.rez[i].kol1, data.rez[i].kol2, data.rez[i].zavrsni, data.rez[i].dz1, data.rez[i].dz2, data.rez[i].dz3, data.rez[i].dz4];
-                  //var tr = $("<tr></tr>");
-                  if(i === 0) {
-                    var td = $("<td></td>");
-                    td.prop("align", "center").html(td_kategorije[0]);
-                    var td1 = $("<td></td>");
-                    td1.prop("align", "center").html(td_podrucja[0]);
-                    tr.append(td);
-                    tr.append(td1);
-                  }
-                  else {
-                    var td = $("<td></td>");
-                    td.prop("align", "center").html(td_podrucja[0]);
-                    tr.append(td);
-                  }
-                tbl.append(tr);
-                }
-                for(var j = 0; j < 7; j++) {
-                  var tr = $("<tr></tr>");
-                  var td = $("<td></td>");
-                  td.prop("align", "center").html(td_kategorije[j+1]);
-                  tr.append(td);
-                  for(var i = 0; i < data.rez.length; i++) {
-                    var td_podrucja = [data.rez[i].ime, data.rez[i].kol1, data.rez[i].kol2, data.rez[i].zavrsni, data.rez[i].dz1, data.rez[i].dz2, data.rez[i].dz3, data.rez[i].dz4];
-                    var td = $("<td></td>");
-                    if(td_podrucja[j+1] === null)
-                      td.prop("align", "center").html("-");
-                    else
-                      td.prop("align", "center").html(td_podrucja[j+1]);
-                    tr.append(td);
-                  }
-                  tbl.append(tr);
-                }
-                $("#tbl").append(tbl);
-                console.log("Nacrtao tablicu, izlazim iz fje.");
-                //ispisiRezultate(data.rez);
               }
-              else
-                $("#tbl").append("Niste upisali niti jedan kolegij!");
+              ispisiTablicu();
             },
             error : function(xhr, status) {
               if(status !== "null")
@@ -145,7 +99,7 @@
           $("#ime_studenta_online_status").append("(offline)").css("color", "red");
           $("span").css("color", "red");
           $("h2").css("color", "red");
-          ispisiRezultateOffline();
+          ispisiTablicu();
         }
       });
       function notifikacijeOnline() {
@@ -257,50 +211,132 @@
           }).then(() => subscription);
         }
       //fja za dinamičko stvaranje tablice sa rezultatima
-      function ispisiRezultateOffline() {
-        console.log("U fji ispisiRezultateOffline");
+      function ispisiTablicu() {
+        console.log("U fji ispisiTablicu");
         var imaRez = false;
         var request = window.indexedDB.open("Studenti", 1);
         request.onsuccess = function(event) {
           var db = event.target.result;
           var objectStore = db.transaction("rezultati", "readonly").objectStore("rezultati");
           var index = objectStore.index("id_studenta");
-          //var count = index.count();
           var cursor = index.openCursor(id);
           var tbl = $("<table></table>");
           tbl.prop("id", "tblRez");
-          var tr = $("<tr></tr>");
-          //potrebno je 8 ćelija sa nazivima elemenata za ocjenjivanje
-          for(var k = 0; k < 8 ; k++) {
-            var td = $("<td></td>");
-            td.prop("align", "center").html(td_kategorije[k]);
-            tr.append(td);
-          }
-          tbl.append(tr);
           cursor.onsuccess = function(event) {
             var cursor = event.target.result;
             if (cursor) {
+              console.log("u ima cursora");
               imaRez = true;
-              var td_podrucja = [cursor.value.kolegij, cursor.value.kol1, cursor.value.kol2, cursor.value.zavrsni, cursor.value.dz1, cursor.value.dz2, cursor.value.dz3, cursor.value.dz4];
-              var tr = $("<tr></tr>");
-              for(var j = 0; j < 8; j++) {
-                var td = $("<td></td>");
-                if(td_podrucja[j] === null)
-                  td.prop("align", "center").html("-");
-                else
-                  td.prop("align", "center").html(td_podrucja[j]);
-                tr.append(td);
-              }
-              tbl.append(tr);
+              var td_podrucja = [, , , , , , , ];
+              kolegiji[br] = cursor.value.kolegij;
+              k1[br] = cursor.value.kol1;
+              k2[br] = cursor.value.kol2;
+              zavrsni[br] = cursor.value.zavrsni;
+              dz1[br] = cursor.value.dz1;
+              dz2[br] = cursor.value.dz2;
+              dz3[br] = cursor.value.dz3;
+              dz4[br] = cursor.value.dz4;
+              console.log("br++ " + br);
+              console.log("kolegiji " + kolegiji[br] + " k1 " + k1[br] + " k2 " + k2[br]);
+              br++;
               cursor.continue();
             }
             else {
               console.log("Gotovo");
+              if(!imaRez) $("#tbl").html("Niste upisali niti jedan kolegij!");
+              else {
+                //redak za kolegije
+                var tr = $("<tr></tr>");
+                var td = $("<td></td>");
+                td.prop("align", "center").html(td_kategorije[0]);
+                tr.append(td);
+                for(var i = 0; i < br; i++) {
+                  var td = $("<td></td>");
+                  td.prop("align", "center").html(kolegiji[i]);
+                  tr.append(td);
+                }
+                tbl.append(tr);
+                //redak za prvi kolokvij
+                var tr = $("<tr></tr>");
+                var td = $("<td></td>");
+                td.prop("align", "center").html(td_kategorije[1]);
+                tr.append(td);
+                for(var i = 0; i < br; i++) {
+                  var td = $("<td></td>");
+                  if(k1[i] === null) td.prop("align", "center").html("-");
+                  else td.prop("align", "center").html(k1[i]);
+                  tr.append(td);
+                }
+                tbl.append(tr);
+                //redak za drugi kolokvij
+                var tr = $("<tr></tr>");var td = $("<td></td>");
+                td.prop("align", "center").html(td_kategorije[2]);
+                tr.append(td);
+                for(var i = 0; i < br; i++) {
+                  var td = $("<td></td>");
+                  if(k2[i] === null) td.prop("align", "center").html("-");
+                  else td.prop("align", "center").html(k2[i]);
+                  tr.append(td);
+                }
+                tbl.append(tr);
+                //redak za zavrsni
+                var tr = $("<tr></tr>");var td = $("<td></td>");
+                td.prop("align", "center").html(td_kategorije[3]);
+                tr.append(td);
+                for(var i = 0; i < br; i++) {
+                  var td = $("<td></td>");
+                  if(zavrsni[i] === null) td.prop("align", "center").html("-");
+                  else td.prop("align", "center").html(zavrsni[i]);
+                  tr.append(td);
+                }
+                tbl.append(tr);
+                //redak za prvu dz
+                var tr = $("<tr></tr>");var td = $("<td></td>");
+                td.prop("align", "center").html(td_kategorije[4]);
+                tr.append(td);
+                for(var i = 0; i < br; i++) {
+                  var td = $("<td></td>");
+                  if(dz1[i] === null) td.prop("align", "center").html("-");
+                  else td.prop("align", "center").html(dz1[i]);
+                  tr.append(td);
+                }
+                tbl.append(tr);
+                //redak za drugu dz
+                var tr = $("<tr></tr>");var td = $("<td></td>");
+                td.prop("align", "center").html(td_kategorije[5]);
+                tr.append(td);
+                for(var i = 0; i < br; i++) {
+                  var td = $("<td></td>");
+                  if(dz2[i] === null) td.prop("align", "center").html("-");
+                  else td.prop("align", "center").html(dz2[i]);
+                  tr.append(td);
+                }
+                tbl.append(tr);
+                //redak za trecu dz
+                var tr = $("<tr></tr>");var td = $("<td></td>");
+                td.prop("align", "center").html(td_kategorije[6]);
+                tr.append(td);
+                for(var i = 0; i < br; i++) {
+                  var td = $("<td></td>");
+                  if(dz3[i] === null) td.prop("align", "center").html("-");
+                  else td.prop("align", "center").html(dz3[i]);
+                  tr.append(td);
+                }
+                tbl.append(tr);
+                //redak za cetvrtu dz
+                var tr = $("<tr></tr>");var td = $("<td></td>");
+                td.prop("align", "center").html(td_kategorije[7]);
+                tr.append(td);
+                for(var i = 0; i < br; i++) {
+                  var td = $("<td></td>");
+                  if(dz4[i] === null) td.prop("align", "center").html("-");
+                  else td.prop("align", "center").html(dz4[i]);
+                  tr.append(td);
+                }
+                tbl.append(tr);
+                $("#tbl").append(tbl);
+              }
             }
-            if(!imaRez)
-              $("#tbl").html("Niste upisali niti jedan kolegij!");
-            else
-              $("#tbl").append(tbl);
           };
         };
       }

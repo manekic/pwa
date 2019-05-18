@@ -4,9 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title></title>
+    <script type="text/javascript" src="app.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <link href="login.css" rel="stylesheet">
+    <link href="view.css" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
   </head>
@@ -16,25 +17,45 @@
       console.log("Na stranici upis novih kolegija login.html");
       var i = null, p = null, id_studenta = null;
       $(document).ready(function(){
-        $.ajax({
-          url: "upisNovihKolegija.php",
-          dataType: "json",
-          success: function(data) {
-            console.log(data.info);
-            for(var i = 0; i < data.studenti.length; i++) {
-              var input = $("<input></input>");
-              input.prop("type", "radio").prop("value", data.studenti[i].ime+" "+data.studenti[i].prezime).prop("name", "studenti").prop("id",data.studenti[i].id);
-              $("#popis").append(input).append(" "+data.studenti[i].ime+" "+data.studenti[i].prezime).append("<br>");
+        localStorage.removeItem("ime_studenta_unk");
+        localStorage.removeItem("id_unk");
+        if(navigator.onLine) {
+          $.ajax({
+            url: "upisNovihKolegija.php",
+            dataType: "json",
+            success: function(data) {
+              console.log(data.info);
+              for(var i = 0; i < data.studenti.length; i++) {
+                var input = $("<input></input>");
+                input.prop("type", "radio").prop("value", data.studenti[i].ime+" "+data.studenti[i].prezime).prop("name", "studenti").prop("id",data.studenti[i].id);
+                $("#popis").append(input).append(" "+data.studenti[i].ime+" "+data.studenti[i].prezime).append("<br>");
+              }
+              var btn = $("<button></button>");
+              btn.prop("id", "klik").prop("class", "btn btn-success").html("Odabir kolegija");
+              $("#popis").append("<br>").append(btn);
+            },
+            error : function(xhr, status) {
+              if(status !== "null")
+              console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
             }
-            var btn = $("<button></button>");
-            btn.prop("id", "klik").prop("class", "btn btn-success").html("Odabir kolegija");
-            $("#popis").append("<br>").append(btn);
-          },
-          error : function(xhr, status) {
-            if(status !== "null")
-            console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
-          }
+          });
+        }
+        else {
+          $("#popis").append("Morate imati pristup internetu da biste mogli upisivati kolegije studentima. Pokušajte kasnije!");
+          var link = $("<a></a>");
+          link.prop("href", "administrator.html").html("Povratak");
+          $("#popis").append("<br />").append(link);
+        }
+
+        $(window).on("online", function() {
+          window.location.reload();
+          //onlineOpcije();
         });
+
+        $(window).on("offline", function() {
+          window.location.reload();
+        });
+
       });
       $("body").on("click", "input[name='studenti']:radio", function() {
         console.log("change "+$(this).val());
@@ -43,7 +64,9 @@
         localStorage.setItem("id_unk", $(this).prop("id"));
       });
       $("body").on("click", "button#klik", function() {
-        window.location.href = "upisNovihKolegija.html";
+        var odabir = localStorage.getItem("ime_studenta_unk");
+        if(odabir === null) alert("Odaberite ime studenta!");
+        else window.location.href = "upisNovihKolegija.html";
       });
     </script>
 
