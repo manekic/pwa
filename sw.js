@@ -235,11 +235,11 @@ self.addEventListener('push', function (event) {
 });
 
 self.addEventListener('sync', function(sync_event) {
-  console.log("back-sync");
+  console.log("back-sync, upisano u bazu");
   var request = indexedDB.open("Studenti", 1);
   request.onsuccess = function(event) {
     var db = event.target.result;
-    var objectStore = db.transaction("novi_rezultati", "readonly").objectStore("novi_rezultati");
+    var objectStore = db.transaction("novi_rezultati", "readwrite").objectStore("novi_rezultati");
     var cursor = objectStore.openCursor();
     cursor.onsuccess = function(event) {
       var cursor = event.target.result;
@@ -248,43 +248,38 @@ self.addEventListener('sync', function(sync_event) {
       var id_kolegija = cursor.value.id_kolegija;
       var bodovi = cursor.value.bodovi;
       var elt = cursor.value.elt;
-      $.ajax({
-        url: "unosRez.php",
-        data:
-        {
-          id_studenta: id_studenta,
-          id_kolegija_Rez: id_kolegija,
-          elt: elt,
-          bodovi: bodovi
+      fetch('server.php', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-type': 'application/json',
         },
-        dataType: "json",
-        success: function(data) {
-          console.log(data.info);
-          window.location.reload();
-          navigator.serviceWorker.ready
-          .then(serviceWorkerRegistration => serviceWorkerRegistration.pushManager.getSubscription())
-          .then(subscription => {
-            if (!subscription) {
-              alert('Please enable push notifications');
-              return;
-            }
-
-            const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0];
-            const jsonSubscription = subscription.toJSON();
-            console.log("sub"+" "+JSON.stringify(jsonSubscription) + " " + contentEncoding);
-            fetch('poruka.php', {
-              method: 'POST',
-              body: JSON.stringify(Object.assign(jsonSubscription, { contentEncoding })),
-            });
-          })
-        },
-        error : function(xhr, status) {
-          if(status !== "null")
-          console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
-        }
+        body: //JSON.stringify({id_studenta: id_studenta, id_kolegija: id_kolegija, bodovi: bodovi, elt: elt})
+          JSON.stringify({id_studenta, id_kolegija, bodovi, elt})
+      })
+      // .then(serviceWorkerRegistration => serviceWorkerRegistration.pushManager.getSubscription())
+      //   .then(subscription => {
+      //     if (!subscription) {
+      //       alert('Please enable push notifications');
+      //       return;
+      //     }
+      //
+      //     const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0];
+      //     const jsonSubscription = subscription.toJSON();
+      //     console.log("sub"+" "+JSON.stringify(jsonSubscription) + " " + contentEncoding);
+      //     fetch('poruka.php', {
+      //       method: 'POST',
+      //       body: JSON.stringify(Object.assign(jsonSubscription, { contentEncoding })),
+      //     });
+      //   })
+      }).catch(function(err) {
+        console.log('It broke');
+        console.log(err.message);
       });
       cursor.delete();
       cursor.continue();
     };
   };
+
+
 });

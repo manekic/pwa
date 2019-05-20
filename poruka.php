@@ -20,7 +20,6 @@ while($row1 = $st1->fetch()) {
 
 $subscription = Subscription::create(json_decode(file_get_contents('php://input'), true));
 
-
 $auth = array(
   'VAPID' => array(
       'subject' => 'https://github.com/Minishlink/web-push-php-example/',

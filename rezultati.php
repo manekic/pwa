@@ -56,48 +56,48 @@ if(isset($_GET['id'])) {
   //slanje povratnih podataka
   sendJSONandExit($message);
 }
-else if(!isset($_GET['id'])){
-  $message = [];
-  $subscription = json_decode(file_get_contents('php://input'), true);
-  if (!isset($subscription['endpoint'])) {
-      echo 'Error: not a subscription';
-      return;
-  }
-
-  $method = $_SERVER['REQUEST_METHOD'];
-
-  switch ($method) {
-      case 'POST':
-        echo 'Endpoint je ' . $subscription['endpoint'] . "\n";
-        echo 'publicKey je ' . $subscription['publicKey'] . "\n";
-        echo 'Auth je ' . $subscription['authToken'] . "\n";
-        $endpoint = $subscription['endpoint'];
-        $token = $subscription['authToken'];
-        $key = $subscription['publicKey'];
-        $id = $_SESSION['id_stud'];
-        try {
-            $db = DB::getConnection();
-            $st2 = $db->prepare("INSERT INTO pretplate(id_studenta, endpoint, p256dh, auth)
-                                  VALUES ('$id','$endpoint', '$key', '$token')");
-            $st2->execute();
-             echo "ubacio";
-          }
-          catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
-          // create a new subscription entry in your database (endpoint is unique)
-          break;
-      case 'PUT':
-          // update the key and token of subscription corresponding to the endpoint
-          break;
-      case 'DELETE':
-          // delete the subscription corresponding to the endpoint
-          break;
-      default:
-          echo "Error: method not handled";
-          return;
-  }
-  //slanje povratnih podataka
-  sendJSONandExit($message);
-}
+// else if(!isset($_GET['id'])){
+//   $message = [];
+//   $subscription = json_decode(file_get_contents('php://input'), true);
+//   if (!isset($subscription['endpoint'])) {
+//       echo 'Error: not a subscription';
+//       return;
+//   }
+//
+//   $method = $_SERVER['REQUEST_METHOD'];
+//
+//   switch ($method) {
+//       case 'POST':
+//         echo 'Endpoint je ' . $subscription['endpoint'] . "\n";
+//         echo 'publicKey je ' . $subscription['publicKey'] . "\n";
+//         echo 'Auth je ' . $subscription['authToken'] . "\n";
+//         $endpoint = $subscription['endpoint'];
+//         $token = $subscription['authToken'];
+//         $key = $subscription['publicKey'];
+//         $id = $_SESSION['id_stud'];
+//         try {
+//             $db = DB::getConnection();
+//             $st2 = $db->prepare("INSERT INTO pretplate(id_studenta, endpoint, p256dh, auth)
+//                                   VALUES ('$id','$endpoint', '$key', '$token')");
+//             $st2->execute();
+//              echo "ubacio";
+//           }
+//           catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
+//           // create a new subscription entry in your database (endpoint is unique)
+//           break;
+//       case 'PUT':
+//           // update the key and token of subscription corresponding to the endpoint
+//           break;
+//       case 'DELETE':
+//           // delete the subscription corresponding to the endpoint
+//           break;
+//       default:
+//           echo "Error: method not handled";
+//           return;
+//   }
+//   //slanje povratnih podataka
+//   sendJSONandExit($message);
+// }
 else
   sendErrorAndExit("Nesto nije u redu -> vjerojatno nisi poslao trazenje podatke!");
  ?>

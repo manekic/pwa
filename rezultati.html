@@ -200,8 +200,8 @@
           var endpoint = subscription.endpoint;
           var publicKey = key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null;
           var authToken = token ? btoa(String.fromCharCode.apply(null, new Uint8Array(token))) : null;
-          return fetch('rezultati.php', {
-            method,
+          return fetch('pretplate.php', {
+            method: 'POST',
             body: JSON.stringify({
               endpoint: subscription.endpoint,
               publicKey: key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null,

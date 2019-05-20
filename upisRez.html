@@ -26,15 +26,6 @@
       <p id="tbl"></p>
   </div>
     <script type="text/javascript">
-    navigator.serviceWorker.register('sw.js').then(function(reg) {
-      return reg.sync.getTags();
-    }).then(function(tags) {
-      if (tags.includes('syncTest')) log("There's already a background sync pending");
-    }).catch(function(err) {
-      log('It broke (probably sync not supported or flag not enabled)');
-      log(err.message);
-    });
-
       var elt = null, id_studenta = null, duljina_id_kolegija;
       var id_kolegija_Rez = null, naziv_kolegija_Rez = null;
       console.log("Na stranici unesiRezultate.html");
@@ -188,14 +179,14 @@
          }).then(function() {
            return navigator.serviceWorker.ready;
          }).then(function(reg) {
-           return reg.sync.register('syncTest');
+           return reg.sync.register('upis_rezultata');
          }).then(function() {
            console.log('Sync registered');
          }).then(function() {
            console.log("back");
          }).catch(function(err) {
-           log('It broke');
-           log(err.message);
+           console.log('It broke');
+           console.log(err.message);
          });
        }
     </script>
