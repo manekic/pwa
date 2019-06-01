@@ -82,6 +82,7 @@ try {
 }
 catch( PDOException $e ) { exit( "PDO error [create pretplate]: " . $e->getMessage() ); }
 echo "Napravio tablicu pretplate.<br />";
+
 // Ubaci neke korisnike unutra
 try {
 	$st = $db->prepare( 'INSERT INTO studenti(username, password, ime, prezime) VALUES (:username, :password, :ime, :prezime)' );

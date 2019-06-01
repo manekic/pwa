@@ -16,7 +16,6 @@ namespace Minishlink\WebPush;
 use Base64Url\Base64Url;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
 
@@ -264,7 +263,7 @@ class WebPush
                 }
             }
             // if VAPID (GCM doesn't support it but FCM does)
-            elseif (array_key_exists('VAPID', $auth)) {
+            elseif (array_key_exists('VAPID', $auth) && $contentEncoding) {
                 $audience = parse_url($endpoint, PHP_URL_SCHEME).'://'.parse_url($endpoint, PHP_URL_HOST);
                 if (!parse_url($audience)) {
                     throw new \ErrorException('Audience "'.$audience.'"" could not be generated.');
@@ -280,8 +279,6 @@ class WebPush
                     } else {
                         $headers['Crypto-Key'] = $vapidHeaders['Crypto-Key'];
                     }
-                } elseif ($contentEncoding === 'aes128gcm' && substr($endpoint, 0, strlen(self::FCM_BASE_URL)) === self::FCM_BASE_URL) {
-                    $endpoint = str_replace('fcm/send', 'wp', $endpoint);
                 }
             }
 
@@ -341,10 +338,15 @@ class WebPush
 
     /**
      * Reuse VAPID headers in the same flush session to improve performance
+     * @param bool $enabled
+     *
+     * @return WebPush
      */
-    public function setReuseVAPIDHeaders($enabled)
+    public function setReuseVAPIDHeaders(bool $enabled)
     {
         $this->reuseVAPIDHeaders = $enabled;
+
+        return $this;
     }
 
     /**
@@ -357,6 +359,8 @@ class WebPush
 
     /**
      * @param array $defaultOptions Keys 'TTL' (Time To Live, defaults 4 weeks), 'urgency', 'topic', 'batchSize'
+     *
+     * @return WebPush
      */
     public function setDefaultOptions(array $defaultOptions)
     {
@@ -364,6 +368,8 @@ class WebPush
         $this->defaultOptions['urgency'] = isset($defaultOptions['urgency']) ? $defaultOptions['urgency'] : null;
         $this->defaultOptions['topic'] = isset($defaultOptions['topic']) ? $defaultOptions['topic'] : null;
         $this->defaultOptions['batchSize'] = isset($defaultOptions['batchSize']) ? $defaultOptions['batchSize'] : 1000;
+
+        return $this;
     }
 
     /**
@@ -376,12 +382,12 @@ class WebPush
 
     /**
      * @param string $audience
-     * @param string|null $contentEncoding
+     * @param string $contentEncoding
      * @param array $vapid
      * @return array
      * @throws \ErrorException
      */
-    private function getVAPIDHeaders(string $audience, ?string $contentEncoding, array $vapid)
+    private function getVAPIDHeaders(string $audience, string $contentEncoding, array $vapid)
     {
         $vapidHeaders = null;
 
@@ -394,10 +400,6 @@ class WebPush
         }
 
         if (!$vapidHeaders) {
-            if (!$contentEncoding) {
-                throw new \ErrorException('Subscription should have a content encoding');
-            }
-
             $vapidHeaders = VAPID::getVapidHeaders($audience, $vapid['subject'], $vapid['publicKey'], $vapid['privateKey'], $contentEncoding);
         }
 

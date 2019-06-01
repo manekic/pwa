@@ -1,20 +1,5 @@
 <?php
 require_once 'db.class.php';
-/*
-INPUT:
-$_GET['username'] = username korisnika
-$_GET['pass'] = pass korisnika
-
-OUTPUT: JSON
-{
-  info = varijabla koja kaze je li prijava uspjela
-  rez = rezultati ispita dostupni u bazi
-}
-ili
-{
-  error = poruka o greški.
-}
-*/
 
 function sendJSONandExit($message)
 {

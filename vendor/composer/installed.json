@@ -261,17 +261,17 @@
     },
     {
         "name": "minishlink/web-push",
-        "version": "v5.2.0",
-        "version_normalized": "5.2.0.0",
+        "version": "v5.2.4",
+        "version_normalized": "5.2.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/web-push-libs/web-push-php.git",
-            "reference": "7150ba0265a2f6f620930073d9a859472a707fa9"
+            "reference": "b1e09e93fbbf3d4f95cee79a61191bd9df9f8f27"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/web-push-libs/web-push-php/zipball/7150ba0265a2f6f620930073d9a859472a707fa9",
-            "reference": "7150ba0265a2f6f620930073d9a859472a707fa9",
+            "url": "https://api.github.com/repos/web-push-libs/web-push-php/zipball/b1e09e93fbbf3d4f95cee79a61191bd9df9f8f27",
+            "reference": "b1e09e93fbbf3d4f95cee79a61191bd9df9f8f27",
             "shasum": ""
         },
         "require": {
@@ -284,10 +284,11 @@
             "web-token/jwt-signature": "^1.0"
         },
         "require-dev": {
-            "phpstan/phpstan": "^0.11",
+            "friendsofphp/php-cs-fixer": "^2.14",
+            "phpstan/phpstan": "0.11.2",
             "phpunit/phpunit": "^7.0"
         },
-        "time": "2019-02-23T15:42:27+00:00",
+        "time": "2019-03-23T17:10:13+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

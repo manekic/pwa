@@ -57,8 +57,14 @@
                 var objectStore = db.transaction(["bodovi"], "readwrite").objectStore("bodovi");
                 objectStore.clear();
                 for(var i = 0; i < data.studenti.length; i++) {
-                  objectStore.add({id_studenta: data.studenti[i].id, naziv_kolegija: naziv_kolegija_Rez, id_kolegija: id_kolegija_Rez, ime: data.studenti[i].ime, prezime: data.studenti[i].prezime, kol1: data.rez[i].kol1, kol2: data.rez[i].kol2,
-                         zavrsni: data.rez[i].zavrsni, dz1: data.rez[i].dz1, dz2: data.rez[i].dz2, dz3: data.rez[i].dz3, dz4: data.rez[i].dz4});
+                  for(var j = 0; j < data.rez.length; j++) {
+                    if(data.studenti[i].id === data.rez[j].id) {
+                      objectStore.add({id_studenta: data.studenti[i].id, naziv_kolegija: naziv_kolegija_Rez, id_kolegija: id_kolegija_Rez,
+                             ime: data.studenti[i].ime, prezime: data.studenti[i].prezime,
+                             kol1: data.rez[j].kol1, kol2: data.rez[j].kol2, zavrsni: data.rez[j].zavrsni,
+                             dz1: data.rez[j].dz1, dz2: data.rez[j].dz2, dz3: data.rez[j].dz3, dz4: data.rez[j].dz4});
+                    }
+                  }
                }
              };
               tablica();
@@ -149,6 +155,7 @@
         };
       }
       $("body").on("change", "input.rez", spremiRezultat);
+
       function spremiRezultat() {
         var id = $(this).prop("id");
         console.log("id je " +id);
@@ -171,23 +178,17 @@
           var objectStore = db.transaction(["novi_rezultati"], "readwrite").objectStore("novi_rezultati");
           objectStore.add({id_studenta: id_studenta, naziv_kolegija: naziv_kolegija_Rez, id_kolegija: id_kolegija_Rez, elt: elt, bodovi: bodovi});
          }
-         new Promise(function(resolve, reject) {
-           Notification.requestPermission(function(result) {
-             if (result !== 'granted') return reject(Error("Denied notification permission"));
-             resolve();
-           })
-         }).then(function() {
-           return navigator.serviceWorker.ready;
-         }).then(function(reg) {
-           return reg.sync.register('upis_rezultata');
-         }).then(function() {
-           console.log('Sync registered');
-         }).then(function() {
-           console.log("back");
-         }).catch(function(err) {
-           console.log('It broke');
-           console.log(err.message);
-         });
+         navigator.serviceWorker.ready
+          .then(function(registration) {
+            registration.sync.register('upis-rezultata');
+          }).then(function() {
+            console.log("Sync registered");
+          }).then(function() {
+            console.log("back");
+          }).catch(function(error) {
+            console.log("It broke").
+            console.log(error.message);
+          });
        }
     </script>
 

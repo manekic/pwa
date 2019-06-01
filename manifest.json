@@ -1,8 +1,7 @@
 {
   "short_name": "Rezultati ispita",
   "name": "Praćenje rezultata na ispitima",
-  "start_url": "/~maja/novo/index.html",
-  "gcm_sender_id": "56350896431",
+  "start_url": "/~maja/pwa/index.html",
   "display": "standalone",
   "icons": [
     {

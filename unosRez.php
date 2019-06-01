@@ -4,24 +4,6 @@ require __DIR__ . '/vendor/autoload.php';
 use Minishlink\WebPush\WebPush;
 use Minishlink\WebPush\Subscription;
 session_start();
-/*if(!isset( $_SESSION["user_id"]))
-  error( "Nije se ulogirao!" );*/
-
-/*
-INPUT:
-$_GET['username'] = username korisnika
-$_GET['pass'] = pass korisnika
-
-OUTPUT: JSON
-{
-  info = varijabla koja kaze je li prijava uspjela
-  rez = rezultati ispita dostupni u bazi
-}
-ili
-{
-  error = poruka o greški.
-}
-*/
 
 function sendJSONandExit($message)
 {

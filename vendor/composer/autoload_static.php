@@ -58,11 +58,11 @@ class ComposerStaticInit38eda49da3b736475b97860c0ae62677
         ),
         'Jose\\Component\\Signature\\Algorithm\\' => 
         array (
-            0 => __DIR__ . '/..' . '/web-token/jwt-signature-algorithm-rsa',
-            1 => __DIR__ . '/..' . '/web-token/jwt-signature-algorithm-none',
+            0 => __DIR__ . '/..' . '/web-token/jwt-signature-algorithm-ecdsa',
+            1 => __DIR__ . '/..' . '/web-token/jwt-signature-algorithm-eddsa',
             2 => __DIR__ . '/..' . '/web-token/jwt-signature-algorithm-hmac',
-            3 => __DIR__ . '/..' . '/web-token/jwt-signature-algorithm-eddsa',
-            4 => __DIR__ . '/..' . '/web-token/jwt-signature-algorithm-ecdsa',
+            3 => __DIR__ . '/..' . '/web-token/jwt-signature-algorithm-none',
+            4 => __DIR__ . '/..' . '/web-token/jwt-signature-algorithm-rsa',
         ),
         'Jose\\Component\\Signature\\' => 
         array (

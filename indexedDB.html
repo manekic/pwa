@@ -30,9 +30,9 @@
       var objStore1 = db.createObjectStore("rezultati", { keyPath: "id"});
       objStore1.createIndex("id_studenta", "id_studenta", {unique: false});
       var objStore2 = db.createObjectStore("kolegiji", { keyPath: "id_kolegija" });
-      objStore2.createIndex("id_kolegija", "id_kolegija", {unique: true});
+      //objStore2.createIndex("id_kolegija", "id_kolegija", {unique: true});
       var objStore3 = db.createObjectStore("novi_rezultati", { autoIncrement: true });
-      objStore3.createIndex("id_studenta", "id_studenta", { unique: false });
+      //objStore3.createIndex("id_studenta", "id_studenta", { unique: false });
       var objStore4 = db.createObjectStore("bodovi", { keyPath: "id_studenta" });
       objStore4.createIndex("id_kolegija", "id_kolegija", {unique: false});
     };

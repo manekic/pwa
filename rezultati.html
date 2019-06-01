@@ -55,7 +55,7 @@
         });
         if(navigator.onLine) {
           console.log("online sam");
-          push_subscribe();
+          //push_subscribe();
           notifikacijeOnline();
           $("#ime_studenta_online_status").append("(online)").css("color", "#5cb85c");
           $.ajax({
@@ -85,13 +85,13 @@
                   }
                 };
               }
-              ispisiTablicu();
             },
             error : function(xhr, status) {
               if(status !== "null")
               console.log("Nesto nije u redu s Ajax upitom. Status: " + status + ".");
             }
           });
+          ispisiTablicu();
         }
         else {
           notifikacijeOffline();
@@ -138,78 +138,73 @@
           });
         }
       }
-      function push_subscribe() {
-        return checkNotificationPermission()
-          .then(() => navigator.serviceWorker.ready)
-          .then(serviceWorkerRegistration =>
-            serviceWorkerRegistration.pushManager.subscribe({
-              userVisibleOnly: true,
-              applicationServerKey: urlBase64ToUint8Array("BMBlr6YznhYMX3NgcWIDRxZXs0sh7tCv7_YCsWcww0ZCv9WGg-tRCXfMEHTiBPCksSqeve1twlbmVAZFv7GSuj0"),
-            })
-          )
-          .then(subscription => {
-              // Subscription was successful
-              // create subscription on your server
-              return push_sendSubscriptionToServer(subscription, 'POST');
-            // Subscription was successful
-            // create subscription on your server
-            //return push_sendSubscriptionToServer(subscription, 'POST');
-          });
-      }
-        function checkNotificationPermission() {
-          return new Promise((resolve, reject) => {
-            if (Notification.permission === 'denied') {
-              return reject(new Error('Push messages are blocked.'));
-            }
-
-            if (Notification.permission === 'granted') {
-              console.log("g");
-              return resolve();
-            }
-
-            if (Notification.permission === 'default') {
-              return Notification.requestPermission().then(result => {
-                if (result !== 'granted') {
-                  reject(new Error('Bad permission result'));
-                }
-
-                resolve();
-              });
-            }
-          });
-        }
-
-        function urlBase64ToUint8Array(base64String) {
-          const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-          const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
-
-          const rawData = window.atob(base64);
-          const outputArray = new Uint8Array(rawData.length);
-
-          for (let i = 0; i < rawData.length; ++i) {
-            outputArray[i] = rawData.charCodeAt(i);
-          }
-          return outputArray;
-        }
-
-        function push_sendSubscriptionToServer(subscription, method) {
-          const key = subscription.getKey('p256dh');
-          const token = subscription.getKey('auth');
-          const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0];
-          console.log('Received PushSubscription: ', JSON.stringify(subscription))
-          var endpoint = subscription.endpoint;
-          var publicKey = key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null;
-          var authToken = token ? btoa(String.fromCharCode.apply(null, new Uint8Array(token))) : null;
-          return fetch('pretplate.php', {
-            method: 'POST',
-            body: JSON.stringify({
-              endpoint: subscription.endpoint,
-              publicKey: key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null,
-              authToken: token ? btoa(String.fromCharCode.apply(null, new Uint8Array(token))) : null,
-              contentEncoding,
-            }),
-          }).then(() => subscription);
-        }
+      // function push_subscribe() {
+      //   return checkNotificationPermission()
+      //     .then(() => navigator.serviceWorker.ready)
+      //     .then(serviceWorkerRegistration =>
+      //       serviceWorkerRegistration.pushManager.subscribe({
+      //         userVisibleOnly: true,
+      //         applicationServerKey: urlBase64ToUint8Array("BMBlr6YznhYMX3NgcWIDRxZXs0sh7tCv7_YCsWcww0ZCv9WGg-tRCXfMEHTiBPCksSqeve1twlbmVAZFv7GSuj0"),
+      //       })
+      //     )
+      //     .then(subscription => {
+      //         return push_sendSubscriptionToServer(subscription, 'POST');
+      //     });
+      // }
+      //   function checkNotificationPermission() {
+      //     return new Promise((resolve, reject) => {
+      //       if (Notification.permission === 'denied') {
+      //         return reject(new Error('Push messages are blocked.'));
+      //       }
+      //
+      //       if (Notification.permission === 'granted') {
+      //         console.log("g");
+      //         return resolve();
+      //       }
+      //
+      //       if (Notification.permission === 'default') {
+      //         return Notification.requestPermission().then(result => {
+      //           if (result !== 'granted') {
+      //             reject(new Error('Bad permission result'));
+      //           }
+      //
+      //           resolve();
+      //         });
+      //       }
+      //     });
+      //   }
+      //
+      //   function urlBase64ToUint8Array(base64String) {
+      //     const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+      //     const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+      //
+      //     const rawData = window.atob(base64);
+      //     const outputArray = new Uint8Array(rawData.length);
+      //
+      //     for (let i = 0; i < rawData.length; ++i) {
+      //       outputArray[i] = rawData.charCodeAt(i);
+      //     }
+      //     return outputArray;
+      //   }
+      //
+      //   function push_sendSubscriptionToServer(subscription, method) {
+      //     const key = subscription.getKey('p256dh');
+      //     const token = subscription.getKey('auth');
+      //     const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0];
+      //     console.log('Received PushSubscription: ', JSON.stringify(subscription))
+      //     var endpoint = subscription.endpoint;
+      //     var publicKey = key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null;
+      //     var authToken = token ? btoa(String.fromCharCode.apply(null, new Uint8Array(token))) : null;
+      //     return fetch('pretplate.php', {
+      //       method: 'POST',
+      //       body: JSON.stringify({
+      //         endpoint: subscription.endpoint,
+      //         publicKey: key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null,
+      //         authToken: token ? btoa(String.fromCharCode.apply(null, new Uint8Array(token))) : null,
+      //         contentEncoding,
+      //       }),
+      //     }).then(() => subscription);
+      //   }
       //fja za dinamičko stvaranje tablice sa rezultatima
       function ispisiTablicu() {
         console.log("U fji ispisiTablicu");
@@ -220,14 +215,11 @@
           var objectStore = db.transaction("rezultati", "readonly").objectStore("rezultati");
           var index = objectStore.index("id_studenta");
           var cursor = index.openCursor(id);
-          var tbl = $("<table></table>");
-          tbl.prop("id", "tblRez");
           cursor.onsuccess = function(event) {
             var cursor = event.target.result;
             if (cursor) {
               console.log("u ima cursora");
               imaRez = true;
-              var td_podrucja = [, , , , , , , ];
               kolegiji[br] = cursor.value.kolegij;
               k1[br] = cursor.value.kol1;
               k2[br] = cursor.value.kol2;
@@ -245,6 +237,8 @@
               console.log("Gotovo");
               if(!imaRez) $("#tbl").html("Niste upisali niti jedan kolegij!");
               else {
+                var tbl = $("<table></table>");
+                tbl.prop("id", "tblRez");
                 //redak za kolegije
                 var tr = $("<tr></tr>");
                 var td = $("<td></td>");
@@ -269,7 +263,8 @@
                 }
                 tbl.append(tr);
                 //redak za drugi kolokvij
-                var tr = $("<tr></tr>");var td = $("<td></td>");
+                var tr = $("<tr></tr>");
+                var td = $("<td></td>");
                 td.prop("align", "center").html(td_kategorije[2]);
                 tr.append(td);
                 for(var i = 0; i < br; i++) {
@@ -280,7 +275,8 @@
                 }
                 tbl.append(tr);
                 //redak za zavrsni
-                var tr = $("<tr></tr>");var td = $("<td></td>");
+                var tr = $("<tr></tr>");
+                var td = $("<td></td>");
                 td.prop("align", "center").html(td_kategorije[3]);
                 tr.append(td);
                 for(var i = 0; i < br; i++) {
@@ -291,7 +287,8 @@
                 }
                 tbl.append(tr);
                 //redak za prvu dz
-                var tr = $("<tr></tr>");var td = $("<td></td>");
+                var tr = $("<tr></tr>");
+                var td = $("<td></td>");
                 td.prop("align", "center").html(td_kategorije[4]);
                 tr.append(td);
                 for(var i = 0; i < br; i++) {
@@ -302,7 +299,8 @@
                 }
                 tbl.append(tr);
                 //redak za drugu dz
-                var tr = $("<tr></tr>");var td = $("<td></td>");
+                var tr = $("<tr></tr>");
+                var td = $("<td></td>");
                 td.prop("align", "center").html(td_kategorije[5]);
                 tr.append(td);
                 for(var i = 0; i < br; i++) {
@@ -313,7 +311,8 @@
                 }
                 tbl.append(tr);
                 //redak za trecu dz
-                var tr = $("<tr></tr>");var td = $("<td></td>");
+                var tr = $("<tr></tr>");
+                var td = $("<td></td>");
                 td.prop("align", "center").html(td_kategorije[6]);
                 tr.append(td);
                 for(var i = 0; i < br; i++) {
@@ -324,7 +323,8 @@
                 }
                 tbl.append(tr);
                 //redak za cetvrtu dz
-                var tr = $("<tr></tr>");var td = $("<td></td>");
+                var tr = $("<tr></tr>");
+                var td = $("<td></td>");
                 td.prop("align", "center").html(td_kategorije[7]);
                 tr.append(td);
                 for(var i = 0; i < br; i++) {
@@ -343,7 +343,62 @@
       $("#odjava").on("click", function() {
         window.location.href = "index.html";
         localStorage.clear();
+
+        // navigator.serviceWorker.ready
+        //   .then(serviceWorkerRegistration => serviceWorkerRegistration.pushManager.getSubscription())
+        //   .then(subscription => {
+        //     // Check that we have a subscription to unsubscribe
+        //     if (!subscription) {
+        //       // No subscription object, so set the state
+        //       // to allow the user to subscribe to push
+        //       console.log("nije sub");
+        //       return;
+        //     }
+        //
+        //     // We have a subscription, unsubscribe
+        //     // Remove push subscription from server
+        //     return obrisi(subscription, 'DELETE');
+        //   })
+        //   .then(subscription => subscription.unsubscribe())
+        //   .catch(e => {
+        //     // We failed to unsubscribe, this can lead to
+        //     // an unusual state, so  it may be best to remove
+        //     // the users data from your data store and
+        //     // inform the user that you have done so
+        //     console.error('Error when unsubscribing the user', e);
+        //   });
       });
+
+      function obrisi(subscription, method) {
+        const key = subscription.getKey('p256dh');
+        const token = subscription.getKey('auth');
+        const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0];
+        //console.log('Received PushSubscription: ', JSON.stringify(subscription))
+        var endpoint = subscription.endpoint;
+        var publicKey = key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null;
+        var authToken = token ? btoa(String.fromCharCode.apply(null, new Uint8Array(token))) : null;
+        return fetch('pretplate.php', {
+          method,
+          body: JSON.stringify({
+            endpoint: subscription.endpoint,
+            publicKey: key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null,
+            authToken: token ? btoa(String.fromCharCode.apply(null, new Uint8Array(token))) : null,
+            contentEncoding,
+          })
+        }).then(() => subscription);
+      }
+      function urlBase64ToUint8Array(base64String) {
+        const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+        const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+
+        const rawData = window.atob(base64);
+        const outputArray = new Uint8Array(rawData.length);
+
+        for (let i = 0; i < rawData.length; ++i) {
+          outputArray[i] = rawData.charCodeAt(i);
+        }
+        return outputArray;
+      }
     </script>
 
   </body>

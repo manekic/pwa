@@ -32,7 +32,6 @@ self.addEventListener("install", function(event) {
 self.addEventListener("fetch", function (event) {
   var requestURL = new URL(event.request.url);
   //console.log("url " + requestURL.pathname);
-  // Handle requests for index.html
   if (requestURL.pathname === "/~maja/pwa/index.html" ) {
     console.log("/~maja/pwa/index.html");
     event.respondWith(
@@ -215,26 +214,32 @@ self.addEventListener("activate", function(event) {
 });
 
 self.addEventListener('push', function (event) {
-    if (!(self.Notification && self.Notification.permission === 'granted')) {
-        return;
-    }
+  //console.log("push event");
+  if (!(self.Notification && self.Notification.permission === 'granted')) {
+    return;
+  }
 
-    const sendNotification = body => {
-        // you could refresh a notification badge here with postMessage API
-        const title = "Poruka nakon unosa rezultata";
+  const sendNotification = body => {
+    const title = "Poruka nakon unosa rezultata";
+    return self.registration.showNotification(title, {
+      body,
+    });
+  };
 
-        return self.registration.showNotification(title, {
-            body,
-        });
-    };
-
-    if (event.data) {
-        const message = event.data.text();
-        event.waitUntil(sendNotification(message));
-    }
+  if (event.data) {
+    const message = event.data.text();
+    event.waitUntil(sendNotification(message));
+  }
 });
 
-self.addEventListener('sync', function(sync_event) {
+self.addEventListener('sync', function(event) {
+  console.log("Event tag je "+event.tag);
+  if (event.tag === 'upis-rezultata') {
+    event.waitUntil(pohranaUBazu());
+  }
+});
+
+function pohranaUBazu() {
   console.log("back-sync, upisano u bazu");
   var request = indexedDB.open("Studenti", 1);
   request.onsuccess = function(event) {
@@ -254,25 +259,14 @@ self.addEventListener('sync', function(sync_event) {
             'Accept': 'application/json',
             'Content-type': 'application/json',
         },
-        body: //JSON.stringify({id_studenta: id_studenta, id_kolegija: id_kolegija, bodovi: bodovi, elt: elt})
-          JSON.stringify({id_studenta, id_kolegija, bodovi, elt})
-      })
-      // .then(serviceWorkerRegistration => serviceWorkerRegistration.pushManager.getSubscription())
-      //   .then(subscription => {
-      //     if (!subscription) {
-      //       alert('Please enable push notifications');
-      //       return;
-      //     }
-      //
-      //     const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0];
-      //     const jsonSubscription = subscription.toJSON();
-      //     console.log("sub"+" "+JSON.stringify(jsonSubscription) + " " + contentEncoding);
-      //     fetch('poruka.php', {
-      //       method: 'POST',
-      //       body: JSON.stringify(Object.assign(jsonSubscription, { contentEncoding })),
-      //     });
-      //   })
-      }).catch(function(err) {
+        body: JSON.stringify({
+          id_studenta: id_studenta,
+          id_kolegija:id_kolegija,
+          bodovi: bodovi,
+          elt: elt
+        })
+      }).then(response => response.json())
+      .catch(function(err) {
         console.log('It broke');
         console.log(err.message);
       });
@@ -280,6 +274,4 @@ self.addEventListener('sync', function(sync_event) {
       cursor.continue();
     };
   };
-
-
-});
+}
