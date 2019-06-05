@@ -49,10 +49,8 @@ Jedne od najvažnijih odlika PWA su pouzdanost, privlačnost i brzina. Aplikacij
   \label{fig:isti_sadrzaj}
 \end{figure}
 
-Na slici \ref{fig:isti_sadrzaj} vidimo da u slučaju nestabilne veze, PWA prikazuje isti sadržaj.
+Na slici \ref{fig:isti_sadrzaj} vidimo da, u slučaju nestabilne veze, PWA prikazuje isti sadržaj.
 \vspace{5mm}
-
-Uslužne skripte (engl. service workers; vidi više u poglavlju \ref{sw}) omogućavaju trenutno pokretanje PWA, bez obzira na veličinu sadržaja aplikacije te na stanje mreže. To se postiže takozvanim predmemoriranjem (engl. caching). Predmemoriranjem ključnih resursa možemo eliminirati ovisnost o mreži i na taj način zajamčiti odaziv i pouzdan doživljaj za korisnike. PWA se mogu instalirati na korisnikov mobilni uređaj i smjestiti se na početni zaslon. Instalacija se odvija bez potrebe za trgovinom aplikacija, direktno sa web-lokacije na kojoj se ta web-aplikacija prikazuje. Manifest web-aplikacije zaslužan je za kontrolu nad izgledom aplikacije, njezinom instalacijom i pokretanjem. Možemo odrediti početni i pozdravni zaslon koji se prikazuje tijekom učitavanja aplikacije, stranicu koja će se učitati kada se aplikacija pokrene, orijetaciju zaslona i slično. Zahvaljujući push obavijestima, PWA i nakon zatvaranja ima interakciju sa korisnicima.
 
 Pokušajmo sada na primjeru ilustrirati PWA. Zanima nas vremenska prognoza za grad Zagreb. U web-preglednik na svom mobilnom uređaju vjerojatno upišemo nešto poput „vremenska prognoza Zagreb“. Kliknemo na neku od ponuđenih web-lokacija i saznamo da će narednih dana biti sunčano. Ista informacija nas zanima i sutradan, ponovno upisujemo ključne riječi u naš web-preglednik te odabiremo jednu od ponuđenih web-lokacija. Recimo da smo odabrali neku drugu web-lokaciju koja se učitava puno duže od one koju smo jučer posjetili. Nemamo vremena dugo čekati, izlazimo sa te web-lokacije i ponovno odlazimo na onu koju smo jučer posjetili. Prognoza se nije promijenila, predviđa se sunčano vrijeme. No, uz vremensku prognozu, danas nam preglednik nudi mogućnost instaliranja aplikacije na naš mobilni uređaj. Klikom na odgovarajuću opciju, aplikacija se instalira i smješta na naš početni zaslon. Sljedeći put kad želimo saznati vremensku prognozu samo otvorimo aplikaciju na našem mobilnom uređaju. Također, aplikacija nas tada pita želimo li primati obavijesti o promjeni vremenske prognoze. Na to pitanje odogovorimo potvrdno, proučimo prognozu, vidimo da nas opet očekuje sunčano vrijeme i zatvorimo aplikaciju. Sljedeće jutro smo pripremili da ćemo za posao obući kratke rukave, no aplikacija nam šalje obavijest da postoji mogućnost lokalnih pljuskova. U zadnji tren uzimamo kišobran i jaknu te izlazimo iz stana. Popodne je, kako nam je aplikacija i javila, počela padati kiša. Sva sreća da smo instalirali aplikaciju na mobilni uređaj.
 
@@ -94,15 +92,15 @@ Za razvoj PWA koristimo Google Chrome jer ima podršku za sve značajke koje že
   \label{fig:developer_tools}
 \end{figure}
 
-Kao što je vidljivo na slici \ref{fig:developer_tools}, alati za razvojne programere (Crlt + Shift + I) sadrže tri kartice koje će nam biti od velike pomoći. Radi se o Console, Network i Application. Sve pomoćne poruke koje ispisujemo tijekom razvijanja aplikacije biti će nam prikazane u Console i to nam uvelike olakšava debbugiranje. Komunikaciju klijentskih i serverskih skripti možemo pratiti u Network-u (zahtijeve klijenta i odgovore servera). U Application se nalaze kartice potrebne za razvoj PWA od kojih ćemo se mi koristiti sljedećima: Manifest, Service Workers, Session Storage, IndexedDB te Cache Storage. Service Workers nam nudi tri mogućnosti: Offline, Update on reload i Bypass for network. Kada želimo vidjeti kako naša aplikacija radi bez internetske veze, označiti ćemo Offline. Također, kako bismo bili sigurni da uvijek koristimo ažurnu verziju uslužne skripte, prilikom razvoja PWA cijelo vrijeme ćemo imati označenu opciju Update on reload.
+Kao što je vidljivo na slici \ref{fig:developer_tools}, alati za razvojne programere (Crlt + Shift + I) sadrže tri kartice koje će nam biti od velike pomoći. Radi se o Console, Network i Application. Sve pomoćne poruke koje ispisujemo tijekom razvijanja aplikacije biti će nam prikazane u Console i to nam uvelike olakšava debbugiranje. Komunikaciju klijentskih i poslužiteljskih skripti možemo pratiti u Network-u (zahtijeve klijenta i odgovore poslužitelja). U Application se nalaze kartice potrebne za razvoj PWA od kojih ćemo se mi koristiti sljedećima: Manifest, Service Workers, Session Storage, IndexedDB te Cache Storage. Service Workers nam nudi tri mogućnosti: Offline, Update on reload i Bypass for network. Kada želimo vidjeti kako naša aplikacija radi bez internetske veze, označit ćemo \textit{Offline}. Također, kako bismo bili sigurni da uvijek koristimo ažurnu verziju uslužne skripte, prilikom razvoja PWA cijelo vrijeme ćemo imati označenu opciju \textit{Update on reload}.
 
 \subsection{Upoznavanje sa početnom aplikacijom}
 \paragraph{}
-Aplikacija od koje ćemo krenuti je web-aplikacija namjenjena studentima za praćenje rezultata na ispitima. Web-aplikacija se sastoji od klijentskog i serverskog dijela. Klijentski dio je pisan u \textit{JavaScript} jeziku, dok je serverski pisan u \textit{PHP} jeziku. Oni komuniciraju pomoću Ajax upita koristeći \textit{GET} metodu. Pri svakom Ajax upitu koji je došao od strane klijenta, server se spaja na bazu \textit{Studenti} te izvodi potrebe radnje. Kao odgovor se šalje ili prikladna poruka (na primjer, poruka o razlogu zbog kojeg prijava studenta u aplikaciju nije uspjela) ili traženi podaci (na primjer, identifikacijski broj studenta).
+Aplikacija od koje ćemo krenuti je web-aplikacija namjenjena studentima za praćenje rezultata na ispitima. Web-aplikacija se sastoji od klijentskog i poslužiteljskog dijela. Klijentski dio je pisan u jeziku \textit{JavaScript}, dok je poslužiteljski pisan u jeziku \textit{PHP}. Oni komuniciraju pomoću Ajax upita koristeći metodu \textit{GET}. Pri svakom Ajax upitu koji je došao od strane klijenta, poslužitelj se spaja na bazu \textit{Studenti} te izvodi potrebe radnje. Kao odgovor se šalje ili prikladna poruka (na primjer, poruka o razlogu zbog kojeg prijava studenta u aplikaciju nije uspjela) ili traženi podaci (na primjer, identifikacijski broj studenta).
 
 Klijentski dio web-aplikacije sastoji se od skripti koje se prikazuju korisnicima. Dakle, to su skripte kojima je implementirana početna stranica za prijavu (\textit{index.html}), stranica na kojoj se studentima prikazuju rezultati (\textit{rezultati.html}), početna stranica koja se prikazuje administratoru (\textit{administrator.html}) i slično.
 
-Serverska strana sastoji se od skripti implementiranih za rad sa bazom. Neke od njih su: \textit{rezultati.php}, \textit{administrator.php}, \textit{index.php} i ostale. Iz navedenog je vidljivo da skripte klijentske strane imaju ekstenziju \textit{.html}, a one serverske strane \textit{.php}. Kako svaka skripta servirana klijentu zahtijeva neke podatke iz baze, očito uvijek mora postojati odgovarajuća serverska skripta koja iste podatke dohvaća.
+Poslužiteljska strana sastoji se od skripti implementiranih za rad sa bazom. Neke od njih su: \textit{rezultati.php}, \textit{administrator.php}, \textit{index.php} i ostale. Iz navedenog je vidljivo da skripte klijentske strane imaju ekstenziju \textit{.html}, a one poslužiteljske strane \textit{.php}. Kako svaka skripta servirana klijentu zahtijeva neke podatke iz baze, očito uvijek mora postojati odgovarajuća poslužiteljska skripta koja iste podatke dohvaća.
 
 Sve varijable važne za uredno funcioniranje web-aplikacije se spremaju u Session Storage. Prilikom svake uspješne prijave, identifikacijski broj korisnika se pohranjuje u spomenuti spremnik. Ako je korisnik student, njegov identifikacijski broj jedak je atributu \textit{student\_id} iz tablice \textit{studenti}. S druge strane, ako je korisnik administrator, u Session Storage se upisuje varijabla sa vrijednosti 0.
 
@@ -122,9 +120,9 @@ Korisnici imaju mogućnost odjaviti se iz aplikacije. Ukoliko se odluče na odja
   \label{fig:admin_pocetna}
 \end{figure}
 
-Razlikovati „vrstu“ korisnika je važno zato što nakon otvaranja aplikacije sadržaj koji treba biti vidljiv studentima nije jednak sadržaju koji se prikazuje administratoru. Slike \ref{fig:rezultati} te \ref{fig:admin_pocetna} prikazuju spomenute razlike.
+Razlikovati „vrstu“ korisnika je važno zato što nakon otvaranja aplikacije sadržaj koji treba biti vidljiv studentima nije jednak sadržaju koji se prikazuje administratoru. Slike \ref{fig:rezultati} i \ref{fig:admin_pocetna} prikazuju spomenute razlike.
 
-Prilikom upisa prve akademske godine na željenom fakultetu svakom studentu se dodijeli jedinstvneni matični broj akademskog građana (JMBAG) te lozinka.
+Prilikom upisa prve akademske godine na željenom fakultetu svakom studentu se dodijeli jedinstveni matični broj akademskog građana (JMBAG) te lozinka.
 
 \begin{figure}[H]
  \centering
@@ -133,22 +131,22 @@ Prilikom upisa prve akademske godine na željenom fakultetu svakom studentu se d
   \label{fig:prijava}
 \end{figure}
 
-Na slici \ref{fig:prijava} vidimo da se prilikom prijave zahtijevaju korisničko ime te lozinka. Kao korisničko ime studenti koriste JMBAG, a ako lozniku koriste lozinku koja im je dodijeljena.
+Na slici \ref{fig:prijava} vidimo da se prilikom prijave zahtijevaju korisničko ime te lozinka. Kao korisničko ime studenti koriste JMBAG, a ako lozinku koriste lozinku koja im je dodijeljena.
 
-Slijedi komunikacija klijenta i servera u kojoj server provjerava točnost podataka koje mu je klijent poslao. Ako je sve u redu, prijava je uspjela te server kao odgovor šalje rezultate i identifikacijski broj korisnika koji se prijavio. Identifikacijski broj se sprema u Session Storage. Studentu se sada prikaže popis svih upisanih kolegija te bodovi iz pojedinih elemenata ocjenjivanja. Inače, ako server nije uspio u bazi pronaći odgovarajući par podataka, kao odgovor šalje poruku koja sadrži informacije o greški. Poruka se prikazuje korisniku kao upozorenje (na primjer, nepostojeće korisničko ime, pogrešna lozinka ili slično). Studenti imaju na izbor žele li se odjaviti prije napuštanja web-aplikacije ili žele ostati prijavljeni u istu. Ako se odjave, podaci iz Session Storage-a se brišu (obriše se identifikacijski broj studenta koji se prijavio) te je sljedeći put prilikom otvaranja web-aplikacije potreba prijava. S druge strane, ako se ne odjave, prilikom otvaranja web-aplikacija za spremljeni identifikacijski broj iz Session Storage-a dohvati od servera rezultate. Studenti se automatski preusmjeravaju na stranicu sa njihovim rezultatima.
+Slijedi komunikacija klijenta i poslužitelja u kojoj poslužitelj provjerava točnost podataka koje mu je klijent poslao. Ako je sve u redu, prijava je uspjela te poslužitelj kao odgovor šalje rezultate i identifikacijski broj korisnika koji se prijavio. Identifikacijski broj se sprema u Session Storage. Studentu se sada prikaže popis svih upisanih kolegija te bodovi iz pojedinih elemenata ocjenjivanja. Inače, ako poslužitelj nije uspio u bazi pronaći odgovarajući par podataka, kao odgovor šalje poruku koja sadrži informacije o greški. Poruka se prikazuje korisniku kao upozorenje (na primjer, nepostojeće korisničko ime, pogrešna lozinka ili slično). Studenti imaju na izbor žele li se odjaviti prije napuštanja web-aplikacije ili žele ostati prijavljeni u istu. Ako se odjave, podaci iz Session Storage-a se brišu (obriše se identifikacijski broj studenta koji se prijavio) te je sljedeći put prilikom otvaranja web-aplikacije potreba prijava. S druge strane, ako se ne odjave, prilikom otvaranja web-aplikacija za spremljeni identifikacijski broj iz Session Storage-a dohvati od servera rezultate. Studenti se automatski preusmjeravaju na stranicu sa njihovim rezultatima.
 
 Baza podataka korištena za ovu web-aplikaciju naziva se \textit{Studenti}. \textit{Studenti} se sastoji od 3 glavne tablice: \textit{studenti}, \textit{kolegiji} te \textit{rezultati}. Tablica \textit{studenti} sadrži sve važne podatke o studentima te ima sljedeće atribute: \textit{student\_id} (primarni ključ), \textit{username}, \textit{password}, \textit{ime}, \textit{prezime}. Tablica \textit{kolegiji} se sastoji od popisa kolegija koji su dostupni na fakultetu te sadrži atribute \textit{kolegij\_id} (primarni ključ) i \textit{naziv\_kolegija}. Vidimo da su \textit{student\_id} i \textit{kolegij\_id} jedinstveni identifikatori za svakog studenta, odnosno za svaki kolegij. Posljednja tablica, \textit{rezultati}, se sastoji od parova id-a studenta i id-a kolegija te broja bodova za svaki od postojećih elemenata ocjenjivanja. Dakle, atributi su: \textit{studenti\_id}, \textit{kolegij\_id}, \textit{1kolokvij}, \textit{2kolokvij}, \textit{zavrsni}, \textit{1zadaca}, \textit{2zadaca}, \textit{3zadaca} i \textit{4zadaca}. Primjećujemo da parovi \textit{student\_id} i \textit{kolegij\_id} nisu jedinstveni!
 
-Navedena baza se kreira na \textit{phpMyAdmin} stranici pokretanjem skripte \textit{prepareDB.php}.
+Navedena baza se kreira na stranici \textit{phpMyAdmin} pokretanjem skripte \textit{prepareDB.php}.
 
-Administrator ima posebno korisničko ime i lozniku te, za razliku od studenata, on ima na raspolaganju druge funkcionalnosti. Sve funkcionalnosti navodim u nastavku i dajem za svaku kratki opis.
+Administrator ima posebno korisničko ime i lozinku te, za razliku od studenata, on ima na raspolaganju druge funkcionalnosti. Sve funkcionalnosti navodimo u nastavku i dajemo za svaku kratki opis.
 
-1.	Upis bodova: server klijentu šalje popis svih kolegija te administrator može odabrati za koji kolegij želi studentima upisat nove bodove. Odabirom naziva kolegija, Ajax upitom se dohvaća popis svih studenata i elemenata ocjenjivanja, sa već postojećim rezultatima. Isti popis se prikazuje te se pruža mogućnost upisa novih bodova. Reakcija na događaj promjene sadržaja \textit{input} polja Ajax upitom šalje sve potrebne podatke serveru koje isti sprema u bazu podataka i time ažurira tablicu rezultati.
+1.	Upis bodova: poslužitelj klijentu šalje popis svih kolegija te administrator može odabrati za koji kolegij želi studentima upisat nove bodove. Odabirom naziva kolegija, Ajax upitom se dohvaća popis svih studenata i elemenata ocjenjivanja, sa već postojećim rezultatima. Isti popis se prikazuje te se pruža mogućnost upisa novih bodova. Reakcija na događaj promjene sadržaja \textit{input} polja Ajax upitom šalje sve potrebne podatke poslužitelju koje isti sprema u bazu podataka i time ažurira tablicu rezultati.
 
-2.	Brisanje upisanih kolegija: Ajax-om se dohavati popis svih studenata te se prikaže administratoru. On odabire studenta kojemu iz baze želi obrisati kolegije upisane prethodnih akademskig godina. Odabirom studenta, Ajax-om se dobiva popis kolegija dotičnog studenta. Nakon odabira željenog predmeta, serverskoj strani aplikacije se šalju potrebni podaci te ona ažurira bazu podataka, točnije tablicu rezultati tako da obriše jedan redak te tablice (onaj koji je jednoznačno određen poslanim podacima).
+2.	Brisanje upisanih kolegija: Ajax-om se dohavati popis svih studenata te se prikaže administratoru. On odabire studenta kojemu iz baze želi obrisati kolegije upisane prethodnih akademskih godina. Odabirom studenta, Ajax-om se dobiva popis kolegija dotičnog studenta. Nakon odabira željenog predmeta, poslužiteljskoj strani aplikacije se šalju potrebni podaci te ona ažurira bazu podataka, točnije tablicu \textit{rezultati} tako da obriše jedan redak te tablice (onaj koji je jednoznačno određen poslanim podacima).
 
-3.	Unos novih studenata: na početku svake akademske godine administrator upisuje studente koji su upisali 1.godinu fakulteta u bazu. Klijentska strana serverskoj šalje podatke u studentu koji se upisuju u bazi podataka u tablicu studenti.
-4.	Upis novih kolegija: administrator ima mogućnost upisivati nove kolegije studentima koji se nalaze u bazi. Odabirom te opcije, serverska strana klijentskoj šalje popis svih studenata. Administrator sa tog popisa odabire studenta kojemu želi upisati nove kolegije i podaci o odabiru studenta se šalju serveru. Nakon toga kao odgovor stiže popih svih kolegija te administrator odabire koje kolegije će upisat dotičnom studentu. Označavanjem kolegija, automatski se u tablicu rezultati dodaje novi redak sa odgovarajućim podacima. Odznačavanjem već označenog kolegija iz tablice rezultati se briše redak koji ima odgovarajuće podatke.
+3.	Unos novih studenata: na početku svake akademske godine administrator upisuje studente koji su upisali 1.godinu fakulteta u bazu. Klijentska strana poslužiteljskoj šalje podatke o studentu koji se upisuju u bazi podataka u tablicu \textit{studenti}.
+4.	Upis novih kolegija: administrator ima mogućnost upisivati nove kolegije studentima koji se nalaze u bazi. Odabirom te opcije, poslužiteljska strana klijentskoj šalje popis svih studenata. Administrator sa tog popisa odabire studenta kojemu želi upisati nove kolegije i podaci o odabiru studenta se šalju poslužitelju. Nakon toga kao odgovor stiže popih svih kolegija te administrator odabire koje kolegije će upisat dotičnom studentu. Označavanjem kolegija, automatski se u tablicu \textit{rezultati} dodaje novi redak sa odgovarajućim podacima. Odznačavanjem već označenog kolegija iz tablice \textit{rezultati} se briše redak koji ima odgovarajuće podatke.
 
 \newpage
 \section{Uslužne skripte} \label{sw}
@@ -158,7 +156,7 @@ Za pravilno korištenje uslužnih skripti važno je razumjeti njihov životni ci
 \subsubsection{Registracija}
 \paragraph{}
 Uslužne skripte su JavaScript skripte koje reagiraju na događaje, a „rade“ u pozadini aplikacije kao dodatni komunikacijski sloj između mreže (web-poslužitelja) i web-aplikacije. U svom pozadinskom radu, one presijecaju mrežne zahtjeve te trajno pohranjuju (predmemoriraju) podatke. Na taj način omogućen je izvanmrežni rad. Prije nego što možemo početi sa korištenjem uslužne skripte, moramo je registrirati kao pozadinski proces.
-Kako bismo napravili svoju prvu uslužnu skriptu, potrebne su dvije nove skripte unutar naše aplikacije. U korijenski direktorij smjestimo skriptu sw.js, a skriptu app.js možemo smjestiti bilo gdje unutar direktorija. Važno je da je uslužna skripta smještena u korijenskom direktoriju jer ona kontrolira sav „promet“ unutar aplikacije.
+Kako bismo napravili svoju prvu uslužnu skriptu, potrebne su dvije nove skripte unutar naše aplikacije. U korijenski direktorij smjestimo skriptu \textit{sw.js}, a skriptu \textit{app.js} možemo smjestiti bilo gdje unutar direktorija. Važno je da je uslužna skripta smještena u korijenskom direktoriju jer ona kontrolira sav „promet“ unutar aplikacije.
 \\\textit{app.js} se sastoji od sljedećeg koda koji je namijenjen registraciji uslužne skripte.
 
 \begin{minted}{js}
@@ -171,12 +169,14 @@ if("serviceWorker" in navigator) {
 }
 \end{minted}
 
-Započinje se provjerom podržava li preglednik uslužne skripte (\textit{navigator.serviceWorker}). Ako podržava, uslužna skripta se registrira i navedeni dio koda vraća obećanje (engl. promise) koje se rješava nakon uspješne registracije uslužne skripte.
+Započinje se provjerom podržava li preglednik uslužne skripte. Ako podržava, uslužna skripta se registrira i navedeni dio koda vraća \textit{promise} koje se rješava nakon uspješne registracije uslužne skripte.
 
-Skriptu \textit{app.js} potrebno je izvršavati pri svakom otvaranju bilo koje druge klijentske skripte (one sa ekstenzijom \textit{.html}). U tu svrhu ispod unutar HTML tag-a \textit{head}, dodajemo
+Skriptu \textit{app.js} potrebno je izvršavati pri svakom otvaranju bilo koje druge klijentske skripte (one sa ekstenzijom \textit{.html}). U tu svrhu unutar HTML \textit{tag-a} \textit{head}, dodajemo
+
 \begin{minted}{html}
 <script type="text/javascript" src="app.js"></script>
 \end{minted}
+
 kako bismo osigurali da se skripta \textit{app.js} izvrši prije svega ostalog na trenutnoj skripti.
 
 \subsubsection{Instalacija}
@@ -205,7 +205,7 @@ self.addEventListener("activate", function(event) {
 });
 \end{minted}
 
-Poput događaja instalacije, i događaj aktivacije može u sebi sadržavati neke specifične radnje vezane uz aplikaciju (na primjer, možemo obrisati sadržaj predmemorije). Jednom kada je uslužna skripta aktivirana, ona ima poputnu kontrolu nad aplikacijom te može upravljati raznim događajima poput \textit{fetch}, \textit{push} i \textit{sync}.
+Poput događaja instalacije, i događaj aktivacije može u sebi sadržavati neke specifične radnje vezane uz aplikaciju (na primjer, možemo obrisati sadržaj predmemorije). Jednom kada je uslužna skripta aktivirana, ona ima potpunu kontrolu nad aplikacijom te može upravljati raznim događajima poput \textit{fetch}, \textit{push} i \textit{sync}.
 
 \vspace{5mm}
 U slučaju da aktivna uslužna skripta ne primi niti jedan od gore navedenih događaja, ona prelazi u stanje mirovanja (engl. idle state). Nakon što je neko vrijeme u stanju mirovanja, skripta prelazi u prekinuto stanje (engl. terminated state). Prekinuto stanje ne znači da je uslužna skripta deinstalirana ili odjavljena (engl. unregistrated). Štoviše, ona će ponovno prijeći u stanje mirovanja čim krene primati funkcijske događaje (\textit{fetch}, \textit{push} ili \textit{sync}).
@@ -220,11 +220,11 @@ U slučaju da aktivna uslužna skripta ne primi niti jedan od gore navedenih dog
 \subsection{HTTPS i uslužne skripte}
 \paragraph{}
 S obzirom na to da uslužne skripte presreću sve zahtjeve, uvijek postoji mogućnost prisustva zlonamjerne treće strane koja bi mogla oštetiti našeg korisnika. Upravo zbog toga samo stranice koje se poslužuju preko sigurnih veza (HTTPS) mogu registrirati uslužne skripte.
-Tijekom razvoja PWA, uslužne skripte možemo koristiti na našem lokalnom poslužitelju (localhost), ali nakon implementacije web-aplikacije potrebno ju je postaviti na poslužitelj koji poslužuje preko sigurne veze HTTPS.
+Tijekom razvoja PWA, uslužne skripte možemo koristiti na našem lokalnom poslužitelju (localhost), ali nakon implementacije web-aplikaciju je potrebno postaviti na poslužitelj koji poslužuje preko sigurne veze HTTPS.
 
 \subsection{Zaključak}
 \paragraph{}
-Dobro razumijevanje životnog ciklusa uslužne skripte je vrlo važno jer nam uvelike može pomoću pri \textit{debugiranju}   (engl. debug). Ponekad se nađemo u situaciji da izmjena koju smo napravili u aplikaciji nije vidljiva u njezinom radu. Nerijetko je "krivac" za to stara uslužna skripta skripta koja upravljanje nad stranicom nije prepustila ažuriranoj uslužnoj skripti.
+Dobro razumijevanje životnog ciklusa uslužne skripte je vrlo važno jer nam uvelike može pomoću pri \textit{debugiranju}. Ponekad se nađemo u situaciji da izmjena koju smo napravili u aplikaciji nije vidljiva u njezinom radu. Nerijetko je "krivac" za to stara uslužna skripta koja upravljanje nad stranicom nije prepustila ažuriranoj uslužnoj skripti.
 
 \newpage
 \section{Predmemoriranje}
@@ -233,13 +233,13 @@ Kako bismo omogućili rad web-aplikacije čak i u uvjetima gdje nema internetske
 
 CacheStorage je novi sloj predmemoriranja koji u potpunosti možemo kontrolirati. Možemo odlučiti što želimo spremiti u predmemoriju, što i kada želimo obrisati iz iste te na koji način odgovaramo zahtjevima iz preglednika (vraćajući traženo iz predmemorije ili sa mreže).
 
-Postavlja se pitanje kada predmemorirati sadržaj. Već je spomenuto da se ta radnja može obaviti tijekom instalacije uslužne skripte, to jest, unutar \textit{install} događaja. Kako se taj događaj dogodi samo jednom u životnom ciklusu uslužne skripte, i naše predmemoriranje će se obaviti samo jednom. Također, ako nešto sa predmemoriranjem pođe po krivu, uvijek imamo mogućnost otkazati instalaciju uslužne skripte. Ako dođe do prekida instalacije, preglednik će ponovno pokušati pokrenuti instalaciju sljedeći put kada korisnik posjeti stranicu. Predmemoriranjem unutar \textit{install} događaja osigurali smo da se pohrane sve potrebne datoteke prije nego što se smatra da je uslužna skripta instalirana i aktivna.
+Postavlja se pitanje kada predmemorirati sadržaj. Već je spomenuto da se ta radnja može obaviti tijekom instalacije uslužne skripte, to jest, unutar događaja \textit{install}. Kako se taj događaj dogodi samo jednom u životnom ciklusu uslužne skripte, i naše predmemoriranje će se obaviti samo jednom. Također, ako nešto sa predmemoriranjem pođe po krivu, uvijek imamo mogućnost otkazati instalaciju uslužne skripte. Ako dođe do prekida instalacije, preglednik će ponovno pokušati pokrenuti instalaciju sljedeći put kada korisnik posjeti stranicu. Predmemoriranjem unutar događaja \textit{install} osigurali smo da se pohrane sve potrebne datoteke prije nego što se smatra da je uslužna skripta instalirana i aktivna.
 
 \subsection{Uobičajeni obrasci spremanja}
 \paragraph{}
 Različiti obrasci spremanja odgovaraju različitim situacijama i zahtjevima. Primjerice, ako radimo aplikaciju za prognozu vremena, logično je da želimo koristiti obrazac koji uvijek prvo pokuša dohvatiti najnovije informacije o vremenu sa mreže, a, samo ako to dohvaćanje ne uspije, poseže se za već spremljenim informacijama u predmomoriju.
 
-Uslužne skripte presreću sve zahtjeve za resursima pomoću \textit{fetch} događaja. Dakle, kada preglednik zatraži neki resurs, uslužna skripta, osluškivajući \textit{fetch} događaje, odgovara traženim resursom (ako takav postoji).
+Uslužne skripte presreću sve zahtjeve za resursima pomoću događaja \textit{fetch}. Dakle, kada preglednik zatraži neki resurs, uslužna skripta, osluškivajući događaje \textit{fetch}, odgovara traženim resursom (ako takav postoji).
 
 U nastavku slijedi nekoliko uobičajenih obrazaca predmemoriranja.
 
@@ -345,7 +345,7 @@ self.addEventListener("fetch", function(event) {
 
 Sve stranice naše aplikacije imaju statičke dijelove – slike, datoteke i poveznice koje određuju izgled aplikacije. Kako se navedeni dijelovi rijetko mijenjaju (ili čak nikada), za njihovo predmemoriranje koristimo obrazac \textit{predmemorija, posezanje na mrežu}.
 
-Što se tiče ostatka sadržaja aplikacije, većinom su to datoteke (skripte) koje se ne mijenjaju često između različitih verzija. Zaključujemo da bismo kod njihovog predmemoriranja mogli koristiti isti obrazac. No, u ovom trenutku nam se javlja veliki problem. Ako se datoteke promijene, morat ćemo promijeniti i uslužnu skriptu kako bismo osigurali da se našim korisnicima prikazuje najnovija verzija stranice. Razmatramo li slučaj dalje, stvari postaju još gore. Naime, sve dok prva uslužna skripta ne prepusti kontrolu drugoj (novoj), korisnicima će se prikazivati stara verzija stranice. Druga uslužna skripta će preuzeti kontrolu nad stranicom tek kada korisnik drugi puta posjeti našu aplikaciju. Upravo zbog toga, odbacujemo \textit{predmemorija, posezanje na mrežu} obrazac te imamo sljedeća dva moguća slučaja:
+Što se tiče ostatka sadržaja aplikacije, većinom su to datoteke (skripte) koje se ne mijenjaju često između različitih verzija. Zaključujemo da bismo kod njihovog predmemoriranja mogli koristiti isti obrazac. No, u ovom trenutku nam se javlja veliki problem. Ako se datoteke promijene, morat ćemo promijeniti i uslužnu skriptu kako bismo osigurali da se našim korisnicima prikazuje najnovija verzija stranice. Razmatramo li slučaj dalje, stvari postaju još gore. Naime, sve dok prva uslužna skripta ne prepusti kontrolu drugoj (novoj), korisnicima će se prikazivati stara verzija stranice. Druga uslužna skripta će preuzeti kontrolu nad stranicom tek kada korisnik drugi puta posjeti našu aplikaciju. Upravo zbog toga, odbacujemo obrazac \textit{predmemorija, posezanje na mrežu} te imamo sljedeća dva moguća slučaja:
 
 \begin{enumerate}
 \item  Posluživanje datoteka obrascem \textit{mreža, posezanje u predmemoriju}. Korisnicima će se uvijek prikazivati najnovije verzije stranica, no propuštamo priliku da ubrzamo učitavanje stranice dohvaćanjem iste iz predmemorije, ako ona tamo postoji.
@@ -384,7 +384,7 @@ self.addEventListener("install", function(event) {
 
 Varijabla \textit{CACHED\_URLS} ne sadrži cijeli popis datoteka jer je poprilično dug pa je navedena samo nekolicina radi ilustracije.
 
-Zbog toga što dohvaćamo i pohranjujemo datoteke asinkrono, želimo odgoditi \textit{install} događaj sve dok asinkroni događaj \textit{fetch} nije završio. Funkcija \textit{waitUntil} nam to omogućava. Sljedećim pseudokodom ćemo opisati što zapravo ta funkcija radi.
+Zbog toga što dohvaćamo i pohranjujemo datoteke asinkrono, želimo odgoditi događaj \textit{install} sve dok asinkroni događaj \textit{fetch} nije završio. Funkcija \textit{waitUntil} nam to omogućava. Sljedećim pseudokodom ćemo opisati što zapravo ta funkcija radi.
 
 \begin{minted}{python}
 ako je otkriven dogadaj instalacije,
@@ -396,7 +396,7 @@ ako neki od ovih koraka ne uspije,
 prekini instalaciju usluzne skripte
 \end{minted}
 
-\textit{waitUntil} produlji trajanje \textit{install} događaja sve dok se ne obećanje koje smo proslijedili ne razriješi. To nam omogućava da čekamo sve dok uspješno ne pohranimo datoteke u predmemoriju prije proglašenja \textit{install} događaja završenim. Također, dobivamo mogućnost prekinuti instalaciju ako je u bilo kojem koraku došlo do odbijanja obećanja. Unutar \textit{waitUntil} pozivamo \textit{caches.open} i proslijeđujemo ime naše predmemorije. \textit{caches.open} ili otvori i vrati postojeću predmemoriju, ili, ako predmemorija sa danim imenom ne postoji, stvara predmemoriju danog imena i varaća je. Objekt koji se vraća je ponovno obećanje te zato nastavljamo sa \textit{then} izjavom.
+\textit{waitUntil} produlji trajanje događaja \textit{install} sve dok se \textit{promise} koje smo proslijedili ne razriješi. To nam omogućava da čekamo sve dok uspješno ne pohranimo datoteke u predmemoriju prije proglašenja događaja \textit{install} završenim. Također, dobivamo mogućnost prekinuti instalaciju ako je u bilo kojem koraku došlo do odbijanja obećanja. Unutar \textit{waitUntil} pozivamo \textit{caches.open} i proslijeđujemo ime naše predmemorije. \textit{caches.open} ili otvori i vrati postojeću predmemoriju, ili, ako predmemorija sa danim imenom ne postoji, stvara predmemoriju danog imena i varaća je. Objekt koji se vraća je ponovno \textit{promise} te zato nastavljamo sa \textit{then} izjavom.
 
 Nakon što se uslužna skripta instalira te je spremna postati aktivna i zamijeniti staru aktivnu skriptu, slijedi događaj \textit{activate} koji uzrokuje aktivaciju iste te skripte. U tom trenutnu, sve datoteke koje se zahtijevaju su uspješno pohranjene u predmemoriju. No, prije nego što proglasimo uslužnu skriptu aktivnom, želimo obrisati stare predmemorije koje su koristile stare uslužne skripte.
 
@@ -416,9 +416,9 @@ self.addEventListener("activate", function(event) {
 });
 \end{minted}
 
-Kod započinje sa produljivanjem događaja pomoću \textit{waitUntil} funkcije. To znači da, kako bi završila svoju aktivaciju,  uslužna skripta mora čekati sve dok ne obrišemo sve stare predmemorije. Tu radnju napravimo proslijeđujući obećanje funckiji \textit{waitUntil}. Pomoću \textit{caches.keys()} dobijemo niz koji sadrži imena svih predmemorija stvorenih u našoj aplikaciji. Iteracijom po tom nizu brišemo samo one predmemorije koje zadovoljavaju oba uvjeta: njihovo ime se razlikuje od imena aktivne predmemorije te njihovo ime započinje sa \textit{PWA-cache}.
+Kod započinje sa produljivanjem događaja pomoću funkcije \textit{waitUntil}. To znači da, kako bi završila svoju aktivaciju,  uslužna skripta mora čekati sve dok ne obrišemo sve stare predmemorije. Tu radnju napravimo proslijeđujući \textit{promise} funkciji \textit{waitUntil}. Pomoću \textit{caches.keys()} dobijemo niz koji sadrži imena svih predmemorija stvorenih u našoj aplikaciji. Iteracijom po istom brišemo stare predmemorije.
 
-Razmotrili smo razne strategije predmemoriranja i dohvaćanja datoteka. Na redu je implementacija istog. Također, zbog duljine koda, navodim samo dio. Ostatak je analogan.
+Razmotrili smo razne strategije predmemoriranja i dohvaćanja datoteka. Na redu je implementacija istog. Također, zbog duljine koda, navodimo samo dio. Ostatak je analogan.
 
 \begin{minted}{js}
 self.addEventListener("fetch", function (event) {
@@ -487,13 +487,12 @@ Sve skripte koje koristi naša aplikacija smo spremili u predmemoriju te ih, neo
 \newpage
 \section{Lokalno spremanje podataka} \label{indexedDB}
 \paragraph{}
-Međutim, iako smo, na primjer, osigurali da studenti mogu otvoriti stranicu \textit{rezultati.html} kada nemaju pristup internetu, nismo osigurali da se na istoj stranici zaista prikažu odgovarajući rezultati studenata. Razlog tome je taj što se aplikacija za svaku manipulaciju podacima (u ovom slučaju radi se o dohvaćanju rezultata) oslanja na Ajax upite upućene serveru. Da bismo postigli neovisnost od servera u aplikaciji, potrebno je lokalno spremiti rezultate studenata. Postoji nekoliko lokalnih spremnika podataka, a mi ćemo se upoznati sa \textit{IndexedDB}.
+Iako smo, na primjer, osigurali da studenti mogu otvoriti stranicu \textit{rezultati.html} kada nemaju pristup internetu, nismo osigurali da se na istoj stranici zaista prikažu odgovarajući rezultati studenata. Razlog tome je taj što se aplikacija za svaku manipulaciju podacima (u ovom slučaju radi se o dohvaćanju rezultata) oslanja na Ajax upite upućene poslužitelju. Da bismo postigli neovisnost od poslužitelja u aplikaciji, potrebno je lokalno spremiti rezultate studenata. Postoji nekoliko lokalnih spremnika podataka, a mi ćemo se upoznati sa \textit{IndexedDB}.
 
 \subsection{Općenito u IndexedDB}
 \paragraph{}
 IndexedDB je transakcijska, indeksirana i objektno orijentirana baza podataka u pregledniku. Objasnimo redom značenje svakog od navedenih pojmova u ovoj definiciji.
 \begin{itemize}
-\item\textit{IndexedDB je transakcijska}: sve manipulacije ovom bazom podataka su grupirane u transakcije. To znači da će ili sve akcije uspjeti ili niti jedna akcija neće uspjeti. Primjerice, recimo da imamo bazu podataka koja sprema podatke o stanju računa svojih korisnika. Želimo Ivanu oduzeti 200 kuna sa računa te ih uplatiti na Markov račun. To su dvije odvojene akcije koje moramo napraviti u bazi podataka. Dakle, moramo od Ivana oduzeti 200 kuna te Marku dodati 200 kuna na račun. Imamo dvije mogućnosti za neuspjeh.
 \item\textit{IndexedDB je transakcijska}: sve manipulacije ovom bazom podataka su grupirane u transakcije. To znači da će ili sve akcije uspjeti ili niti jedna akcija neće uspjeti.
 Primjerice, recimo da imamo bazu podataka koja sprema podatke o stanju računa svojih korisnika. Želimo Ivanu oduzeti 200 kuna sa računa te ih uplatiti na Markov račun. To su dvije odvojene akcije koje moramo napraviti u bazi podataka. Dakle, moramo od Ivana oduzeti 200 kuna te Marku dodati 200 kuna na račun. Imamo dvije mogućnosti za neuspjeh.
 \begin{enumerate}
@@ -503,11 +502,11 @@ Primjerice, recimo da imamo bazu podataka koja sprema podatke o stanju računa s
 U indexedDB takvih problema nema jer se akcije grupiraju u transakcije. Time postižemo da su sve akcije ili uspjele ili niti jedna od njih nije uspjela.
 \item\textit{IndexedDB je objektno orijentirana}: za razliku od relacijski baza podataka (primjerice, MySQL) koje se sastoje od tablica sa unaprijed definiranim stupcima, objektno orijentirana baza podataka pohranjuje objekte. Svaka baza može sadržavati više spremišta objekata (engl. object store) i svaki od njih može sadržavati više objekata.
 Baza podataka za prethodni primjer, sa Markom i Ivanom, može, primjerice, sadržavati spremište objekata za članove banke. Unutar tog spremišta svakog člana predstavlja jedan objekt koji se sastoji od imena i prezimena člana, stanja njegovog računa i slično.
-\item\textit{IndexedDB je indeksirana}: poput tradicionalnih relakcijski baza podataka, i IndexedDB koristi indekse. Svakom spremištu objekata možemo dodati indeks koji koristimo za dohvaćanje željenih objekata.
+\item\textit{IndexedDB je indeksirana}: poput tradicionalnih relacijski baza podataka, i IndexedDB koristi indekse. Svakom spremištu objekata možemo dodati indeks koji koristimo za dohvaćanje željenih objekata.
 
-U dosad spomenutom primjeru, za spremište objekata koje sadrži članove banke, kao indeks možemo koristiti prezime člana (pod pretpostavkom da se postoji višr članova sa istim prezimenom).
+U dosad spomenutom primjeru, za spremište objekata koje sadrži članove banke, kao indeks možemo koristiti prezime člana (pod pretpostavkom da se postoji više članova sa istim prezimenom).
 \item\textit{IndexedDB je baza podataka u pregledniku}: IndexedDB je potpunosti smještena u pregledniku. Bilo koji podatak pohranjen u toj bazi možemo dohvatiti neovisno o stanju mreže.
-Sve radnje vezane uz IndexedDB pisane su JavaScript jezikom. Objekti koji se pohranjuju mogu biti JavaScript objekti, brojevi, stringovi, polja, regularni izrazi, null vrijednosti i slično.
+Sve radnje vezane uz IndexedDB pisane su jezikom JavaScript. Objekti koji se pohranjuju mogu biti JavaScript objekti, brojevi, stringovi, polja, regularni izrazi, null vrijednosti i slično.
 \end{itemize}
 
 \subsection{Sintaksa IndexedDB}
@@ -527,9 +526,9 @@ request.onsuccess = function(event) {
 }
 \end{minted}
 
-\textit{windows.indexedDB.open} vraća zahtijev za otvaranje komunikacije sa bazom. Osluškuju se događaji \textit{success} i \textit{error} vezani uz taj zahtijev.
+\textit{windows.indexedDB.open} vraća zahtjev za otvaranje komunikacije sa bazom. Osluškuju se događaji \textit{success} i \textit{error} vezani uz taj zahtjev.
 
-Ukoliko \textit{new-db} ne postoji, čim pokrenemo ovaj kod, u pregledniku će se stvoriti i otvoriti nova baza podataka tog imena. Ukoliko navedena baza već postoji, ona će se pokretanjem koda samo otvoriti. Aktivira se \textit{success} događaj te ispisuju informacije o bazi.
+Ukoliko \textit{new-db} ne postoji, čim pokrenemo ovaj kod, u pregledniku će se stvoriti i otvoriti nova baza podataka tog imena. Ukoliko navedena baza već postoji, ona će se pokretanjem koda samo otvoriti. Aktivira se događaj \textit{success} te ispisuju informacije o bazi.
 
 \subsubsection{Kreiranje spremišta objekata}
 \paragraph{}
@@ -544,11 +543,11 @@ request.onupgradeneeded = function(event) {
 };
 \end{minted}
 
-Kada preglednik uoči da da je broj verzije veći nego kod kreiranja baze podataka, on aktivira \textit{upgrade needed} događaj te na taj način modificira postojeću bazu podataka.
+Kada preglednik uoči da da je broj verzije veći nego kod kreiranja baze podataka, on aktivira događaj \textit{upgrade needed} te na taj način modificira postojeću bazu podataka.
 
 \subsubsection{Dodavanje podataka u spremište objekata}
 \paragraph{}
-Da bismo dodali podatke u spremište objekata, moramo pokrenuti transakciju. To se postiže pozivanjem \textit{transaction} funkcije na objektu koji predstavlja bazu podataka. Naravno, prije toga je potrebno otvoriti željenu bazu. Transakcije u IndexedDB mogu biti \textit{readwrite} ili \textit{readonly} te stoga funkcija \textit{transaction} prima dva parametra. Prvi je ime spremišta u kojeg želimo dodati elemente, a drugi je neobavezan i označava da li je transakcija \textit{readonly} (zadano) ili \textit{readwrite}.
+Da bismo dodali podatke u spremište objekata, moramo pokrenuti transakciju. To se postiže pozivanjem funkcije \textit{transaction} na objektu koji predstavlja bazu podataka. Naravno, prije toga je potrebno otvoriti željenu bazu. Transakcije u IndexedDB mogu biti \textit{readwrite} ili \textit{readonly} te stoga funkcija \textit{transaction} prima dva parametra. Prvi je ime spremišta u kojeg želimo dodati elemente, a drugi je neobavezan i označava da li je transakcija \textit{readonly} (zadano) ili \textit{readwrite}.
 
 \begin{minted}{js}
 var request = window.indexedDB.open("new-db", 2);
@@ -591,7 +590,7 @@ request.onsuccess = function(event) {
 };
 \end{minted}
 
-Pokrenemo li gornji kod, nakon otvaranja baze podataka, pokreće se transakcija na spremištu \textit{članovi}. Ovog puta funkciji \textit{transaction} kao drugi parametar proslijeđujemo \textit{readonly} jer ne namjeravamo raditi pohranu u spremište objekata. Iz našeg spremišta članovi ćemo pomoću funkcije \textit{get} dohvatiti objekt čiji ključ je prezime \textit{Horvat}. Kako \textit{get} ima asinkrono djelovanje, ono ne vraća odmah rezultat, već vraća objekt koji predstavlja naš zahtjev. Osluškivanjem \textit{onsuccess} događaja za ovaj zahtjev, čekamo objekt koji smo zatražili.  Član \textit{Karlo Horvat} se nalazi u spremištu pa će se kao ime traženog člana ispisati \textit{Karlo}.
+Pokrenemo li gornji kod, nakon otvaranja baze podataka, pokreće se transakcija na spremištu \textit{članovi}. Ovog puta funkciji \textit{transaction} kao drugi parametar proslijeđujemo \textit{readonly} jer ne namjeravamo raditi pohranu u spremište objekata. Iz našeg spremišta članovi ćemo pomoću funkcije \textit{get} dohvatiti objekt čiji ključ je prezime \textit{Horvat}. Kako \textit{get} ima asinkrono djelovanje, ono ne vraća odmah rezultat, već vraća objekt koji predstavlja naš zahtjev. Osluškivanjem događaja \textit{onsuccess} za ovaj zahtjev, čekamo objekt koji smo zatražili.  Član \textit{Karlo Horvat} se nalazi u spremištu pa će se kao ime traženog člana ispisati \textit{Karlo}.
 \item\textbf{Dohvaćanje objekata pomoću pokazivača}. Dohvaćanjem objekata pomoću ključa možemo dohvatiti najviše jedan objekt i moramo mu znati točan ključ. Zaključujemo da ta metoda nije uvijek najbolja. Dohvaćanje više objekata odjednom možemo postići korištenjem pokazivača.
 
 \begin{minted}{js}
@@ -612,11 +611,11 @@ request.onsuccess = function(event) {
 };
 \end{minted}
 
-Kao i u kodovima do sada, prvo moramo otvoriti bazu podataka i pokrenuti transakciju nad željenim spremištem. Nakon toga otvaramo pokazivač, asinkronu funkciju koja pokreće događaj \textit{onsuccess} svaki puta kada se pokazivač pomakne (pomoću funkcije \textit{continue}). Unutar \textit{onsuccess} funkcije možemo pristupiti pokazivaču kako bismo dohvatili objekt na kojeg pokazivač trenutno pokazuje. U konzolu ispisujemo vrijednost pokazivača koja nas zanima i pomičemo se na idući objekt pozivajući funkciju \textit{conutine} na pokazivaču.
+Kao i u kodovima do sada, prvo moramo otvoriti bazu podataka i pokrenuti transakciju nad željenim spremištem. Nakon toga otvaramo pokazivač, asinkronu funkciju koja pokreće događaj \textit{onsuccess} svaki puta kada se pokazivač pomakne (pomoću funkcije \textit{continue}). Unutar funkcije \textit{onsuccess} možemo pristupiti pokazivaču kako bismo dohvatili objekt na kojeg pokazivač trenutno pokazuje. U konzolu ispisujemo vrijednost pokazivača koja nas zanima i pomičemo se na idući objekt pozivajući funkciju \textit{conutine} na pokazivaču.
 
-Kao što je već spomenuto, prilikom svakog pomicanja pokazivača, pokreće se \textit{onsuccess} događaj. To znači da će se nakon \textbf{svakog} pomicanja pokazivača, pa čak i onda kada pokazivač pokazuje na zadnji zapis ili čak i onda kada je spremište prazno, pokrenuti \textit{onsuccess} događaj. Zbog toga je, prije pristupa nekoj vrijednosti, važno uvijek provjeriti pokazuje li zaista pokazivač na nešto.
+Kao što je već spomenuto, prilikom svakog pomicanja pokazivača, pokreće se događaj \textit{onsuccess}. To znači da će se nakon \textbf{svakog} pomicanja pokazivača, pa čak i onda kada pokazivač pokazuje na zadnji zapis ili čak i onda kada je spremište prazno, pokrenuti događaj \textit{onsuccess}. Zbog toga je, prije pristupa nekoj vrijednosti, važno uvijek provjeriti pokazuje li zaista pokazivač na nešto.
 
-\item\textbf{Dohvaćanje objekata pomoću indeksa}. U dohvaćanju objekata pomoću pokazivača smo vidjeli kako iterirati po svim objetkima i dohvaćati željene vrijednosti. No, kada želimo dohvatiti samo objekte koji zadovoljavaju neki uvjet (primjerice, sve objekte koji su rođeni 1994.), tada moramo koristiti indekse.
+\item\textbf{Dohvaćanje objekata pomoću indeksa}. U dohvaćanju objekata pomoću pokazivača smo vidjeli kako iterirati po svim objektima i dohvaćati željene vrijednosti. No, kada želimo dohvatiti samo objekte koji zadovoljavaju neki uvjet (primjerice, sve objekte koji su rođeni 1994.), tada moramo koristiti indekse.
 Napravimo sada novu bazu podataka i novo spremište objekata pod imenom \textit{osobni\_podaci} te spremimo u njega nekoliko objekata, ali tako da više njih ima godinu rođenja jednaku 1994.
 
 \begin{minted}{js}
@@ -644,12 +643,11 @@ request.onsuccess = function(event) {
 };
 \end{minted}
 
-
 U prethodnom kodu možemo uočiti vrlo malo razliku u sintaksi koja je namjerno napravljena kako bi se demonstriralo zapisivanje željenog na dva načina.
 
 Spremište \textit{osobni\_podaci} kreirali smo sa auto-inkrementirajućim ključem. Za razliku od spremišta \textit{članovi}, gdje je \textit{prezime} bio jedinstven ključ (što baš i nije najsretnije rješenje jer postoji više ljudi istog prezimena, no ovdje smo generirali primjer gdje to izbjegavamo), ovdje se jedinstveni ključ za svaki objekt generira automatski. Točnije, prvi objekt će imati identifikacijski broj 1, drugi 2 i tako dalje.
 
-Funkcija \textit{createIndex} primi ime indeksa kao svoj prvi argument, put do ključa koji bi indeks trebao koristiti kao drugi te kao treći argument primi polje koje je neobavezno. To polje govori da ključevi koje indeks koristi nisu jednistveni, točnije, da više objekata može imati isti ključ. Ostaka koda nam je poznat.
+Funkcija \textit{createIndex} primi ime indeksa kao svoj prvi argument, put do ključa koji bi indeks trebao koristiti kao drugi te kao treći argument primi polje koje je neobavezno. To polje govori da ključevi koje indeks koristi nisu jedinstveni, točnije, da više objekata može imati isti ključ. Ostatak koda nam je poznat.
 
 \begin{minted}{js}
 var request = window.indexedDB.open("db", 1);
@@ -676,7 +674,7 @@ Umjesto da svaku funkciju pišemo zajedno kao samostalnu, ovdje vidimo mogućnos
 
 \subsubsection{Ažuriranje objekata u spremištu objekata}
 \paragraph{}
-Ako nam je poznat primarni ključ objekta, lako ga možemo ažurirati korištenjem funkcije \textit{put}. Funkcija se poziva na spremištu objekta i proslijeđuje mu ažuriranu vrijednost objetka zajedno sa primarnim ključem (kako bi se znalo koji objekt se ažurira). U sljedećem kodu je vidljivo kako se implementira opisani postupak.
+Ako nam je poznat primarni ključ objekta, lako ga možemo ažurirati korištenjem funkcije \textit{put}. Funkcija se poziva na spremištu objekta i proslijeđuje mu ažuriranu vrijednost objekta zajedno sa primarnim ključem (kako bi se znalo koji objekt se ažurira). U sljedećem kodu je vidljivo kako se implementira opisani postupak.
 
 \begin{minted}{js}
 var request = window.indexedDB.open("db", 1);
@@ -706,7 +704,7 @@ request.onsuccess = function(event) {
 };
 \end{minted}
 
-Ako nam je poznat ključ objekta koje želimo obrisati, to možemo napraviti na način koji je prikazan na prethodnoj slici. Dakle, obrisali smo objekt koji ima ključ 1.
+Ako nam je poznat ključ objekta koje želimo obrisati, to možemo napraviti na način koji je prikazan u prethodnom kodu. Dakle, obrisali smo objekt koji ima ključ 1.
 
 U svim ostalim slučajevima, primjerice, kada želimo obrisati više objekata odjednom, koristimo se pokazivačem i iteracijom istog po objektima iz spremišta. Naravno, potrebno je zadati neku vrijednost po kojoj se određuje hoće li se objekt obrisati iz baze ili neće. U narednom primjeru brisat ćemo sve osobe koje su rođene 1994.godine.
 
@@ -726,7 +724,7 @@ request.onsuccess = function(event) {
 };
 \end{minted}
 
-Želimo li obrisati sve objekte iz nekog spremišta, funkcijom \textit{clear} ćemo dobiti povratnu vrijednost sa \textit{onsuccess} i \textit{onerror} događajima.
+Želimo li obrisati sve objekte iz nekog spremišta, funkcijom \textit{clear} ćemo dobiti povratnu vrijednost sa događajima \textit{onsuccess} i \textit{onerror}.
 
 \begin{minted}{js}
 var request = window.indexedDB.open("db", 1);
@@ -742,7 +740,7 @@ request.onsuccess = function(event) {
 
 \subsection{Lokalna baza podataka za našu aplikaciju} \label{lokalno_spremanje}
 \paragraph{}
-Do sada smo promotrili sve akcije koji će nam trebati za kreiranje i manipulaciju lokalnom bazom podataka za našu aplikaciju i možemo krenuti sa radom. Kreirajmo \textit{indexedDB.html} datoteku. U njoj će se nalaziti kod pomoću kojeg ćemo kreirati i dodati osnovne stvari u bazu. Kao što je bio slučaj sa \textit{prepareDB.php}, prije korištenja same aplikacije, pokrenut ćemo navedenu skriptu kako bi se u pregledniku stvorila naša baza. Zbog toga što su svi kodovi do sada detaljno objašnjeni te je jasno koji se koristi u kojoj situaciji, detaljno ću navesti samo važne informacije o bazi. Dakle, pripadne kodove izostavljam jer su analogni već viđenima.
+Do sada smo promotrili sve akcije koji će nam trebati za kreiranje i manipulaciju lokalnom bazom podataka za našu aplikaciju i možemo krenuti sa radom. Kreirajmo \textit{indexedDB.html} datoteku. U njoj će se nalaziti kod pomoću kojeg ćemo kreirati i dodati osnovne stvari u bazu. Kao što je bio slučaj sa \textit{prepareDB.php}, prije korištenja same aplikacije, pokrenut ćemo navedenu skriptu kako bi se u pregledniku stvorila naša baza. Zbog toga što su svi kodovi do sada detaljno objašnjeni te je jasno koji se koristi u kojoj situaciji, detaljno ćemo navesti samo važne informacije o bazi. Dakle, pripadne kodove izostavljamo jer su analogni već viđenima.
 
 Kreiramo bazu pod nazivom \textit{Studenti} (verzija je, naravno, prva). U bazi stvaramo spremište objekata pod nazivom \textit{rezultati} te kao ključ stavljamo \textit{id}. Definiramo indeks \textit{id\_studenta} za ovo spremište. Put do ključa koji indeks treba koristiti je, također, \textit{id\_studenta} te ključ koji indeks koristi nije jedinstven.
 
@@ -756,7 +754,7 @@ Treće spremište koje kreiramo naziva se \textit{bodovi}, ključ je \textit{id\
 
 Na kraju kreiramo spremište pod nazivom \textit{novi\_rezultati} koje ima auto-inkrementirajuću ključ. Indeks, kao i u spremištu \textit{kolegiji}, nije potreban.
 
-Za početak, primjetimo da na početku skripti \textit{rezultati.html}, \textit{administrator.html}, \textit{upisRez.html} postoji sljedeći kod:
+Za početak, primijetimo da na početku skripti \textit{rezultati.html}, \textit{administrator.html}, \textit{upisRez.html} postoji sljedeći kod:
 
 \begin{minted}{js}
 if(navigator.onLine) {
@@ -789,23 +787,23 @@ $(window).on("offline", function() {
 
 Pomoću njega smo osigurali da u aplikaciji, uz ime i prezime studenta ili oznake za administratora (ovisno o tome tko se prijavio u aplikaciju), imamo i indikatore koji nam govore postoji li pristup internetskoj vezi ili ne.
 
-\textit{if} i \textit{else} blokovi pokazuju da li se korisnik uoči prijave nalazio \textit{online} ili \textit{offline}. Međutim, ukoliko se promijeni korisnikov status veze, sve dok se ne osvježi stranica, to neće biti vidljivo. Upravo zbog toga postoje reakcije na događaje \textit{online} i \textit{offline}. Na taj način je moguće u svakom trenutku prepoznati promjenu stanja veze i, sukladno sa time, promijeniti indikatore.
+Blokovi \textit{if} i \textit{else} pokazuju da li se korisnik uoči prijave nalazio \textit{online} ili \textit{offline}. Međutim, ukoliko se promijeni korisnikov status veze, sve dok se ne osvježi stranica, to neće biti vidljivo. Upravo zbog toga postoje reakcije na događaje \textit{online} i \textit{offline}. Na taj način je moguće u svakom trenutku prepoznati promjenu stanja veze i, sukladno sa time, promijeniti indikatore.
 
 Ranije je na slici \ref{fig:isti_sadrzaj} prikazano da se sadržaj koji aplikacija pruža korisnicima koji su \textit{online} ne razlikuje od sadržaja koji se pruža korisnicima koji su \textit{offline}. Uz implementirane indikatore, to je vrlo jednostavno uočiti.
 
-Sljedeći korak koji moramo napraviti jest taj da osiguramo prikaz rezultata studentima čak i onda kada su oni \textit{offline}. U spremište \textit{rezultati} je potrebno pohraniti sve rezultate studenata koji se prijave u aplikaciju. Dakle, jednom kada student otvori aplikaciju, njegovi rezultati se spremaju u spremište \textit{rezultati}. Ako pri sljedećem otvaranju aplikacije student ne bude imao pristup internetu, učitat će mu se rezultati iz spremišta. Naravno, u tom trenutnu student možda ima i neke nove rezultate, no, da bi i njih vidio, on aplikaciju mora otvoriti u uvjetima u kojima ima pristup internetu. Sljedećim otvaranjem aplikacije koje uspije kontaktirati server (to se događa u slučaju da student ima pristup internetu), podaci u spremištu se ažuriraju. Dakle, koristi se funkcija \textit{put} koja ili sprema novi objekt u spremište (u slučaju da objekt još ne postoji u spremištu objekata) ili ažurira već postojeći objekt novim rezultatima.
+Sljedeći korak koji moramo napraviti jest taj da osiguramo prikaz rezultata studentima čak i onda kada su oni \textit{offline}. U spremište \textit{rezultati} je potrebno pohraniti sve rezultate studenata koji se prijave u aplikaciju. Dakle, jednom kada student otvori aplikaciju, njegovi rezultati se spremaju u spremište \textit{rezultati}. Ako pri sljedećem otvaranju aplikacije student ne bude imao pristup internetu, učitat će mu se rezultati iz spremišta. Naravno, u tom trenutnu student možda ima i neke nove rezultate, no, da bi i njih vidio, on aplikaciju mora otvoriti u uvjetima u kojima ima pristup internetu. Sljedećim otvaranjem aplikacije koje uspije kontaktirati poslužitelj (to se događa u slučaju da student ima pristup internetu), podaci u spremištu se ažuriraju. Dakle, koristi se funkcija \textit{put} koja ili sprema novi objekt u spremište (u slučaju da objekt još ne postoji u spremištu objekata) ili ažurira već postojeći objekt novim rezultatima.
 
-Naredni slučaj u kojem trebamo lokalno pohraniti podatke je unos novih bodova od strane administratora. Zapisivanje bodova u bazu na phpMyAdmin-u će se „riješiti“ pomoću pozadinske sinkronizacije, no o tome nešto kasnije. Za sada ćemo se samo baviti pohranjivanjem potrebnih podataka.
+Naredni slučaj u kojem trebamo lokalno pohraniti podatke je unos novih bodova od strane administratora. Zapisivanje bodova u bazu na \textit{phpMyAdmin-u} će se „riješiti“ pomoću pozadinske sinkronizacije, no o tome nešto kasnije. Za sada ćemo se samo baviti pohranjivanjem potrebnih podataka.
 
 Administratoru želimo omogućiti unos bodova studentima čak i onda kada on nema pristup internetu, no ovdje ima nekoliko komplikacija. Želimo li administratoru dopustiti da on unosi bodove iz svih kolegija, svim studentima, morali bismo lokalno pohraniti čitave baze koje se nalaze na \textit{phpMyAdmin-u}, a to nije efikasno rješenje jer bismo, u tom slučaju, lokalno morali spremati velike količine podataka. Kako bismo pojednostavili ovu situaciju, odlučujemo se na sljedeće: kada je \textit{offline}, administrator može upisati bodove studentima samo za onaj kolegij za koji ih je upisivao zadnji puta kada je imao pristup internetu.
 
-Promotrimo situaciju kada administrator ima pristup internetu. On mora odabrati kolegij za koji želi unesti bodove studentima. Nakon odabira, u Session Storage se spremaju dvije varijabile - identifikacijski broj i naziv odabranog kolegija. Na skripti \textit{upisRez.html} se ti podaci dohvaćaju i, u komunikaciji sa serverom prikazuje se popis svih studenata koji su upisali odabrani kolegij, zajedno sa bodovima koje su ostvarili iz pojedinih elemenata ocjenjivanja.
+Promotrimo situaciju kada administrator ima pristup internetu. On mora odabrati kolegij za koji želi unesti bodove studentima. Nakon odabira, u Session Storage se spremaju dvije varijabile - identifikacijski broj i naziv odabranog kolegija. Na skripti \textit{upisRez.html} se ti podaci dohvaćaju i, u komunikaciji sa poslužiteljem prikazuje se popis svih studenata koji su upisali odabrani kolegij, zajedno sa bodovima koje su ostvarili iz pojedinih elemenata ocjenjivanja.
 
 U ovom trenutku imamo pristup podacima koji su nam potrebni: naziv kolegija (točnije, identifikacijski broj kolegija) te popis studenata koji su upisali odabrani kolegij, popraćen njihovim dosadašnjim rezultatima. Sada treba napraviti lokalnu pohranu podataka.
 
-Odgovor servera lokalno spremamo u spremište objekata \textit{bodovi}. Dakle, sada se u spremištu nalaze objekti koji predstavljaju sudente koji su upisali odabrani kolegij. Svaki objekt se sastoji od identifikacijskog broj studenta, naziva kolegija, identifikacijskog broja kolegija te broja dosad ostvarenih bodova. Prije samog spremanja podataka, obrišemo sve objekte koji se već nalaze u spremištu objekata. To su podaci koje smo prošli put spremili u \textit{bodovi}.
+Odgovor poslužitelja lokalno spremamo u spremište objekata \textit{bodovi}. Dakle, sada se u spremištu nalaze objekti koji predstavljaju studente koji su upisali odabrani kolegij. Svaki objekt se sastoji od identifikacijskog broj studenta, naziva kolegija, identifikacijskog broja kolegija te broja dosad ostvarenih bodova. Prije samog spremanja podataka, obrišemo sve objekte koji se već nalaze u spremištu objekata. To su podaci koje smo prošli put spremili u \textit{bodovi}.
 
-Ako administrator posjeti aplikaciju kada je \textit{offline} te želi unesti bodove studentima, on prvo na svojoj početnoj stranici odabire opciju (jedinu opciju koja mu se nudi) \textit{Unos rezultata}. Nakon toga se otvara stranica \textit{upisRez.html} na kojoj se prikaže naziv kolegija za koji je zadnje unosio bodove te popis studenata (sa bodovima) koji su upisali taj kolegij.
+Ako administrator posjeti aplikaciju kada je \textit{offline} te želi unesti bodove studentima, on prvo na svojoj početnoj stranici odabire opciju \textit{Unos rezultata} (jedinu koja mu se nudi). Nakon toga se otvara stranica \textit{upisRez.html} na kojoj se prikaže naziv kolegija za koji je zadnje unosio bodove te popis studenata (sa bodovima) koji su upisali taj kolegij.
 
 Svaki administratorov unos novih bodova studentima, bilo da je taj unos napravljen kada je administrator \textit{online} ili \textit{offline}, sprema se u spremište objekata \textit{novi\_rezultati}. To znači da su ti bodovi spremljeni samo lokalno, a ne u bazu \textit{Studenti} na \textit{phpMyAdmin-u}.
 
@@ -813,7 +811,7 @@ Pohranu podataka u bazu \textit{Studenti} ćemo omogućiti pomoću \textit{pozad
 
 \subsection{Zaključak}
 \paragraph{}
-Krenuvši od početne aplikacije, do sada smo napravili nekoliko vrlo važnih izmjena. Studenti koji se jednom prijave u aplikaciju te je napuste bez odjave, u mogućnosti su vidjeti svoje rezultate na ispitima čak i onda kada nemaju osiguran pristup internetu. Također, administrator koji napusti aplikaciju bez odjave može vidjeti početnu stranicu koja mu prikazuje popis radnji koje može obavljati te popis svih studenata koji su upisali kolegij za koji je zadnje unosio bodove u bazu podataka (prilikom odabira \textit{Upis rezultata}). U nastavku ćemo osigurati da administrator može unositi nove rezulatate studentima neovisno o mreži. Ostale radnje, dakle unos novih studenata, upisivanje novih kolegija te brisanje upisanih kolegija, administratoru neće biti omogućene ukoliko on nema pristup internetu. Odabir bilo koje od navedenih radnji uzrokovati će prikaz odgovarajuće poruke (o nemogućnosti izvođenja željene radnje) ukoliko internetski pristup nije omogućen.
+Krenuvši od početne aplikacije, do sada smo napravili nekoliko vrlo važnih izmjena. Studenti koji se jednom prijave u aplikaciju te je napuste bez odjave, u mogućnosti su vidjeti svoje rezultate na ispitima čak i onda kada nemaju osiguran pristup internetu. Također, administrator koji napusti aplikaciju bez odjave može vidjeti početnu stranicu koja mu prikazuje popis radnji koje može obavljati te popis svih studenata koji su upisali kolegij za koji je zadnje unosio bodove u bazu podataka (prilikom odabira \textit{Upis rezultata}). U nastavku ćemo osigurati da administrator može unositi nove rezultate studentima neovisno o mreži. Ostale radnje, dakle unos novih studenata, upisivanje novih kolegija te brisanje upisanih kolegija, administratoru neće biti omogućene ukoliko on nema pristup internetu. Odabir bilo koje od navedenih radnji, bilo da je administrator otvorio aplikaciju u stanju \textit{offline} ili, nakon nekog vremena, iz stanja \textit{online} prešao u stanje \textit{offline}, uzrokovati će prikaz odgovarajuće poruke (o nemogućnosti izvođenja željene radnje) ukoliko internetski pristup nije omogućen.
 
 \newpage
 \section{Pozadinska sinkronizacija} \label{back-sync}
@@ -832,7 +830,7 @@ Dakle, omogućavanjem pozadinske sinkronizacije korisnici više ne moraju brinut
 
 \subsection{Omogućavanje pozadinske sinkronizacije}
 \paragraph{}
-U skripti u kojoj imamo situaciju gdje želimo koristiti pozadinsku sinkronizaciju, moramo registrirati \textit{sync} događaj na sljedeći način:
+U skripti u kojoj imamo situaciju gdje želimo koristiti pozadinsku sinkronizaciju, moramo registrirati događaj \textit{sync} na sljedeći način:
 
 \begin{minted}{js}
 navigator.serviceWorker.ready.then(function(reg) {
@@ -840,11 +838,11 @@ navigator.serviceWorker.ready.then(function(reg) {
 });
 \end{minted}
 
-Navedeni kod koristi objekt registracije aktivne uslužne skripte kako bi registrirao \textit{sync} događaj naziva \textit{send-msgs}.
+Navedeni kod koristi objekt registracije aktivne uslužne skripte kako bi registrirao događaj \textit{sync} naziva \textit{send-msgs}.
 
-U slučaju kompleksnih aplikacija, pozadinska sinkronizacija se može brinuti o više različitih podataka sa kojima treba postupati na različite način. Kako bismo mogli razlikovati \textit{sync} događaje, pridružujemo im različita imena.
+U slučaju kompleksnih aplikacija, pozadinska sinkronizacija se može brinuti o više različitih podataka sa kojima treba postupati na različite načine. Kako bismo mogli razlikovati događaje \textit{sync}, pridružujemo im različita imena.
 
-Da bismo omogućili pozadinsku sinkronizaciju, također potrebno je uslužnu skriptu pretplatiti na događaj \textit{sync}. Navedeno možemo napraviti dodavajući sljedeći kod u skriptu koja implementira uslužnu skriptu.
+Da bismo omogućili pozadinsku sinkronizaciju, također je potrebno uslužnu skriptu pretplatiti na događaj \textit{sync}. Navedeno možemo napraviti dodajući sljedeći kod u skriptu koja implementira uslužnu skriptu.
 
 \begin{minted}{js}
 self.addEventListener('sync', function(event) {
@@ -855,13 +853,13 @@ self.addEventListener('sync', function(event) {
 });
 \end{minted}
 
-Uslužna skripta osluškuje na \textit{sync} događaj. Ukoliko je riječ o \textit{sync} događaju naziva \textit{send-msgs}, uslužna skripta pokušava izvršiti funkciju \textit{send} (čija implementacija ovdje nedostaje iz razloga što nije važna). Korištenjem funkcije \textit{waitUntil} osiguravamo da se \textit{sync} događaj ne završi sve dok mu mi to ne kažemo. Dobivamo na vremenu da izvedemo neke akcije te uspješno razriješimo događaj ako one uspiju. Ako akcije ne uspiju, odnosno ako rezultiraju odbijajućim obećanjem (engl. rejected promise), tada će uslužna skripta kasnije ponovno pokušati razriješiti ovaj događaj. Pokušaji će se ponavljati sve dok ne uspiju.
+Uslužna skripta osluškuje na događaj \textit{sync}. Ukoliko je riječ o događaju \textit{sync} naziva \textit{send-msgs}, uslužna skripta pokušava izvršiti funkciju \textit{send} (čija implementacija ovdje nedostaje iz razloga što nije važna). Korištenjem funkcije \textit{waitUntil} osiguravamo da se događaj \textit{sync} ne završi sve dok mu mi to ne kažemo. Dobivamo na vremenu da izvedemo neke akcije te uspješno razriješimo događaj ako one uspiju. Ako akcije ne uspiju, odnosno ako rezultiraju odbijenim \textit{promise-om} (engl. rejected promise), tada će uslužna skripta kasnije ponovno pokušati razriješiti ovaj događaj. Pokušaji će se ponavljati sve dok ne uspiju.
 
 \subsection{SyncManager}
 \paragraph{}
-Svaka interakcija sa \textit{sync} događajima odvija se pomoću SyncManager-a. To je sučelje uslužne skripte koje nam dopušta da registriramo različite \textit{sync} događaje. SyncManageru-u možemo pristupiti pomoću objekta registracije aktivne uslužne skripte. Taj objekt možemo dohvatiti pomoću uslužne skripte ili neke druge stripte naše aplikacije. No, način na koji ga dohvaćamo se razlikuje za ova dva spomenuta slučaja.
+Svaka interakcija sa događajima \textit{sync} odvija se pomoću SyncManager-a. To je sučelje uslužne skripte koje nam dopušta da registriramo različite događaje \textit{sync}. SyncManageru-u možemo pristupiti pomoću objekta registracije aktivne uslužne skripte. Taj objekt možemo dohvatiti pomoću uslužne skripte ili neke druge skripte naše aplikacije. No, način na koji ga dohvaćamo se razlikuje za ova dva spomenuta slučaja.
 
-Ukoliko registracijskog objektu želimo pristupiti unutar uslužne skripte, sljedeći kod će nam poslužiti:
+Ukoliko registracijskom objektu želimo pristupiti unutar uslužne skripte, sljedeći kod će nam poslužiti:
 \begin{minted}{js}
 self.registration
 \end{minted}
@@ -871,21 +869,9 @@ Ako pak, s druge strane, registracijskom objektu želimo pristupiti iz neke drug
 navigator.serviceWorker.ready.then(function(registration) {});
 \end{minted}
 
-Nakon što smo dohvatili registracijski objekt, interakcija sa SyncManager-om je identična pristupamo li mu iz uslužne skripte ili neke druge skripte. Primjerice, želimo li registrirati \textit{sync} događaj unutar uslužne skripte, to ćemo napraviti pomoću koda:
+Nakon što smo dohvatili registracijski objekt, interakcija sa SyncManager-om je identična pristupamo li mu iz uslužne skripte ili neke druge skripte.
 
-\begin{minted}{js}
-self.registration.sync.register('send-msgs');
-\end{minted}
-
-Želimo li postići isto, ali unutar neke druge skripte, pokrećemo kod:
-
-\begin{minted}{js}
-navigator.serviceWorker.ready.then(function(registration) {
-    registration.sync.register('send-msgs');
-}
-\end{minted}
-
-SyncManager sadrži listu svih registriranih \textit{sync} događaja. Nazivi, odnosno, oznake događaja (engl. event tags) su jedinstvene. Ako registriramo novi \textit{sync} događaj sa oznakom koja već postoji, SyncManager će to ignorirati i neće ponoviti unos te oznake na svoju listu. Upravo to nam omogućava da grupiramo slične događaje.
+SyncManager sadrži listu svih registriranih događaja \textit{sync}. Nazivi, odnosno, oznake događaja (engl. event tags) su jedinstvene. Ako registriramo novi  događaj \textit{sync} sa oznakom koja već postoji, SyncManager će to ignorirati i neće ponoviti unos te oznake na svoju listu. Upravo to nam omogućava da grupiramo slične događaje.
 
 Primjerice, ako imamo aplikaciju za slanje poruka, potpuno je logično da ne želimo poslati obavijest našem korisniku za svaku poruku koju mu pošalje korisnik A, već ćemo sve poruke primljene od korisnika A grupirati u jednu obavijest.
 
@@ -893,10 +879,9 @@ SyncManager poruke sprema u redove u skladu sa njihovim oznakama događaja. Kako
 
 \subsection{Fetch API}
 \paragraph{}
-Komunikacija sa poslužiteljom se dosad, u većini slučajeva, odvijala pomoću Ajax poziva. Kod pozadinske sinkronizacije slanje podataka poslužitelju obavlja uslužna skripta. To znači da se implementacija istog nalazi na uslužnoj skripti. Sada je vrijeme da se upozamo sa Fetch API-em jer uslužne skripte ne omogućavaju Ajax pozive poslužitelju.
+Komunikacija sa poslužiteljom se dosad, u većini slučajeva, odvijala pomoću Ajax poziva. Kod pozadinske sinkronizacije slanje podataka poslužitelju obavlja uslužna skripta. To znači da se implementacija istog nalazi na uslužnoj skripti. Sada je vrijeme da se upoznamo sa \textit{Fetch API-em} jer uslužne skripte ne omogućavaju Ajax pozive poslužitelju.
 
-
-Fetch je moderan način za izvođenje Ajax poziva pri radu u \textit{JavaScript} jeziku. Umjesto pisanja nezgrapnog Ajax koda ili korištenja biblioteka kao što su jQuery i Angular, novi JavaScript standard nudi kompaktniju, modernu i fleksibilnu sintaksu.
+Fetch je moderan način za izvođenje Ajax poziva pri radu u jeziku \textit{JavaScript}. Umjesto pisanja nezgrapnog Ajax koda ili korištenja biblioteka kao što su jQuery i Angular, novi JavaScript standard nudi kompaktniju, modernu i fleksibilnu sintaksu.
 
 \begin{minted}{js}
 fetch('server.php', {
@@ -912,7 +897,7 @@ fetch('server.php', {
       .catch((error) => console.log(error))
 \end{minted}
 
-Želimo li poslati podakte poslužitelju, moramo znati \textit{url} skripte kojoj šaljemo podatke, u ovom slučaju to je skripta \textit{server.php}. Potreban je parametar \textit{method} koji govori da se radi o \textit{POST} slanju podataka. \textit{body} sadrži podatke koje želimo poslati poslužitelju. Naravno, koristimo \textit{JSON.stringify} funkciju kako bismo objekte pretvorili u string. Parametar \textit{headers} je opcionalan te određuje vrstu podataka koje šaljemo kao i vrstu oih podataka koje primamo.
+Želimo li poslati podatke poslužitelju, moramo znati \textit{url} skripte kojoj šaljemo podatke, u ovom slučaju to je skripta \textit{server.php}. Potreban je parametar \textit{method} koji govori da se radi o slanju podataka \textit{POST}. \textit{body} sadrži podatke koje želimo poslati poslužitelju. Naravno, koristimo \textit{JSON.stringify} funkciju kako bismo objekte pretvorili u string. Parametar \textit{headers} je opcionalan te određuje vrstu podataka koje šaljemo kao i vrstu onih podataka koje primamo.
 
 \subsection{Omogućavanje pozadinske sinkronizacije unutar naše aplikacije}
 \paragraph{}
@@ -944,7 +929,7 @@ var request = window.indexedDB.open("Studenti", 1);
           });
 \end{minted}
 
-Registrirali smo \textit{sync} događaj te mu dodijelili oznaku \textit{upis-rezultata}. U slučaju uspješe registracije, u konzulu se ispiše popratna poruka. Ako pak registracije krene po zlu, u konzolu će se također ispisati odgovarajuća poruka.
+Registrirali smo događaj \textit{sync} te mu dodijelili oznaku \textit{upis-rezultata}. U slučaju uspješe registracije, u konzulu se ispiše popratna poruka. Ako pak registracije krene po zlu, u konzolu će se također ispisati odgovarajuća poruka.
 
 Potrebno je kreirati novu skriptu koju će uslužna skripta kontaktirati kako bi osigurala pohranu podataka o broju bodova iz lokalne baze u bazu \textit{Studenti} na \textit{phpMyAdmin-u}. Skriptu ćemo nazvat \textit{server.php}. Ona se, uglavnom, sastoji od koda kao i skripta koja se pozivala unutar Ajax poziva, no ima neke izmjene. \textit{server.php} izgleda ovako:
 
@@ -953,28 +938,29 @@ Potrebno je kreirati novu skriptu koju će uslužna skripta kontaktirati kako bi
 require_once 'db.class.php';
 session_start();
 
-  $data = file_get_contents('php://input');
-  $data_array = array();
-  $data_array = explode('"', $data);
-  $id_studenta = $data_array[3];
-  $id_kolegija = $data_array[7];
-  $bodovi = $data_array[11];
-  $elt = $data_array[15];
+  $data = json_decode(file_get_contents('php://input'), true);
+  $id_studenta = $data['id_studenta'];
+  $id_kolegija = $data['id_kolegija'];
+  $bodovi = $data['bodovi'];
+  $elt = $data['elt'];
+  $_SESSION['id_studenta'] = $id_studenta;
 
   //spajanje na bazu, tablica rezultati
   try {
+    //imamo 7 mogućih slučajeva - ovisno o elementu ocjenjivanja o kojem se radi
+    if($elt == "1kolokvij") {
       $db = DB::getConnection();
-      $st = $db->prepare("UPDATE rezultati SET $elt = '$bodovi'
-                           WHERE student_id = '$id_studenta'
-                           AND kolegij_id = '$id_kolegija'");
-      $st->execute();
-      $message['info'] = "Ubacio rezultate u bazu!";
+      $st = $db->prepare("UPDATE rezultati SET 1kolokvij = '$bodovi'
+                         WHERE student_id =:student_id AND kolegij_id =:kolegij_id");
+      $st->execute(array('student_id' => $id_studenta, 'kolegij_id' => $id_kolegija));
     }
+    //ostalih 6 slučajeva ...
+   }
     catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
  ?>
 \end{minted}
 
-Dalje trebamo pretplatiti uslužnu skriptu na \textit{sync} događaj kako bi ga ona počela osluškivati. U skriptu \textit{sw.js} dodajemo sljedeći kod:
+Dalje trebamo pretplatiti uslužnu skriptu na događaj \textit{sync} kako bi ga ona počela osluškivati. U skriptu \textit{sw.js} dodajemo sljedeći kod:
 
 \begin{minted}{js}
 self.addEventListener('sync', function(event) {
@@ -1003,7 +989,11 @@ function pohranaUBazu() {
             'Accept': 'application/json',
             'Content-type': 'application/json',
         },
-        body: JSON.stringify({id_studenta, id_kolegija, bodovi, elt})
+        body: JSON.stringify({
+          id_studenta: id_studenta,
+          id_kolegija:id_kolegija,
+          bodovi: bodovi,
+          elt: elt})
       })
       .catch(function(err) {
         console.log('It broke' + err.messag);
@@ -1015,13 +1005,13 @@ function pohranaUBazu() {
 }
 \end{minted}
 
-Unutar uslužne skripte potrebno je, pomoću \textit{fetch} funckije poslati podatke o broju bodova poslužitelju. Naravno, prije samog slanja, potrebno je iste podatke dohvatiti iz lokalne baze podataka. Podatke dohvaćamo pokazivačem. Nakon svakog dohvata, objekt funkcijom \textit{JSON.stringify} pretvaramo u string, šaljemo ga poslužitelju i brišemo ga iz lokalne baze. Pokazivač se nakon svakog dohvata pomiče.
+Unutar uslužne skripte potrebno je, pomoću funkcije \textit{fetch} poslati podatke o broju bodova poslužitelju. Naravno, prije samog slanja, potrebno je iste podatke dohvatiti iz lokalne baze podataka. Podatke dohvaćamo pokazivačem. Nakon svakog dohvata, objekt funkcijom \textit{JSON.stringify} pretvaramo u string, šaljemo ga poslužitelju i brišemo ga iz lokalne baze. Pokazivač se nakon svakog dohvata pomiče.
 
 \subsection{Zaključak}
 U ovom trenutku imamo jako naprednu aplikaciju. Korisnicima je omogućen pristup aplikaciji neovisno i stanju mreže,a osigurali smo i to da se ne moraju brinuti o tome hoće li se njihove radnje zaista dostaviti serveru. Jedina značajka koja je ostala za implementaciju u svrhu pretvaranja naše aplikacije u PWA jest push obavijest. Za kraj želimo poslati obavijest svakom korisniku nakon što administrator za njega unese nove rezultate u bazu podataka.
 
 \newpage
-\section{}{Push obavijesti} \label{push}
+\section{Push obavijesti}\label{push}
 \subsection{Općenito o push obavijestima}
 \paragraph{}
 Došlo je vrijeme da se upoznamo sa značajkom PWA koja vlasniku aplikacije pomaže zadržati korisnike.
@@ -1030,7 +1020,7 @@ Kombiniranjem Push API-a sa Notification API-em omogućavamo slanje push obavije
 
 \subsubsection{Notification API}
 \paragraph{}
-Notification API omogućava web-aplikaciji da prikazuje obavijesti korisnicima.
+\textit{Notification API} omogućava web-aplikaciji da prikazuje obavijesti korisnicima.
 
 \begin{figure}[H]
  \centering
@@ -1058,11 +1048,11 @@ Korisnik može prihvatiti ili odbiti obavijest. Ukoliko ih prihvati, varijabla \
 
 \subsubsection{Push API}
 \paragraph{}
-Push API omogućava korisnicima da se pretplate na push obavijesti iz naše aplikacije te dopušta poslužitelju da šalje preglednicima pretplaćenih korisnika poruke u bilo koje vrijeme. Porukama upravlja uslužna skripta koja osluškuje na događaje povezane sa njima te djeluje sukladno sa zahtjevima koje definiraju događaji. Ti zahtjevi su, najčešće, slanje obavijesti korisnicima.
+\textit{Push API} omogućava korisnicima da se pretplate na push obavijesti iz naše aplikacije te dopušta poslužitelju da šalje preglednicima pretplaćenih korisnika poruke u bilo koje vrijeme. Porukama upravlja uslužna skripta koja osluškuje na događaje povezane sa njima te djeluje sukladno sa zahtjevima koje definiraju događaji. Ti zahtjevi su, najčešće, slanje obavijesti korisnicima.
 
-U push obavijestima sudjeluju tri strane, poslužitelj za našu aplikaciju, preglednik u kojem je naša aplikacija otvorena te centralni poslužitelj poruka.
+U push obavijestima sudjeluju tri strane, poslužitelj za našu aplikaciju, preglednik u kojem je aplikacija otvorena te centralni poslužitelj poruka.
 
-Postoji nekoliko ključnij koraka koja se moraju dogoditi da bi se korisnik uspješno pretplatio na push obavijesti.
+Postoji nekoliko ključnih koraka koja se moraju dogoditi da bi se korisnik uspješno pretplatio na push obavijesti.
 
 Prvi korak u pretplaćivanju korisnika na push obavijesti je  pribavljanje dopuštenja za prikazivanje obavijesti te kontaktiranje centralnog poslužitelja poruka od kojeg tražimo kreiranje nove pretplate za korisnika. Centralni poslužitelj poruka pohranjuje detalje pretplate te ih vraća našoj aplikaciji.
 
@@ -1079,7 +1069,7 @@ Kada odlučimo poslati poruku korisniku, naš poslužitelj dohvaća podatke o pr
 
 \subsection{VAPID ključevi}
 \paragraph{}
-Prilikom pretplaćivanja korisnika na push obavijesti, centralni poslužitelj poruka vraća detalje pretplate koji sadrže sve potrebne informacije za slanje bezbroj poruka dotičnom korisniku. Možemo se naći u situaciji da neka skripta nevezana uz našu aplikaciju "presretne" te detalje o pretplati korisnika te ih zlorabi šaljući korisniku neželjene obavijesti. Kako bismo izbjegli spomenuti problem, centralni poslužitelj poruka prihvaća samo one poruke koje sadrže privatni ključ koji je pohranjen na našem poslužitelju. Da bi se potvrdilo da poruke sadrže točni privatni ključ, za svaki privatni postoji odgovarajući javni ključ. Javni ključ se nalazi unutar naše skripte te se šalje centralnom poslužitelju poruka zajedno sa zahtjevom za novu pretplatu. Na taj način centralni poslužitelj poruka pohranjuje javni ključ zajedno sa detaljima pretplate na push obavijesti.
+Prilikom pretplaćivanja korisnika na push obavijesti, centralni poslužitelj poruka vraća detalje pretplate koji sadrže sve potrebne informacije za slanje bezbroj poruka dotičnom korisniku. Možemo se naći u situaciji da neka skripta nevezana uz našu aplikaciju "presretne" te detalje o pretplati korisnika te ih zlorabi šaljući korisniku neželjene obavijesti. Kako bismo izbjegli spomenuti problem, centralni poslužitelj poruka prihvaća samo one poruke koje sadrže privatni ključ koji je pohranjen na našem poslužitelju. Da bi se potvrdilo da poruke sadrže točan privatni ključ, za svaki privatni postoji odgovarajući javni ključ. Javni ključ se nalazi unutar naše skripte te se šalje centralnom poslužitelju poruka zajedno sa zahtjevom za novu pretplatu. Na taj način centralni poslužitelj poruka pohranjuje javni ključ zajedno sa detaljima pretplate na push obavijesti.
 
 Dakle, prilikom stvaranja aplikacije, potrebno je generirati privatni i javni ključ koje će aplikacija koristiti u svrhu slanja push obavijesti. VAPID ključevi je oznaka za privatni i, odgovarajući, javni ključ.
 
@@ -1087,7 +1077,7 @@ Dakle, prilikom stvaranja aplikacije, potrebno je generirati privatni i javni kl
 \paragraph{}
 Podaci koji se šalju unutar push obavijesti moraju biti šifrirani.Također, da bi preglednik mogao ispravno dešifrirati poruku, podacima koji se šalju potrebno je dodati određena zaglavlja. Iz razloga što je jako komplicirano da sami šifriramo i dešifriramo poruke, pri slanju push obavijesti koristimo biblioteke koje taj posao rade umjesto nas.
 
-Obzirom da poslužiteljske skripte pišemo u \textit{PHP} jeziku, biblioteka mora odgovarati tome. Biblioteka koju ćemo mi koristiti nalazi se \href{https://github.com/web-push-libs/web-push-php}{ovdje}. Potrebno ju je preuzeti na vlastito računalo na način koji je opisan u uputama (pomoću \href{https://getcomposer.org/}{composer-a}). U opisu biblioteke detaljno je objašnjeno što joj je sve potrebno za ispravan rad. Prije početka rada potrebno je na računalo preuzeti sve navedeno.
+Obzirom da poslužiteljske skripte pišemo u jeziku \textit{PHP}, biblioteka mora odgovarati tome. Biblioteka koju ćemo mi koristiti nalazi se \href{https://github.com/web-push-libs/web-push-php}{ovdje}. Potrebno ju je preuzeti na vlastito računalo na način koji je opisan u uputama (pomoću \href{https://getcomposer.org/}{composer-a}). U opisu biblioteke detaljno je objašnjeno što joj je sve potrebno za ispravan rad. Prije početka rada potrebno je na računalo preuzeti sve navedeno.
 
 \subsection{Obavijesti i push obavijesti u našoj aplikaciji}
 \subsubsection{Obavijesti}
@@ -1131,7 +1121,7 @@ Kao što je vidljivo iz koda funkcija, prvo se provjerava jesu li uslužna skrip
 
 Obavijestima smo definirali \textit{body}, \textit{icon} te \textit{tag}, a ti argumenti redom označavaju sadržaj obavijesti, URL slike koju želimo korisnicima prikazati uz obavijest te jedinstveni identifikator ove obavijesti.
 
-Kao dodatni atributi jos se mogu navesti \textit{actions} (obavijesti možemo dodati do dva izbora na koja korisnici mogu kliknuti; primjerice potvrdnu opciju), \textit{sound} (URL audio datoteke za koju želimo da se otvori kada se obavijest kreira), \textit{data} (pridruživanje podataka obavijestima) i slično.
+Kao dodatni atributi još se mogu navesti \textit{actions} (obavijesti možemo dodati do dva izbora na koja korisnici mogu kliknuti; primjerice potvrdnu opciju), \textit{sound} (URL audio datoteke za koju želimo da se otvori kada se obavijest kreira), \textit{data} (pridruživanje podataka obavijestima) i slično.
 
 \subsubsection{Push obavijesti}
 \paragraph{}
@@ -1149,7 +1139,7 @@ $ openssl ec -in private_key.pem -outform DER|tail -c +8|head -c 32|base64
   |tr -d '=' |tr '/+' '_-' >> private_key.txt
 
 \end{minted}
-koje kreiraju odgovarajuće datoteke te, unutar njih, upisuju odgovarajuće ključeve.
+koje generiraju odgovarajuće datoteke te, unutar njih, upisuju odgovarajuće ključeve.
 
 Skripti \textit{app.js} dodajemo sljedeći kod:
 
@@ -1207,6 +1197,7 @@ function dohvacanje_dozvole() {
     }
   });
 }
+\end{minted}
 
 Funkcija \textit{push\_pretplata} prvo dohvaća status o dozvoli za primanje obavijesti te pretplaćuje korisnika na push obavijesti. Da bi se korisnik pretplatio na push obavijesti, potrebno je obavezni atribut \textit{userVisibleOnly} postaviti na \textit{true}. To znači da sve push obavijesti moraju biti vidljive korisniku. Funkcija \textit{urlBase64ToUint8Array} radi pretvorbu javnog ključa u format koji centralni poslužitelj poruka raspoznaje. Implementacija funkcije dana je sljedećim kodom.
 
@@ -1315,23 +1306,83 @@ Funkcijom \textit{getSubsctiprion} od centralnog poslužitelja poruka dohvaćamo
 
 Dakle, kako je skripta \textit{app.js} uključena unutar skripte \textit{rezultati.html}, svaki puta kada korisnik posjeti našu aplikaciju, ona će se pokrenuti. To znači da će se svaki puta provjeriti je li pribavljena dozvola za prikazivanje obavijesti tom korisniku na uređaju sa kojeg trenutno posjećuje aplikaciju. Ako jest, ne kreira se nova pretplata, ako nije, nova pretplata se kreira i sprema u bazu podataka.
 
-Primjetimo još samo da smo u poslužiteljske skripte morali uključiti Web Push PHP bliblioteku navodeći
+Primjetimo da u poslužiteljske skripte moramo uključiti Web Push PHP bliblioteku navodeći sljedeći kod na početak istih (\textit{server.php, pretplate.php}).
 
 \begin{minted}{php}
 require __DIR__ . '/vendor/autoload.php';
 use Minishlink\WebPush\WebPush;
 use Minishlink\WebPush\Subscription;
 \end{minted}
-
-na početak istih.
 \vspace{5mm}
+Slanje push obavijesti događa se u onom trenutku kada se u bazu podataka \textit{Studenti} pohrane novi rezultati za nekog studenta. Tada se dohvaćaju pretplate tog studenta za sve uređaje na kojima je prijavljen te se na sve njih šalju obavijesti sa odgovarajućom porukom. Skripta \textit{server.php} brine o spremanju podataka o rezultatima u bazu podataka, pa u nju dodajemo sljedeći kod koji omogućava slanje push obavijesti studentima.
 
-Slanje push obavijesti događa se u onom trenutku kada se u bazu podataka \textit{Studenti} pohrane novi rezultati za nekog studenta. Tada se dohvaćaju pretplate tog studenta za sve uređaje na kojima je prijavljen te se na sve njih šalju obavijesti sa odgovarajućom porukom.
+\begin{minted}{php}
+try {
+    $db = DB::getConnection();
+    $st1 = $db->prepare('SELECT * FROM pretplate WHERE id_studenta=:id_studenta');
+    $st1->execute(array('id_studenta' => $id_studenta));
+    }
+  catch( PDOException $e ) { exit( 'PDO error ' . $e->getMessage() ); }
+
+  while($row1 = $st1->fetch()) {
+    $message['w'] = "yas1";
+    $subscription = Subscription::create(
+    [
+      "endpoint" => $row1['endpoint'],
+      "keys" => [
+        'p256dh' => $row1['p256dh'],
+        'auth' => $row1['auth']
+      ]
+    ]);
+
+    $auth = array(
+      'VAPID' => array(
+          'subject' => 'https://github.com/Minishlink/web-push-php-example/',
+          'publicKey' => file_get_contents(__DIR__ . '/keys/public_key.txt'),
+          'privateKey' => file_get_contents(__DIR__ . '/keys/private_key.txt'),
+      ),
+    );
+
+    $webPush = new WebPush($auth);
+      $res = $webPush->sendNotification(
+        $subscription,
+        $_SESSION['ime_studenta']." , upisani su Vam novi bodovi iz kolegija ".$_SESSION['ime_kolegija']
+      );
+
+    foreach ($webPush->flush() as $report) {
+      $endpoint = $report->getRequest()->getUri()->__toString();
+
+      if ($report->isSuccess())
+          echo "[v] Message sent successfully for subscription {$endpoint}.";
+      else
+          echo "[x] Message failed to sent for subscription {$endpoint}: {$report->getReason()}";
+    }
+}
+\end{minted}
+
+Standardnim manipulacijama bazom dohvatimo podatke o studentu i kolegiju (ime i prezime studenta te naziv kolegija) kako bismo mogli presonalizirati push obavijesti.
 
 Preostalo je uslužnu skriptu pretplatiti na događaj \textit{push}. Dodavanje koda
 
 \begin{minted}{js}
+self.addEventListener('push', function (event) {
+  //console.log("push event");
+  if (!(self.Notification && self.Notification.permission === 'granted')) {
+    return;
+  }
 
+  const sendNotification = body => {
+    const title = "Poruka nakon unosa rezultata";
+    return self.registration.showNotification(title, {
+      body,
+    });
+  };
+
+  if (event.data) {
+    const message = event.data.text();
+    event.waitUntil(sendNotification(message));
+  }
+});
 \end{minted}
 
 u uslužnu skriptu uzrokuje da ona započne osluškivati na događaje slanja push obavijesti.
@@ -1408,4 +1459,8 @@ Instalacijski prozor će se prikazati samo ako su navedene stavke zadovoljene:
 \end{enumerate}
 
 Dodatno, korisnik web-aplikaciju mora posjetiti nekoliko puta prije nego što mu se prikaže instalacijski prozor (zbog toga što preglednik prvo mora ustanoviti da korisnik ima interes za aplikaciju).
+
+\section{Sažetak}
+\paragraph{}
+Uslužne skripte (engl. service workers; vidi više u poglavlju \ref{sw}) omogućavaju trenutno pokretanje PWA, bez obzira na veličinu sadržaja aplikacije te na stanje mreže. To se postiže takozvanim predmemoriranjem (engl. caching). Predmemoriranjem ključnih resursa možemo eliminirati ovisnost o mreži i na taj način zajamčiti odaziv i pouzdan doživljaj za korisnike. PWA se mogu instalirati na korisnikov mobilni uređaj i smjestiti se na početni zaslon. Instalacija se odvija bez potrebe za trgovinom aplikacija, direktno sa web-lokacije na kojoj se ta web-aplikacija prikazuje. Manifest web-aplikacije zaslužan je za kontrolu nad izgledom aplikacije, njezinom instalacijom i pokretanjem. Možemo odrediti početni i pozdravni zaslon koji se prikazuje tijekom učitavanja aplikacije, stranicu koja će se učitati kada se aplikacija pokrene, orijetaciju zaslona i slično. Zahvaljujući push obavijestima, PWA i nakon zatvaranja ima interakciju sa korisnicima.
 \end{document}
