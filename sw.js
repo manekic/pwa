@@ -31,7 +31,7 @@ self.addEventListener("install", function(event) {
 
 self.addEventListener("fetch", function (event) {
   var requestURL = new URL(event.request.url);
-  //console.log("url " + requestURL.pathname);
+  console.log("url " + requestURL.pathname);
   if (requestURL.pathname === "/~maja/pwa/index.html" ) {
     console.log("/~maja/pwa/index.html");
     event.respondWith(
@@ -58,14 +58,37 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  }
-  else if (requestURL.pathname === "/~maja/pwa/administrator.html") {
+  } else if (requestURL.pathname === "/~maja/pwa/administrator.html") {
     console.log("/~maja/pwa/administrator.html");
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("administrator.html").then(function(cachedResponse) {
           var fetchPromise = fetch("administrator.html").then(function(networkResponse) {
             cache.put("administrator.html", networkResponse.clone());
+            return networkResponse;
+          });
+          return cachedResponse || fetchPromise;
+        });
+      })
+    );
+  } else if (requestURL.pathname === "/~maja/pwa/view.css") {
+    event.respondWith(
+      caches.open(CACHE_NAME).then(function(cache) {
+        return cache.match("view.css").then(function(cachedResponse) {
+          var fetchPromise = fetch("view.css").then(function(networkResponse) {
+            cache.put("view.css", networkResponse.clone());
+            return networkResponse;
+          });
+          return cachedResponse || fetchPromise;
+        });
+      })
+    );
+  } else if (requestURL.pathname === "/~maja/pwa/login.css") {
+    event.respondWith(
+      caches.open(CACHE_NAME).then(function(cache) {
+        return cache.match("login.css").then(function(cachedResponse) {
+          var fetchPromise = fetch("login.css").then(function(networkResponse) {
+            cache.put("login.css", networkResponse.clone());
             return networkResponse;
           });
           return cachedResponse || fetchPromise;

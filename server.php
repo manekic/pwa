@@ -5,19 +5,6 @@ use Minishlink\WebPush\WebPush;
 use Minishlink\WebPush\Subscription;
 session_start();
 
-  // $data = file_get_contents('php://input');
-  // echo "data je ".$_POST['id_studenta']."<br>";
-  // $data_array = array();
-  // $data_array = explode('"', $data);
-  // $id_studenta = $data_array[3];
-  // echo "id s ".$id_studenta;
-  // $id_kolegija = $data_array[7];
-  // $bodovi = $data_array[11];
-  // $elt = $data_array[15];
-  // echo " ".$elt."<br>";
-  //
-  // $_SESSION['id_studenta'] = $id_studenta;
-  // $message = [];
   function sendJSONandExit($message)
   {
       // Kao izlaz skripte pošalji $message u JSON formatu i prekini izvođenje.
@@ -33,9 +20,7 @@ session_start();
   $elt = $data['elt'];
   $_SESSION['id_studenta'] = $id_studenta;
   $message = [];
-  //
-  // echo "id s ".$id_studenta."<br />";
-  // echo "elt ".$elt."<br />";
+  
   //spajanje na bazu kolegiji da saznamo ime kolegija
   try {
       $db = DB::getConnection();

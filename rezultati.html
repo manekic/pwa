@@ -23,9 +23,10 @@
 			</ul>
 		</div>
 	</nav>
-  <div class="table-responsive">
-      <p id="tbl"></p>
-  </div>
+    <div class="table-responsive">
+        <p id="tbl"></p>
+    </div>
+
     <script type="text/javascript">
       console.log("Na stranici rezultati.html");
       //dohvacanje potrebnih podataka iz localStorage
@@ -41,6 +42,25 @@
       var td_kategorije = ["Kolegij", "1.kolokvij ", "2.kolokvij", "Završni ispit", "1.zadaća", "2.zadaća", "3.zadaća", "4.zadaća"];
       $(document).ready(function(){
         $("#ime_studenta").append(" " + ime + " " + prezime);
+
+        if (!("Notification" in window)) {
+          console.error("This browser does not support desktop notification");
+        }
+        else if (Notification.permission === "granted") {
+          console.log("Permission to receive notifications has been granted");
+        }
+
+        // Otherwise, we need to ask the user for permission
+        else if (Notification.permission !== 'denied') {
+          Notification.requestPermission(function (permission) {
+          //If the user accepts, let's create a notification
+            if (permission === "granted") {
+              console.log("Permission to receive notifications has been granted");
+              push_pretplata();
+            }
+          });
+        }
+
         $(window).on("online", function() {
           $("#ime_studenta_online_status").html("(online)").css("color", "#5cb85c");
           $("span").css("color", "#5cb85c");
@@ -55,6 +75,7 @@
           $("h2").css("color", "red");
           console.log("offline event triggered: navigator.onLine=" + navigator.onLine);
         });
+
         if(navigator.onLine) {
           console.log("online sam");
           //push_subscribe();
@@ -68,7 +89,7 @@
           $("#ime_studenta_online_status").append("(offline)").css("color", "red");
           $("span").css("color", "red");
           $("h2").css("color", "red");
-          ispisiTablicu();
+          dohvatiPodatke();
         }
       });
 
@@ -184,7 +205,77 @@
         }
       }
 
-      function ispisiTablicuOffline() {
+      function push_pretplata() {
+        return dohvacanje_dozvole()
+          .then(() => navigator.serviceWorker.ready)
+          .then(serviceWorkerRegistration =>
+            serviceWorkerRegistration.pushManager.subscribe({
+              userVisibleOnly: true,
+              applicationServerKey: urlBase64ToUint8Array("BMBlr6YznhYMX3NgcWIDRxZXs0sh7tCv7_YCsWcww0ZCv9WGg-tRCXfMEHTiBPCksSqeve1twlbmVAZFv7GSuj0"),
+            })
+          )
+          .then(subscription => {
+              return push_slanje_serveru(subscription, 'POST');
+          });
+      }
+
+        function dohvacanje_dozvole() {
+          return new Promise((resolve, reject) => {
+            if (Notification.permission === 'denied') {
+              return reject(new Error('Push messages are blocked.'));
+            }
+
+            if (Notification.permission === 'granted') {
+              console.log("g");
+              return resolve();
+            }
+
+            if (Notification.permission === 'default') {
+              return Notification.requestPermission().then(result => {
+                if (result !== 'granted') {
+                  reject(new Error('Bad permission result'));
+                }
+
+                resolve();
+              });
+            }
+          });
+        }
+
+        function urlBase64ToUint8Array(base64String) {
+          const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+          const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+
+          const rawData = window.atob(base64);
+          const outputArray = new Uint8Array(rawData.length);
+
+          for (let i = 0; i < rawData.length; ++i) {
+            outputArray[i] = rawData.charCodeAt(i);
+          }
+          return outputArray;
+        }
+
+        function push_slanje_serveru(subscription, method) {
+          const key = subscription.getKey('p256dh');
+          const token = subscription.getKey('auth');
+          const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0];
+          console.log('Received PushSubscription: ', JSON.stringify(subscription))
+          var endpoint = subscription.endpoint;
+          var publicKey = key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null;
+          var authToken = token ? btoa(String.fromCharCode.apply(null, new Uint8Array(token))) : null;
+          return fetch('pretplate.php', {
+            method: 'POST',
+            body: JSON.stringify({
+              endpoint: subscription.endpoint,
+              publicKey: key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null,
+              authToken: token ? btoa(String.fromCharCode.apply(null, new Uint8Array(token))) : null,
+              contentEncoding,
+            })
+          }).then(() => subscription);
+        }
+
+
+      function dohvatiPodatke() {
         console.log("U fji ispisiTablicu");
         var imaRez = false;
         var request = window.indexedDB.open("Studenti", 1);
