@@ -17,7 +17,7 @@ var CACHED_URLS = [
   "unosStudenata.html",
   "upisKolegijaLogin.html",
   "upisNovihKolegija.html",
-  "upisRez.html"
+  "upisRez.html",
 ];
 
 self.addEventListener("install", function(event) {
@@ -32,8 +32,7 @@ self.addEventListener("install", function(event) {
 self.addEventListener("fetch", function (event) {
   var requestURL = new URL(event.request.url);
   console.log("url " + requestURL.pathname);
-  if (requestURL.pathname === "/~maja/pwa/index.html" ) {
-    console.log("/~maja/pwa/index.html");
+  if (requestURL.pathname === "/~manekic/pwa/index.html" ) {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("index.html").then(function(cachedResponse) {
@@ -45,8 +44,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/pwa/app.js") {
-    console.log("/~maja/pwa/app.js");
+  } else if (requestURL.pathname === "/~manekic/pwa/app.js") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("app.js").then(function(cachedResponse) {
@@ -58,8 +56,8 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/pwa/administrator.html") {
-    console.log("/~maja/pwa/administrator.html");
+  } else if (requestURL.pathname === "/~manekic/pwa/administrator.html") {
+    //console.log("/~manekic/pwa/administrator.html");
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("administrator.html").then(function(cachedResponse) {
@@ -71,7 +69,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/pwa/view.css") {
+  } else if (requestURL.pathname === "/~manekic/pwa/view.css") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("view.css").then(function(cachedResponse) {
@@ -83,7 +81,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/pwa/login.css") {
+  } else if (requestURL.pathname === "/~manekic/pwa/login.css") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("login.css").then(function(cachedResponse) {
@@ -95,7 +93,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/pwa/rezultati.html") {
+  } else if (requestURL.pathname === "/~manekic/pwa/rezultati.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return fetch(event.request).then(function(networkResponse) {
@@ -106,7 +104,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/pwa/unosRezultata.html") {
+  } else if (requestURL.pathname === "/~manekic/pwa/unosRezultata.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("unosRezultata.html").then(function(cachedResponse) {
@@ -118,7 +116,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/pwa/unosStudenata.html") {
+  } else if (requestURL.pathname === "/~manekic/pwa/unosStudenata.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("unosStudenata.html").then(function(cachedResponse) {
@@ -130,7 +128,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/pwa/brisanjeLogin.html") {
+  } else if (requestURL.pathname === "/~manekic/pwa/brisanjeLogin.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("brisanjeLogin.html").then(function(cachedResponse) {
@@ -142,7 +140,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/pwa/brisanjeRez.html") {
+  } else if (requestURL.pathname === "/~manekic/pwa/brisanjeRez.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("brisanjeRez.html").then(function(cachedResponse) {
@@ -154,7 +152,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/pwa/unosKolegija.html") {
+  } else if (requestURL.pathname === "/~manekic/pwa/unosKolegija.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("unosKolegija.html").then(function(cachedResponse) {
@@ -166,7 +164,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/pwa/upisRez.html") {
+  } else if (requestURL.pathname === "/~manekic/pwa/upisRez.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("upisRez.html").then(function(cachedResponse) {
@@ -178,7 +176,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/pwa/upisKolegijaLogin.html") {
+  } else if (requestURL.pathname === "/~manekic/pwa/upisKolegijaLogin.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("upisKolegijaLogin.html").then(function(cachedResponse) {
@@ -190,7 +188,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~maja/pwa/upisNovihKolegija.html") {
+  } else if (requestURL.pathname === "/~manekic/pwa/upisNovihKolegija.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("upisNovihKolegija.html").then(function(cachedResponse) {
@@ -293,8 +291,13 @@ function pohranaUBazu() {
         console.log('It broke');
         console.log(err.message);
       });
-      cursor.delete();
-      cursor.continue();
+	 if(cursor.value.id_studenta === id_studenta)
+        {
+            cursor.delete();
+            console.log("obrisao");
+        }
+	cursor.continue();
+
     };
   };
 }

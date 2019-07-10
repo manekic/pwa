@@ -1,16 +1,16 @@
 {
   "short_name": "Rezultati ispita",
   "name": "Praćenje rezultata na ispitima",
-  "start_url": "/~maja/pwa/index.html",
+  "start_url": "https://rp2.studenti.math.hr/~manekic/pwa/",
   "display": "standalone",
   "icons": [
     {
-      "src": "app-icon-192.png",
+      "src": "rsz_math.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "app-icon-512.png",
+      "src": "rsz_1math.png",
       "type": "image/png",
       "sizes": "512x512"
     }

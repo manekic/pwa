@@ -11,7 +11,7 @@ class DB
 	    	try
 	    	{
 	    		// Unesi ispravni HOSTNAME, DATABASE, USERNAME i PASSWORD
-		    	DB::$db = new PDO( "mysql: host=localhost; dbname=Studenti; charset=utf8", 'maja', 'AM258' );
+		    	DB::$db = new PDO( "mysql: host=rp2.studenti.math.hr; dbname=nekic; charset=utf8", 'student', 'pass.mysql' );
 		    	DB::$db-> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		    }
 		    catch( PDOException $e ) { exit( 'PDO Error: ' . $e->getMessage() ); }

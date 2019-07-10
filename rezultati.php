@@ -1,6 +1,6 @@
 <?php
 require_once 'db.class.php';
-require __DIR__ . '/vendor/autoload.php';
+//require __DIR__ . '/vendor/autoload.php';
 use Minishlink\WebPush\WebPush;
 use Minishlink\WebPush\Subscription;
 session_start();

@@ -13,6 +13,10 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </head>
   <body  class="text-center">
+    <header>
+
+
+    <section>
     <nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
       <ul class="nav navbar-nav navbar-left">
@@ -23,10 +27,15 @@
 			</ul>
 		</div>
 	</nav>
+  </section>
+  </header>
+  <section class="section main-content">
+  <div class="container">
     <div class="table-responsive">
         <p id="tbl"></p>
     </div>
-
+    </div>
+    </section>
     <script type="text/javascript">
       console.log("Na stranici rezultati.html");
       //dohvacanje potrebnih podataka iz localStorage
@@ -171,8 +180,8 @@
         //obavijest o otvaranju aplikacije
         console.log("notifikacije");
         if("Notification" in window && "serviceWorker" in navigator) {
-          Notification.requestPermission().then(function(premission) {
-            if(premission === "granted") {
+          Notification.requestPermission().then(function(permission) {
+            if(permission === "granted") {
               console.log("granted");
               navigator.serviceWorker.ready.then(function(registration) {
                 registration.showNotification("Prijava u aplikaciju", {
@@ -190,8 +199,8 @@
         //obavijest o otvaranju aplikacije
         console.log("notifikacije");
         if("Notification" in window && "serviceWorker" in navigator) {
-          Notification.requestPermission().then(function(premission) {
-            if(premission === "granted") {
+          Notification.requestPermission().then(function(permission) {
+            if(permission === "granted") {
               console.log("granted");
               navigator.serviceWorker.ready.then(function(registration) {
                 registration.showNotification("Prijava u aplikaciju", {
