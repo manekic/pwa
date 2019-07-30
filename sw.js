@@ -33,11 +33,7 @@ self.addEventListener("install", function(event) {
 self.addEventListener("fetch", function (event) {
   var requestURL = new URL(event.request.url);
   console.log("url " + requestURL.pathname);
-<<<<<<< HEAD
   if (requestURL.pathname === "/~maja/pwa/index.html" ) {
-=======
-  if (requestURL.pathname === "/~manekic/pwa/index.html" ) {
->>>>>>> 72a94e26a6c03e2d4d34e86541f5b7eb335ca2d1
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("index.html").then(function(cachedResponse) {
@@ -49,11 +45,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-<<<<<<< HEAD
   } else if (requestURL.pathname === "/~maja/pwa/app.js") {
-=======
-  } else if (requestURL.pathname === "/~manekic/pwa/app.js") {
->>>>>>> 72a94e26a6c03e2d4d34e86541f5b7eb335ca2d1
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("app.js").then(function(cachedResponse) {
@@ -65,13 +57,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-<<<<<<< HEAD
   } else if (requestURL.pathname === "/~maja/pwa/administrator.html") {
-    //console.log("/~maja/pwa/administrator.html");
-=======
-  } else if (requestURL.pathname === "/~manekic/pwa/administrator.html") {
-    //console.log("/~manekic/pwa/administrator.html");
->>>>>>> 72a94e26a6c03e2d4d34e86541f5b7eb335ca2d1
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("administrator.html").then(function(cachedResponse) {
@@ -83,7 +69,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~manekic/pwa/view.css") {
+  } else if (requestURL.pathname === "/~maja/pwa/view.css") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("view.css").then(function(cachedResponse) {
@@ -95,7 +81,6 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-<<<<<<< HEAD
   } else if (requestURL.pathname === "/~maja/pwa/view1.css") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
@@ -109,9 +94,6 @@ self.addEventListener("fetch", function (event) {
       })
     );
   } else if (requestURL.pathname === "/~maja/pwa/login.css") {
-=======
-  } else if (requestURL.pathname === "/~manekic/pwa/login.css") {
->>>>>>> 72a94e26a6c03e2d4d34e86541f5b7eb335ca2d1
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("login.css").then(function(cachedResponse) {
@@ -123,7 +105,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~manekic/pwa/rezultati.html") {
+  } else if (requestURL.pathname === "/~maja/pwa/rezultati.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return fetch(event.request).then(function(networkResponse) {
@@ -134,7 +116,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~manekic/pwa/unosRezultata.html") {
+  } else if (requestURL.pathname === "/~maja/pwa/unosRezultata.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("unosRezultata.html").then(function(cachedResponse) {
@@ -146,7 +128,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~manekic/pwa/unosStudenata.html") {
+  } else if (requestURL.pathname === "/~maja/pwa/unosStudenata.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("unosStudenata.html").then(function(cachedResponse) {
@@ -158,7 +140,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~manekic/pwa/brisanjeLogin.html") {
+  } else if (requestURL.pathname === "/~maja/pwa/brisanjeLogin.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("brisanjeLogin.html").then(function(cachedResponse) {
@@ -170,7 +152,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~manekic/pwa/brisanjeRez.html") {
+  } else if (requestURL.pathname === "/~maja/pwa/brisanjeRez.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("brisanjeRez.html").then(function(cachedResponse) {
@@ -182,7 +164,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~manekic/pwa/unosKolegija.html") {
+  } else if (requestURL.pathname === "/~maja/pwa/unosKolegija.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("unosKolegija.html").then(function(cachedResponse) {
@@ -194,7 +176,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~manekic/pwa/upisRez.html") {
+  } else if (requestURL.pathname === "/~maja/pwa/upisRez.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("upisRez.html").then(function(cachedResponse) {
@@ -206,7 +188,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~manekic/pwa/upisKolegijaLogin.html") {
+  } else if (requestURL.pathname === "/~maja/pwa/upisKolegijaLogin.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("upisKolegijaLogin.html").then(function(cachedResponse) {
@@ -218,7 +200,7 @@ self.addEventListener("fetch", function (event) {
         });
       })
     );
-  } else if (requestURL.pathname === "/~manekic/pwa/upisNovihKolegija.html") {
+  } else if (requestURL.pathname === "/~maja/pwa/upisNovihKolegija.html") {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return cache.match("upisNovihKolegija.html").then(function(cachedResponse) {
