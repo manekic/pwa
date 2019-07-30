@@ -18,6 +18,7 @@ var CACHED_URLS = [
   "upisKolegijaLogin.html",
   "upisNovihKolegija.html",
   "upisRez.html",
+  "view1.css"
 ];
 
 self.addEventListener("install", function(event) {
